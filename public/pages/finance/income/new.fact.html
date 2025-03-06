@@ -1,10 +1,670 @@
-                <div class="mt-4 md:mt-0">
-                    <a href="list.fact.html" class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Voltar para Lista
-                    </a>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Faturação - Sistema de Gestão</title>
+    
+    <!-- Estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Componentes -->
+    <script src="/js/Sidebar.js"></script>
+
+    <style>
+        /* Estilos Base */
+        .form-input, .form-select, .form-textarea {
+            @apply h-14 px-4 py-3 text-base rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all;
+        }
+
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+        }
+
+        .form-label.required::after {
+            content: "*";
+            @apply text-red-500 ml-1;
+        }
+
+        /* Cards Principais */
+        .info-card {
+            @apply p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all hover:border-blue-500;
+        }
+
+        .info-card-label {
+            @apply text-sm font-medium text-gray-600 dark:text-gray-400;
+        }
+
+        .info-card-value {
+            @apply text-3xl font-bold text-gray-900 dark:text-white mt-2 font-mono;
+        }
+
+        /* Container Principal */
+        .main-container {
+            @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            @apply border-b border-gray-200 dark:border-gray-700;
+        }
+
+        .tab-list {
+            @apply flex flex-wrap -mb-px text-sm font-medium text-center;
+        }
+
+        .tab-item {
+            @apply me-2;
+        }
+
+        .tab-button {
+            @apply inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 transition-all;
+        }
+
+        .tab-button.active {
+            @apply text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500;
+        }
+
+        .tab-icon {
+            @apply w-5 h-5 me-2;
+        }
+
+        /* Área de Upload */
+        .upload-area {
+            @apply border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center cursor-pointer transition-all hover:border-blue-500 bg-gray-50 dark:bg-gray-900;
+            min-height: 400px;
+        }
+
+        .upload-area.has-image {
+            @apply border-none p-0 bg-transparent;
+        }
+
+        .upload-preview {
+            @apply w-full h-full object-cover rounded-xl shadow-lg;
+            min-height: 400px;
+        }
+
+        /* Seleção de Unidade */
+        .unit-selector {
+            @apply grid grid-cols-4 gap-6;
+        }
+
+        .unit-avatar {
+            @apply flex flex-col items-center justify-center w-24 h-24 rounded-xl text-xl font-semibold cursor-pointer transition-all shadow-md hover:shadow-lg relative group;
+        }
+
+        .unit-avatar.selected {
+            @apply ring-2 ring-blue-500 ring-offset-2 transform scale-105;
+        }
+
+        .unit-code {
+            @apply text-2xl font-bold;
+        }
+
+        .unit-name {
+            @apply text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity;
+        }
+
+        /* Botões */
+        .btn {
+            @apply h-14 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-3 text-base;
+        }
+
+        .btn-primary {
+            @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+        }
+
+        .btn-secondary {
+            @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+        }
+
+        /* Estilos específicos para o talão */
+        .receipt-card {
+            @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .receipt-header {
+            @apply p-6 border-b border-dashed border-gray-300 dark:border-gray-600;
+        }
+
+        .receipt-section {
+            @apply p-6 border-b border-dashed border-gray-300 dark:border-gray-600;
+        }
+
+        .receipt-section:last-child {
+            @apply border-b-0;
+        }
+
+        .receipt-title {
+            @apply text-2xl font-bold text-center mb-2;
+        }
+
+        .receipt-subtitle {
+            @apply text-sm text-gray-600 dark:text-gray-400 text-center;
+        }
+
+        .receipt-divider {
+            @apply my-4 border-t border-dashed border-gray-300 dark:border-gray-600;
+        }
+
+        .receipt-table {
+            @apply w-full;
+        }
+
+        .receipt-table th {
+            @apply text-left text-sm font-semibold text-gray-600 dark:text-gray-400 pb-2;
+        }
+
+        .receipt-table td {
+            @apply text-sm py-1;
+        }
+
+        .receipt-total {
+            @apply text-xl font-bold text-right;
+        }
+
+        /* Área de upload com estilo de talão */
+        .receipt-upload-area {
+            @apply border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center cursor-pointer transition-all hover:border-blue-500;
+            min-height: 600px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .receipt-upload-area.has-image {
+            @apply border-none p-0;
+        }
+
+        .receipt-preview {
+            @apply w-full h-full object-contain rounded-xl shadow-lg;
+            min-height: 600px;
+        }
+
+        /* Campos de entrada estilizados como talão */
+        .receipt-input {
+            @apply w-full p-2 bg-transparent border-b border-gray-300 dark:border-gray-600 font-mono text-right focus:outline-none focus:border-blue-500;
+        }
+
+        .receipt-input:disabled {
+            @apply bg-gray-50 dark:bg-gray-900;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .receipt-container {
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .receipt-section {
+            border-bottom: 1px dashed #d1d5db;
+            padding: 1rem;
+        }
+        
+        .receipt-section:last-child {
+            border-bottom: none;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .input-highlight {
+            background-color: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            transition: all 0.3s;
+        }
+        
+        .input-highlight:focus {
+            background-color: #e0f2fe;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .photo-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .photo-upload:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+        
+        .tab-active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+        
+        .tab-inactive {
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-inactive:hover {
+            color: #4b5563;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Estilos específicos para o talão */
+        .receipt-card {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .receipt-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-divider {
+            border-top: 1px dashed #d1d5db;
+            margin: 1rem 0;
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .receipt-table th,
+        .receipt-table td {
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .receipt-table td:last-child {
+            text-align: right;
+        }
+
+        .receipt-total {
+            font-weight: bold;
+            border-top: 1px dashed #d1d5db;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Cabeçalho -->
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Novo Registro de Faturação</h1>
+                        <p class="text-sm text-gray-600 mt-1">Preencha os dados da faturação conforme o talão fiscal</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Voltar</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveButton">
+                            <i class="fas fa-save"></i>
+                            <span>Salvar Faturação</span>
+                        </button>
+                    </div>
                 </div>
-                        <button type="button" onclick="window.location.href='list.fact.html'"
-                            class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">
-                            Cancelar
-                        </button> 
+
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200 mb-6">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="info-geral">
+                                <i class="fas fa-receipt w-4 h-4 me-2"></i>Informações Gerais
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="pagamentos">
+                                <i class="fas fa-money-bill-wave w-4 h-4 me-2"></i>Métodos de Pagamento
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="delivery">
+                                <i class="fas fa-motorcycle w-4 h-4 me-2"></i>Serviços de Entrega
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="cancelamentos">
+                                <i class="fas fa-ban w-4 h-4 me-2"></i>Cancelamentos
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="operacoes">
+                                <i class="fas fa-store w-4 h-4 me-2"></i>Operações Internas
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="metricas">
+                                <i class="fas fa-chart-line w-4 h-4 me-2"></i>Métricas
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="fotos">
+                                <i class="fas fa-images w-4 h-4 me-2"></i>Fotos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Main Form Content -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Left Column - Photo Upload -->
+                    <div class="md:col-span-1">
+                        <div class="photo-upload" id="main-photo-upload">
+                            <i class="fas fa-image text-5xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 font-medium">Clique para adicionar uma foto do talão</p>
+                            <p class="text-gray-500 text-sm mt-2">Formatos aceitos: JPG, PNG</p>
+                            <input type="file" id="photoFactTotal" name="photoFactTotal" accept="image/*" class="hidden">
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Receipt Form -->
+                    <div class="md:col-span-2">
+                        <form id="faturacaoForm" class="receipt-container">
+                            <!-- Receipt Header -->
+                            <div class="receipt-section receipt-header">
+                                <div class="text-center mb-4">
+                                    <h3 class="text-lg font-bold mb-1">Plateiapositiva, Lda</h3>
+                                    <p class="text-sm">Rua Sousa Aroso n° 544, Bloco A0.1 Fração K</p>
+                                    <p class="text-sm">4450-286 Matosinhos</p>
+                                    <p class="text-sm">Nr. Contribuinte: 510885411</p>
+                                </div>
+
+                                <div class="receipt-divider"></div>
+
+                                <div class="font-bold mb-4">Fecho de dia</div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+                                        <input type="date" id="date" name="date" class="w-full p-2 rounded input-highlight text-sm" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Hora</label>
+                                        <input type="time" id="time" name="time" class="w-full p-2 rounded input-highlight text-sm" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total por Modos de Pagamento -->
+                            <div class="receipt-section">
+                                <h3 class="font-bold text-gray-800 mb-3">Total por Modos de Pagamento</h3>
+                                <table class="receipt-table">
+                                    <tr>
+                                        <td>Numerário Euro</td>
+                                        <td>
+                                            <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="106.90" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Multibanco Euro</td>
+                                        <td>
+                                            <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="1994.05" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr class="receipt-total">
+                                        <td>Total:</td>
+                                        <td>
+                                            <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="2100.95" readonly>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Movimentos Anulados -->
+                            <div class="receipt-section">
+                                <h3 class="font-bold text-gray-800 mb-3">Movimentos Anulados</h3>
+                                <table class="receipt-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Mesa</th>
+                                            <th>Descrição</th>
+                                            <th>Qnt.</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>16</td>
+                                            <td>CATARINAVEGAN PANCAK</td>
+                                            <td>1</td>
+                                            <td class="text-right">9,50</td>
+                                        </tr>
+                                        <tr>
+                                            <td>60</td>
+                                            <td>OFFICE EGGS ZENITH</td>
+                                            <td>1</td>
+                                            <td class="text-right">12,00</td>
+                                        </tr>
+                                        <tr class="receipt-total">
+                                            <td colspan="3">Total:</td>
+                                            <td class="text-right">21,50</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Conta Corrente -->
+                            <div class="receipt-section">
+                                <h3 class="font-bold text-gray-800 mb-3">Conta corrente (Debito)</h3>
+                                <table class="receipt-table">
+                                    <tr>
+                                        <td>EMP1 EMPREGADO 1</td>
+                                        <td>Consumo I81</td>
+                                        <td class="text-right">39,00</td>
+                                    </tr>
+                                    <tr class="receipt-total">
+                                        <td colspan="2">Total:</td>
+                                        <td class="text-right">39,00</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Exemplo de unidades (será substituído pelos dados da API)
+            const units = [
+                { id: 1, code: 'MAT', name: 'Matosinhos', color: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' },
+                { id: 2, code: 'POR', name: 'Porto', color: 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200' },
+                { id: 3, code: 'LIS', name: 'Lisboa', color: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' },
+                { id: 4, code: 'BRA', name: 'Braga', color: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' }
+            ];
+
+            // Renderizar avatares das unidades
+            function renderUnitAvatars() {
+                const unitSelector = document.getElementById('unitSelector');
+                if (units.length > 0) {
+                    unitSelector.innerHTML = units.map(unit => `
+                        <div class="unit-avatar ${unit.color} group" data-unit-id="${unit.id}" data-unit-code="${unit.code}">
+                            <span class="unit-code">${unit.code}</span>
+                            <span class="unit-name">${unit.name}</span>
+                            <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                ${unit.name}
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Adicionar eventos de clique
+                    document.querySelectorAll('.unit-avatar').forEach(avatar => {
+                        avatar.addEventListener('click', function() {
+                            document.querySelectorAll('.unit-avatar').forEach(a => {
+                                a.classList.remove('selected');
+                                a.classList.remove('scale-105');
+                            });
+                            this.classList.add('selected');
+                            this.classList.add('scale-105');
+                            updateFactId(this.dataset.unitCode);
+                        });
+                    });
+                }
+            }
+
+            // Função para gerar o ID da faturação
+            function generateFactId(unitCode = 'MAT') {
+                const year = document.querySelector('input[name="year"]').value;
+                const month = new Date(document.querySelector('input[name="date"]').value).getMonth() + 1;
+                const day = new Date(document.querySelector('input[name="date"]').value).getDate();
+                const total = parseFloat(document.getElementById('totalDisplay').textContent.replace('€ ', '').replace(',', '.'));
+                
+                if (year && month && day && total) {
+                    const formattedMonth = month.toString().padStart(2, '0');
+                    const formattedDay = day.toString().padStart(2, '0');
+                    const formattedTotal = total.toFixed(2).replace('.', '');
+                    return `${year}.${formattedMonth}.${formattedDay}.${unitCode}.${formattedTotal}`;
+                }
+                return '-';
+            }
+
+            // Atualizar ID da faturação
+            function updateFactId(unitCode) {
+                const idDisplay = document.getElementById('factIdDisplay');
+                const newId = generateFactId(unitCode);
+                
+                idDisplay.style.opacity = '0';
+                setTimeout(() => {
+                    idDisplay.textContent = newId;
+                    idDisplay.style.opacity = '1';
+                }, 200);
+            }
+
+            // Inicializar
+            renderUnitAvatars();
+
+            // Manipulação de abas
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover classe active de todas as abas
+                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                    
+                    // Adicionar classe active na aba clicada
+                    this.classList.add('active');
+                    const content = document.querySelector(`.tab-content[data-tab="${this.dataset.tab}"]`);
+                    if (content) {
+                        content.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Upload de imagem
+            const uploadArea = document.getElementById('uploadArea');
+            const photoInput = document.getElementById('photoInput');
+            const photoPreview = document.getElementById('photoPreview');
+            const uploadPrompt = document.getElementById('uploadPrompt');
+
+            uploadArea.addEventListener('click', () => photoInput.click());
+            uploadArea.addEventListener('dragover', e => {
+                e.preventDefault();
+                uploadArea.classList.add('border-blue-500');
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('border-blue-500');
+            });
+            uploadArea.addEventListener('drop', e => {
+                e.preventDefault();
+                uploadArea.classList.remove('border-blue-500');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    handleImageUpload(file);
+                }
+            });
+
+            photoInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (file) handleImageUpload(file);
+            });
+
+            function handleImageUpload(file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    photoPreview.src = e.target.result;
+                    photoPreview.classList.remove('hidden');
+                    uploadPrompt.classList.add('hidden');
+                    uploadArea.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Inicializar data e hora
+            const currentDate = new Date();
+            document.querySelector('input[name="date"]').value = currentDate.toISOString().split('T')[0];
+            document.querySelector('input[name="time"]').value = currentDate.toTimeString().slice(0,5);
+            updateDateFields(currentDate);
+
+            // Configurar data e hora atual para o talão
+            document.getElementById('dateTime').value = currentDate.toISOString().slice(0, 16);
+
+            // Atualizar campos de data
+            function updateDateFields(date) {
+                const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                
+                document.querySelector('input[name="weekDay"]').value = weekdays[date.getDay()];
+                document.querySelector('input[name="weekNum"]').value = getWeekNumber(date);
+                document.querySelector('input[name="month"]').value = months[date.getMonth()];
+                document.querySelector('input[name="year"]').value = date.getFullYear();
+            }
+
+            // Calcular número da semana
+            function getWeekNumber(d) {
+                d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+                var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+                var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+                return weekNo;
+            }
+
+            // Event listeners para atualização do ID
+            document.querySelector('input[name="date"]').addEventListener('change', () => {
+                const date = new Date(document.querySelector('input[name="date"]').value);
+                updateDateFields(date);
+                updateFactId();
+            });
+
+            // Cálculo automático do total
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('change', updateTotal);
+            });
+
+            function updateTotal() {
+                const totalCash = parseFloat(document.getElementById('totalCash').value) || 0;
+                const posMb = parseFloat(document.getElementById('posMb1Gross').value) || 0;
+                const total = totalCash + posMb;
+                document.getElementById('totalFact').value = total.toFixed(2);
+            }
+        });
+    </script>
+</body>
+</html> 
