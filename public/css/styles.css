@@ -1,13 +1,148 @@
+/* Definindo variáveis para tema claro (padrão) */
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  
+  /* Cores de botões */
+  --button-primary: #2563eb;
+  --button-primary-hover: #1d4ed8;
+  --button-danger: #ef4444;
+  --button-danger-hover: #dc2626;
+  --button-edit: #0ea5e9;
+  
+  /* Cores de status */
+  --status-pending: #f59e0b;
+  --status-paid: #10b981;
+  --status-canceled: #ef4444;
+  
+  /* Cores do sidebar */
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: rgba(0, 0, 0, 0.05);
+  --sidebar-text: #0f172a;
+  --sidebar-text-secondary: #64748b;
+  --sidebar-border: #e2e8f0;
+  --theme-toggle-bg: #f1f5f9;
+  --theme-toggle-color: #0f172a;
+  --theme-toggle-hover: #e2e8f0;
+  
+  /* Cores da marca */
+  --brand-50: #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-200: #bfdbfe;
+  --brand-300: #93c5fd;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #2563eb;
+  --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
+
+  /* Cores específicas para componentes */
+  --component-bg: #ffffff;
+  --component-border: #e5e7eb;
+  --component-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --component-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Cores para gráficos */
+  --chart-grid: #f1f5f9;
+  --chart-text: #64748b;
+  --chart-line: #2563eb;
+  --chart-line-bg: rgba(37, 99, 235, 0.1);
+  --chart-donut-1: #2563eb;
+  --chart-donut-2: #f59e0b;
+  --chart-donut-3: #10b981;
+
+  /* Cores específicas para ícones dos cards */
+  --icon-revenue-bg: #d1fae5;
+  --icon-revenue-text: #10b981;
+  --icon-clients-bg: #dbeafe;
+  --icon-clients-text: #3b82f6;
+  --icon-contracts-bg: #ede9fe;
+  --icon-contracts-text: #8b5cf6;
+  --icon-employees-bg: #fee2e2;
+  --icon-employees-text: #ef4444;
+}
+
+/* Variáveis para tema escuro */
+[data-theme="dark"] {
+  --bg-primary: #0d1323;
+  --bg-secondary: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  
+  /* Cores de botões */
+  --button-primary: #3b82f6;
+  --button-primary-hover: #60a5fa;
+  --button-danger: #f87171;
+  --button-danger-hover: #fca5a5;
+  --button-edit: #38bdf8;
+  
+  /* Cores de status */
+  --status-pending: #fbbf24;
+  --status-paid: #34d399;
+  --status-canceled: #f87171;
+  
+  /* Cores do sidebar */
+  --sidebar-bg: #0f172a;
+  --sidebar-hover: rgba(58, 60, 132, 0.2);
+  --sidebar-text: #f8fafc;
+  --sidebar-text-secondary: #94a3b8;
+  --sidebar-border: #1d294c;
+  --theme-toggle-bg: #1e293b;
+  --theme-toggle-color: #f8fafc;
+  --theme-toggle-hover: #334155;
+
+  /* Cores específicas para componentes no tema escuro */
+  --component-bg: #0f172a;
+  --component-border: #0d1323;
+  --component-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --component-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  
+  /* Cores para gráficos no tema escuro */
+  --chart-grid: #334155;
+  --chart-text: #94a3b8;
+  --chart-line: #60a5fa;
+  --chart-line-bg: rgba(96, 165, 250, 0.1);
+  --chart-donut-1: #60a5fa;
+  --chart-donut-2: #fbbf24;
+  --chart-donut-3: #34d399;
+
+  /* Cores específicas para ícones dos cards no tema escuro */
+  --icon-revenue-bg: rgba(16, 185, 129, 0.2);
+  --icon-revenue-text: #34d399;
+  --icon-clients-bg: rgba(59, 130, 246, 0.2);
+  --icon-clients-text: #60a5fa;
+  --icon-contracts-bg: rgba(139, 92, 246, 0.2);
+  --icon-contracts-text: #a78bfa;
+  --icon-employees-bg: rgba(239, 68, 68, 0.2);
+  --icon-employees-text: #f87171;
+}
+
+/* Estilos base */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
+/* Estilos base para o corpo e elementos principais */
 body {
-  background-color: #f5f5f5;
-  padding: 20px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 .container {
@@ -18,19 +153,19 @@ body {
 h1 {
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 h2 {
   margin-bottom: 20px;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .form-container {
-  background-color: white;
+  background-color: var(--bg-secondary);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
   margin-bottom: 30px;
 }
 
@@ -42,14 +177,17 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 input, select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 16px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .form-buttons {
@@ -67,28 +205,28 @@ button {
 }
 
 button[type="submit"] {
-  background-color: #4CAF50;
+  background-color: var(--button-primary);
   color: white;
 }
 
 button[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: var(--button-primary-hover);
 }
 
 #cancel-btn {
-  background-color: #f44336;
+  background-color: var(--button-danger);
   color: white;
 }
 
 #cancel-btn:hover {
-  background-color: #d32f2f;
+  background-color: var(--button-danger-hover);
 }
 
 .list-container {
-  background-color: white;
+  background-color: var(--bg-secondary);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 table {
@@ -99,11 +237,11 @@ table {
 th, td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: var(--header-bg);
   font-weight: 600;
 }
 
@@ -116,23 +254,600 @@ th {
 }
 
 .edit-btn {
-  background-color: #2196F3;
+  background-color: var(--button-edit);
   color: white;
 }
 
 .delete-btn {
-  background-color: #f44336;
+  background-color: var(--button-danger);
   color: white;
 }
 
 .status-pendente {
-  color: #ff9800;
+  color: var(--status-pending);
 }
 
 .status-pago {
-  color: #4CAF50;
+  color: var(--status-paid);
 }
 
 .status-cancelado {
-  color: #f44336;
+  color: var(--status-canceled);
+}
+
+/* Toggle Theme Button */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Aplicando as cores aos elementos */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+aside {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.bg-zinc-900 {
+  background-color: var(--bg-black) !important;
+}
+
+.bg-zinc-900 {
+  background-color: var(--bg-primary) !important;
+}
+
+.text-zinc-600 {
+  color: var(--text-secondary) !important;
+}
+
+.text-white {
+  color: var(--text-primary) !important;
+}
+
+.border-zinc-800 {
+  border-color: var(--border-color) !important;
+}
+
+/* Ajustes para os cards e containers */
+.card, 
+.form-container, 
+.list-container {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+/* Ajustes para inputs e selects */
+input, 
+select {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* Hover states */
+.hover\:bg-zinc-800:hover {
+  background-color: var(--bg-secondary) !important;
+}
+
+.hover\:text-white:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Classe para o cabeçalho do card que usa a cor da marca */
+.bg-brand {
+  background-color: var(--brand-600);
+}
+
+.text-brand {
+  color: var(--brand-600);
+}
+
+/* Estilos para o menu lateral colapsável */
+.sidebar {
+  width: 260px;
+  transition: width 0.3s ease;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar.collapsed .sidebar-text {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-logo-text {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-user-info {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Estilos para o avatar */
+.avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-200);
+  color: var(--brand-700);
+  font-weight: 500;
+}
+
+/* Classes para usar as cores da marca */
+.bg-brand-50 { background-color: var(--brand-50); }
+.bg-brand-100 { background-color: var(--brand-100); }
+.bg-brand-200 { background-color: var(--brand-200); }
+.bg-brand-300 { background-color: var(--brand-300); }
+.bg-brand-400 { background-color: var(--brand-400); }
+.bg-brand-500 { background-color: var(--brand-500); }
+.bg-brand-600 { background-color: var(--brand-600); }
+.bg-brand-700 { background-color: var(--brand-700); }
+.bg-brand-800 { background-color: var(--brand-800); }
+.bg-brand-900 { background-color: var(--brand-900); }
+
+.text-brand-50 { color: var(--brand-50); }
+.text-brand-100 { color: var(--brand-100); }
+.text-brand-200 { color: var(--brand-200); }
+.text-brand-300 { color: var(--brand-300); }
+.text-brand-400 { color: var(--brand-400); }
+.text-brand-500 { color: var(--brand-500); }
+.text-brand-600 { color: var(--brand-600); }
+.text-brand-700 { color: var(--brand-700); }
+.text-brand-800 { color: var(--brand-800); }
+.text-brand-900 { color: var(--brand-900); }
+
+/* Estilos para o dropdown do usuário */
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 220px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+  display: none;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-dropdown-body {
+  padding: 0.5rem 0;
+}
+
+.user-dropdown-footer {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.user-dropdown-item {
+  padding: 0.5rem 1rem;
+  display: block;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.user-dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Complemento de estilos para o layout base */
+
+/* Transições e velocidades */
+:root {
+  --transition-speed: 0.3s;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+}
+
+/* Estilos para o sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  transition: width var(--transition-speed), transform var(--transition-speed);
+  overflow-x: hidden;
+  z-index: 50;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .sidebar-logo-text,
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-user-info,
+.sidebar.collapsed .theme-toggle span {
+  display: none;
+}
+
+.sidebar.collapsed .menu-item {
+  justify-content: center;
+}
+
+.sidebar.collapsed .theme-toggle {
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-toggle i {
+  transform: rotate(180deg);
+}
+
+.sidebar-toggle i {
+  transition: transform var(--transition-speed);
+}
+
+/* Estilo para o overlay mobile */
+#mobileOverlay {
+  transition: opacity var(--transition-speed);
+}
+
+/* Estilos para menu móvel */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .flex-1 {
+    margin-left: 0 !important;
+  }
+  
+  #navbar {
+    margin-left: 0 !important;
+  }
+}
+
+/* Estilo para itens de menu */
+.menu-item {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-item.active {
+  background-color: var(--brand-600) !important;
+  color: white !important;
+}
+
+/* Animação de carregamento */
+.content-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  position: relative;
+}
+
+.content-loading::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--brand-600);
+  border-radius: 50%;
+  animation: loading 1s infinite linear;
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para height porcentual no gráfico do dashboard */
+.h-40\% { height: 40%; }
+.h-45\% { height: 45%; }
+.h-50\% { height: 50%; }
+.h-55\% { height: 55%; }
+.h-60\% { height: 60%; }
+.h-65\% { height: 65%; }
+.h-70\% { height: 70%; }
+.h-75\% { height: 75%; }
+.h-80\% { height: 80%; }
+.h-85\% { height: 85%; }
+.h-90\% { height: 90%; }
+.h-95\% { height: 95%; }
+.h-100\% { height: 100%; }
+
+/* Estilo para o cursor do toggle */
+.sidebar-toggle {
+  cursor: pointer;
+}
+
+/* Ajustes para temas escuro e claro */
+.bg-card {
+  background-color: var(--bg-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Estilos para o dropdown do usuário */
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 220px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-dropdown-body {
+  padding: 0.5rem 0;
+}
+
+.user-dropdown-footer {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.user-dropdown-item {
+  padding: 0.5rem 1rem;
+  display: block;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.user-dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Ajustes para o mínimo width da coluna de data no calendário */
+.min-w-16 {
+  min-width: 4rem;
+}
+
+/* Card de estatísticas */
+.card-stats {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-stats:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Formulários */
+.form-select {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--brand-600);
+  box-shadow: 0 0 0 2px var(--brand-200);
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--brand-600);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-700);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Cards */
+.card {
+  background-color: var(--bg-card);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 var(--shadow-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
+}
+
+/* Estilos para componentes do dashboard */
+.dashboard-card {
+  background-color: var(--component-bg);
+  border: 1px solid var(--component-border);
+  border-radius: 0.5rem;
+  box-shadow: var(--component-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--component-hover-shadow);
+}
+
+/* Estilos para gráficos */
+.chart-container {
+  background-color: var(--component-bg);
+  border: 1px solid var(--component-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* Estilos para tabelas nos componentes */
+.component-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.component-table th {
+  background-color: var(--component-bg);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--component-border);
+}
+
+.component-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--component-border);
+  color: var(--text-primary);
+}
+
+/* Ajustes para o menu do sidebar */
+.sidebar {
+  background-color: var(--sidebar-bg) !important;
+}
+
+.menu-item {
+  color: var(--sidebar-text) !important;
+}
+
+.menu-item:hover {
+  background-color: var(--sidebar-hover) !important;
+}
+
+.submenu {
+  border-left: 1px solid var(--sidebar-border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* Submenu aberto */
+.submenu.open {
+  max-height: 500px; /* Altura máxima suficiente para mostrar todos os itens */
+}
+
+/* Rotação do ícone de seta */
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+/* Desabilitar borda do submenu quando o sidebar está colapsado */
+.sidebar.collapsed .submenu {
+  border-left: none;
+}
+
+/* Linhas divisórias verticais para o sidebar */
+.sidebar-divider {
+  width: 70%;
+  height: 1px;
+  background-color: var(--sidebar-border);
+  margin: 0.75rem auto;
+}
+
+/* Ajustes para o botão de tema */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: var(--component-border);
+}
+
+/* Classes de texto */
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
 }

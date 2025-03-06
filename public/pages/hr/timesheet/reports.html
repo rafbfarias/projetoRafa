@@ -1,0 +1,345 @@
+<div class="space-y-6">
+    <!-- Cabeçalho da página -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold">Relatórios de Ponto</h1>
+            <p class="text-slate-500 mt-1">Visualize e exporte os registros de ponto dos usuários</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+            <button id="exportButton" class="bg-brand-600 hover:bg-brand-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center">
+                <i class="fas fa-download mr-2"></i>
+                Exportar Relatório
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card-bg rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">Filtros</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Filtro de usuário -->
+            <div>
+                <label for="userFilter" class="block text-sm font-medium mb-1">Usuário</label>
+                <select id="userFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <option value="">Todos os usuários</option>
+                    <!-- Opções serão preenchidas via JavaScript -->
+                </select>
+            </div>
+            
+            <!-- Filtro de unidade -->
+            <div>
+                <label for="unitFilter" class="block text-sm font-medium mb-1">Unidade</label>
+                <select id="unitFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <option value="">Todas as unidades</option>
+                    <!-- Opções serão preenchidas via JavaScript -->
+                </select>
+            </div>
+            
+            <!-- Filtro de data inicial -->
+            <div>
+                <label for="startDateFilter" class="block text-sm font-medium mb-1">Data Inicial</label>
+                <input type="date" id="startDateFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+            
+            <!-- Filtro de data final -->
+            <div>
+                <label for="endDateFilter" class="block text-sm font-medium mb-1">Data Final</label>
+                <input type="date" id="endDateFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+        </div>
+        
+        <!-- Filtros adicionais -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <!-- Status do registro -->
+            <div>
+                <label for="statusFilter" class="block text-sm font-medium mb-1">Status</label>
+                <select id="statusFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <option value="">Todos os status</option>
+                    <option value="complete">Completos</option>
+                    <option value="incomplete">Incompletos</option>
+                    <option value="late">Atrasados</option>
+                </select>
+            </div>
+            
+            <!-- Tipo de registro -->
+            <div>
+                <label for="typeFilter" class="block text-sm font-medium mb-1">Tipo de Registro</label>
+                <select id="typeFilter" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <option value="">Todos os tipos</option>
+                    <option value="regular">Regular</option>
+                    <option value="overtime">Hora Extra</option>
+                    <option value="absence">Ausência</option>
+                </select>
+            </div>
+            
+            <!-- Botão de aplicar filtros -->
+            <div class="flex items-end">
+                <button id="applyFilters" class="w-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Aplicar Filtros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estatísticas rápidas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Total de horas -->
+        <div class="card-bg rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold">Total de Horas</h3>
+                <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold" id="totalHours">0h</p>
+            <div class="flex items-center mt-2 text-sm">
+                <span class="text-slate-500">No período selecionado</span>
+            </div>
+        </div>
+
+        <!-- Média diária -->
+        <div class="card-bg rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold">Média Diária</h3>
+                <div class="bg-green-100 text-green-600 p-2 rounded-lg">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold" id="dailyAverage">0h</p>
+            <div class="flex items-center mt-2 text-sm">
+                <span class="text-slate-500">No período selecionado</span>
+            </div>
+        </div>
+
+        <!-- Horas extras -->
+        <div class="card-bg rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold">Horas Extras</h3>
+                <div class="bg-amber-100 text-amber-600 p-2 rounded-lg">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold" id="overtimeHours">0h</p>
+            <div class="flex items-center mt-2 text-sm">
+                <span class="text-slate-500">No período selecionado</span>
+            </div>
+        </div>
+
+        <!-- Registros incompletos -->
+        <div class="card-bg rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold">Registros Incompletos</h3>
+                <div class="bg-red-100 text-red-600 p-2 rounded-lg">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold" id="incompleteRecords">0</p>
+            <div class="flex items-center mt-2 text-sm">
+                <span class="text-slate-500">No período selecionado</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de resultados -->
+    <div class="card-bg rounded-lg shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Registros de Ponto</h3>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-slate-500" id="resultCount">0 registros encontrados</span>
+                    <select id="pageSize" class="text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="10">10 por página</option>
+                        <option value="25">25 por página</option>
+                        <option value="50">50 por página</option>
+                        <option value="100">100 por página</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        <th class="px-6 py-3">Data</th>
+                        <th class="px-6 py-3">Usuário</th>
+                        <th class="px-6 py-3">Unidade</th>
+                        <th class="px-6 py-3">Entrada</th>
+                        <th class="px-6 py-3">Saída</th>
+                        <th class="px-6 py-3">Intervalo</th>
+                        <th class="px-6 py-3">Total</th>
+                        <th class="px-6 py-3">Status</th>
+                        <th class="px-6 py-3">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody" class="divide-y divide-slate-200 dark:divide-slate-700">
+                    <!-- Os dados serão preenchidos via JavaScript -->
+                    <tr class="animate-pulse">
+                        <td colspan="9" class="px-6 py-4 text-center text-slate-500">
+                            Carregando dados...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Paginação -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div class="text-sm text-slate-500">
+                Mostrando <span id="pageInfo">0-0 de 0</span> registros
+            </div>
+            <div class="flex space-x-2">
+                <button id="prevPage" class="px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div id="pageNumbers" class="flex space-x-1">
+                    <!-- Números de página serão preenchidos via JavaScript -->
+                </div>
+                <button id="nextPage" class="px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalhes do registro -->
+<div id="recordDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-700">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-clipboard-list mr-2 text-brand-600"></i>
+                Detalhes do Registro
+            </h2>
+            <button id="closeDetailsModal" class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                <i class="fas fa-times h-6 w-6"></i>
+            </button>
+        </div>
+        
+        <div class="overflow-y-auto flex-1 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Informações do usuário -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Informações do Usuário</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center">
+                                <i class="fas fa-user text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-lg" id="modalUserName">Nome do Usuário</p>
+                                <p class="text-slate-500 text-sm" id="modalUserRole">Cargo do Usuário</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="text-sm text-slate-500">ID do Usuário</p>
+                                <p class="font-medium" id="modalUserId">USR12345</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500">Unidade</p>
+                                <p class="font-medium" id="modalUserUnit">Nome da Unidade</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detalhes do registro -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Detalhes do Registro</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-sm text-slate-500">Data do Registro</p>
+                            <p class="font-medium" id="modalRecordDate">01/01/2024</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-slate-500">Entrada</p>
+                                <p class="font-medium" id="modalTimeIn">09:00</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500">Saída</p>
+                                <p class="font-medium" id="modalTimeOut">18:00</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500">Início do Intervalo</p>
+                                <p class="font-medium" id="modalBreakStart">12:00</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500">Fim do Intervalo</p>
+                                <p class="font-medium" id="modalBreakEnd">13:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-slate-500">Tempo Total</p>
+                                    <p class="font-medium text-lg" id="modalTotalTime">08:00</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-500">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium" id="modalStatus">
+                                        Completo
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Observações -->
+            <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-medium mb-3">Observações</h3>
+                <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-4" id="modalNotes">
+                    <p class="text-slate-500 dark:text-slate-400">Sem observações registradas.</p>
+                </div>
+            </div>
+            
+            <!-- Histórico de edições -->
+            <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-medium mb-3">Histórico de Edições</h3>
+                <div class="space-y-3" id="modalEditHistory">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium">Registro criado</p>
+                            <p class="text-sm text-slate-500">Por: Admin</p>
+                            <p class="text-xs text-slate-400">01/01/2024, 09:05</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
+            <button id="closeModalButton" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-medium rounded-lg text-sm px-4 py-2">
+                Fechar
+            </button>
+            <div class="flex space-x-2">
+                <button id="editRecordButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 flex items-center">
+                    <i class="fas fa-edit mr-1"></i>
+                    Editar
+                </button>
+                <button id="printRecordButton" class="bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-lg text-sm px-4 py-2 flex items-center">
+                    <i class="fas fa-print mr-1"></i>
+                    Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar a página de relatórios
+        initReportsPage();
+    });
+</script>
+<script src="/js/hr/timesheet/reports.js"></script> 

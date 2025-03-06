@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const faturacaoController = require('../controllers/faturacaoController');
 
-// Rotas CRUD
+// Rotas
 router.get('/', faturacaoController.getAllLancamentos);
 router.get('/:id', faturacaoController.getLancamento);
 router.post('/', faturacaoController.createLancamento);

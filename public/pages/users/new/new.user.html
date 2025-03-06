@@ -1,0 +1,212 @@
+<div class="container p-6">
+    <!-- Header com Foto e Informações -->
+    <div class="card-bg p-6 rounded-lg shadow-sm mb-6">
+        <div class="flex items-center space-x-6">
+            <!-- Área da Foto -->
+            <div class="relative">
+                <div class="w-24 h-24 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                    <img id="userPhoto" src="/images/default-avatar.png" alt="Foto do usuário" class="w-full h-full object-cover hidden">
+                    <i class="fas fa-user text-4xl text-zinc-600" id="defaultAvatar"></i>
+                </div>
+                <label for="photoInput" class="absolute bottom-0 right-0 w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600">
+                    <i class="fas fa-camera text-white text-sm"></i>
+                </label>
+                <input type="file" id="photoInput" class="hidden" accept="image/*">
+            </div>
+
+            <!-- Informações do Usuário -->
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 id="displayName" class="text-2xl font-bold text-zinc-100">Novo Usuário</h1>
+                        <p id="displayEmail" class="text-zinc-400">Email não definido</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="history.back()" class="px-4 py-2 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700">
+                            <i class="fas fa-arrow-left mr-2"></i>Voltar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="flex space-x-4 mt-4">
+                    <div class="px-3 py-1 rounded-full bg-zinc-800 text-sm">
+                        <span class="text-zinc-400">Função:</span>
+                        <span id="roleBadge" class="text-zinc-100 ml-1">Admin</span>
+                    </div>
+                    <div class="px-3 py-1 rounded-full bg-zinc-800 text-sm">
+                        <span class="text-zinc-400">Status:</span>
+                        <span class="text-zinc-100 ml-1">Pendente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="card-bg rounded-lg shadow-sm">
+        <div class="p-6 border-b border-zinc-800">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-user-plus text-xl text-brand-500"></i>
+                <h2 class="text-xl font-bold">Informações do Usuário</h2>
+            </div>
+        </div>
+
+        <form id="userForm" class="p-6 space-y-6">
+            <!-- Grid de 2 colunas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nome -->
+                <div class="space-y-2">
+                    <label for="name" class="block text-sm font-medium text-zinc-300">Nome</label>
+                    <input type="text" id="name" name="name" required
+                        class="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:outline-none focus:border-brand-500 text-zinc-100">
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-zinc-300">Email</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:outline-none focus:border-brand-500 text-zinc-100">
+                </div>
+
+                <!-- Senha -->
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-zinc-300">Senha</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" required
+                            class="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:outline-none focus:border-brand-500 text-zinc-100">
+                        <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Função Global -->
+                <div class="space-y-2">
+                    <label for="globalRole" class="block text-sm font-medium text-zinc-300">Função Global</label>
+                    <select id="globalRole" name="globalRole" required
+                        class="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:outline-none focus:border-brand-500 text-zinc-100">
+                        <option value="admin">Admin</option>
+                        <option value="superadmin">Superadmin</option>
+                    </select>
+                    <p class="text-sm text-zinc-400 mt-1">
+                        Superadmins podem criar e gerenciar unidades e outros usuários
+                    </p>
+                </div>
+            </div>
+
+            <!-- Alerta de Informações -->
+            <div class="bg-brand-500/10 border border-brand-500/20 rounded-lg p-4">
+                <h4 class="text-sm font-medium text-brand-500 mb-2">Importante</h4>
+                <ul class="text-sm space-y-1 text-brand-500/80">
+                    <li>• Superadmins têm acesso total ao sistema</li>
+                    <li>• Admins podem ser designados como responsáveis por unidades</li>
+                    <li>• A senha inicial pode ser alterada pelo usuário após o primeiro acesso</li>
+                </ul>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="flex justify-end space-x-4 mt-6 pt-6 border-t border-zinc-800">
+                <button type="button" onclick="history.back()"
+                    class="px-4 py-2 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700">
+                    Cancelar
+                </button>
+                <button type="submit" id="submitButton"
+                    class="px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600">
+                    Criar Usuário
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('userForm');
+    const photoInput = document.getElementById('photoInput');
+    const userPhoto = document.getElementById('userPhoto');
+    const defaultAvatar = document.getElementById('defaultAvatar');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const displayName = document.getElementById('displayName');
+    const displayEmail = document.getElementById('displayEmail');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const globalRole = document.getElementById('globalRole');
+    const roleBadge = document.getElementById('roleBadge');
+    const submitButton = document.getElementById('submitButton');
+
+    // Atualiza o display do nome e email enquanto digita
+    nameInput.addEventListener('input', function() {
+        displayName.textContent = this.value || 'Novo Usuário';
+    });
+
+    emailInput.addEventListener('input', function() {
+        displayEmail.textContent = this.value || 'Email não definido';
+    });
+
+    // Toggle de visibilidade da senha
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    // Preview da foto
+    photoInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                userPhoto.src = e.target.result;
+                userPhoto.classList.remove('hidden');
+                defaultAvatar.classList.add('hidden');
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // Atualiza o badge de função
+    globalRole.addEventListener('change', function() {
+        roleBadge.textContent = this.value === 'superadmin' ? 'Super Admin' : 'Admin';
+    });
+
+    // Submit do formulário
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        submitButton.disabled = true;
+        submitButton.innerHTML = 'Criando...';
+
+        try {
+            const formData = {
+                name: nameInput.value,
+                email: emailInput.value,
+                password: passwordInput.value,
+                globalRole: globalRole.value
+            };
+
+            // Aqui você faria a chamada para sua API
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao criar usuário');
+            }
+
+            // Redireciona para a lista de usuários
+            window.location.href = '/pages/users/list.html';
+
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Criar Usuário';
+        }
+    });
+});
+</script>

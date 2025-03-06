@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Receita - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B00',
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white">
+    <!-- Layout principal -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo principal -->
+        <main class="flex-1 p-8">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Nova Receita</h1>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Cadastro de nova receita</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <a href="list.html" class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar para Lista
+                    </a>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="card-bg rounded-lg shadow-sm p-6">
+                <form id="incomeForm" class="space-y-6">
+                    <!-- Data e Identificação -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="date">Data</label>
+                            <input type="date" id="date" name="date" required
+                                class="w-full rounded-lg border-slate-300 dark:border-slate-700">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="factId">ID da Receita</label>
+                            <input type="text" id="factId" name="factId" required
+                                class="w-full rounded-lg border-slate-300 dark:border-slate-700"
+                                placeholder="Ex: REC-2024-001">
+                        </div>
+                    </div>
+
+                    <!-- Empresa e Unidade -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="companyId">Empresa</label>
+                            <select id="companyId" name="companyId" required
+                                class="w-full rounded-lg border-slate-300 dark:border-slate-700">
+                                <option value="">Selecione uma empresa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="unit">Unidade</label>
+                            <select id="unit" name="unit" required
+                                class="w-full rounded-lg border-slate-300 dark:border-slate-700">
+                                <option value="">Selecione uma unidade</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Valor e Status -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="totalFact">Valor Total</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">R$</span>
+                                <input type="number" id="totalFact" name="totalFact" required step="0.01" min="0"
+                                    class="w-full rounded-lg border-slate-300 dark:border-slate-700 pl-10"
+                                    placeholder="0,00">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="status">Status</label>
+                            <select id="status" name="status" required
+                                class="w-full rounded-lg border-slate-300 dark:border-slate-700">
+                                <option value="Pendente">Pendente</option>
+                                <option value="Validado">Validado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="window.location.href='list.html'"
+                            class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Salvar Receita
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../js/finance/income.script.js"></script>
+</body>
+</html> 

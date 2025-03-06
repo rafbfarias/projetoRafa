@@ -1,0 +1,16 @@
+<div class="dashboard-card p-6">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold">Clientes Ativos</h3>
+        <div style="background-color: var(--icon-clients-bg); color: var(--icon-clients-text);" class="p-2 rounded-lg">
+            <i class="fas fa-users"></i>
+        </div>
+    </div>
+    <p class="text-2xl font-bold" id="activeClients">1.257</p>
+    <div class="flex items-center mt-2 text-sm">
+        <span style="color: var(--icon-clients-text);" class="flex items-center">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span id="clientsIncrease">5.3%</span>
+        </span>
+        <span class="text-muted ml-2">vs mês anterior</span>
+    </div>
+</div> 

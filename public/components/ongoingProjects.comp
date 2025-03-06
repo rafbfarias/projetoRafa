@@ -1,0 +1,11 @@
+<div class="dashboard-card">
+    <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <h3 class="font-semibold">Projetos em Andamento</h3>
+        <a href="#" class="text-brand-600 hover:text-brand-700 text-sm font-medium">Ver todos</a>
+    </div>
+    <div class="p-6">
+        <div id="ongoingProjectsList" class="space-y-6">
+            <!-- Preenchido via JavaScript -->
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,126 @@
+<!-- Sidebar -->
+<nav id="sidebar" class="sidebar h-full bg-slate-900 shadow-lg overflow-y-auto">
+    <!-- Logo -->
+    <div class="flex items-center p-4">
+        <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center">
+            <span class="text-xl font-bold text-white">D</span>
+        </div>
+        <h1 class="text-xl font-bold ml-3 text-white sidebar-logo-text">dineo.</h1>
+        <button class="sidebar-toggle ml-auto text-white" id="sidebarToggle" aria-label="Toggle Sidebar">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
+
+    <!-- Linha divisória após o cabeçalho -->
+    <div class="sidebar-divider"></div>
+
+    <!-- Avatar e Informações do Usuário -->
+    <div class="p-4">
+        <div class="flex items-center space-x-4 relative" id="userProfileToggle">
+            <div class="w-12 h-12 rounded-full overflow-hidden avatar flex-shrink-0">
+                <img src="/images/users/4.png" alt="Avatar" class="avatar-image w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0 sidebar-user-info">
+                <p class="font-medium truncate text-white">Ana Silva</p>
+                <p class="text-slate-400 text-sm truncate">Administradora</p>
+            </div>
+            <button class="text-slate-400 hover:text-white">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        <button class="theme-toggle mt-4 w-10 h-10 flex items-center justify-center rounded-lg transition-colors text-white" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Menu de Navegação -->
+    <div class="p-4 overflow-y-auto" style="max-height: calc(100vh - 280px);">
+        <h2 class="text-xs font-semibold uppercase text-slate-500 mb-4">Menu</h2>
+        <ul class="space-y-1">
+            <li>
+                <a href="/pages/dashboard.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                    <i class="fas fa-th-large w-5 text-center"></i>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+            </li>
+            
+            <!-- RH -->
+            <li>
+                <div class="menu-item flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer" data-submenu="rh">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-users w-5 text-center"></i>
+                        <span class="sidebar-text">Recursos Humanos</span>
+                    </div>
+                    <i class="fas fa-chevron-right sidebar-text transition-transform"></i>
+                </div>
+                <ul class="submenu pl-4 space-y-1" id="rh-submenu">
+                    <li>
+                        <a href="/pages/hr/employees/employees.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-user-tie w-5 text-center"></i>
+                            <span class="sidebar-text">Funcionários</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/hr/timesheet/timesheet.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-clock w-5 text-center"></i>
+                            <span class="sidebar-text">Registro de Ponto</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/hr/departments/departments.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-building w-5 text-center"></i>
+                            <span class="sidebar-text">Departamentos</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Divisória entre RH e Finanças -->
+            <li>
+                <div class="sidebar-divider"></div>
+            </li>
+
+            <!-- Finanças -->
+            <li>
+                <div class="menu-item flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer" data-submenu="finance">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-dollar-sign w-5 text-center"></i>
+                        <span class="sidebar-text">Finanças</span>
+                    </div>
+                    <i class="fas fa-chevron-right sidebar-text transition-transform"></i>
+                </div>
+                <ul class="submenu pl-4 space-y-1" id="finance-submenu">
+                    <li>
+                        <a href="/pages/finance/income/fact.dash.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/finance/income/list.fact.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-chart-line w-5 text-center"></i>
+                            <span class="sidebar-text">Receitas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/finance/income/new.fact.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-plus w-5 text-center"></i>
+                            <span class="sidebar-text">Nova Receita</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Linha divisória antes do botão de logoff -->
+    <div class="sidebar-divider"></div>
+
+    <!-- Botão de Logoff -->
+    <div class="p-4 mt-auto">
+        <a href="/index.html" class="flex items-center space-x-3 p-3 rounded-lg text-red-500 hover:bg-slate-800 transition-colors">
+            <i class="fas fa-sign-out-alt w-5 text-center"></i>
+            <span class="sidebar-text">Sair do Sistema</span>
+        </a>
+    </div>
+</nav> 

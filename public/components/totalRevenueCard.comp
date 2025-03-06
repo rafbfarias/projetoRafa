@@ -1,0 +1,16 @@
+<div class="dashboard-card p-6">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold">Receita Total</h3>
+        <div style="background-color: var(--icon-revenue-bg); color: var(--icon-revenue-text);" class="p-2 rounded-lg">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+    <p class="text-2xl font-bold" id="totalRevenue">R$ 45.850,00</p>
+    <div class="flex items-center mt-2 text-sm">
+        <span style="color: var(--icon-revenue-text);" class="flex items-center">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span id="revenueIncrease">12%</span>
+        </span>
+        <span class="text-muted ml-2">vs mês anterior</span>
+    </div>
+</div> 

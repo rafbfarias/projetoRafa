@@ -1,0 +1,540 @@
+<div class="space-y-6">
+    <!-- Cabeçalho da página -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="mr-2 text-2xl font-bold">Registro de Ponto</h1>
+            <p class="text-slate-500 mt-1">Registre sua entrada, saída e intervalos</p>
+        </div>
+    </div>
+
+    <!-- Card principal -->
+    <div class="card-bg rounded-lg shadow-sm overflow-hidden">
+        <!-- Cabeçalho do card -->
+        <div class="bg-brand-600 text-white p-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-user mr-2"></i>
+                <span id="stepTitle">Identificação do Funcionário</span>
+            </h2>
+            <p class="text-brand-100 text-sm mt-1">
+                Unidade: <span id="unitName">Café Centro</span> • <span id="headerDate"></span>
+            </p>
+        </div>
+
+        <!-- Corpo do card - varia conforme o passo -->
+        <div class="p-5">
+            <!-- Passo 1: Identificação -->
+            <div id="step1" class="block">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Digite seu código de identificação:
+                </label>
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        id="employeeId"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5"
+                        placeholder="Código do funcionário"
+                    />
+                    <button 
+                        id="submitButton"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none submit-button"
+                    >
+                        <i class="fas fa-check h-5 w-5"></i>
+                    </button>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                        Digite o código fornecido pela empresa para registrar seu ponto.
+                    </p>
+                    <p class="text-sm text-blue-600 mt-1 font-medium">
+                        Para demonstração, use o código "12345" ou qualquer código de 5 dígitos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo 2: Confirmação de identidade e ações -->
+            <div id="step2" class="hidden">
+                <div class="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-4 mb-4">
+                    <!-- Coluna de informações do funcionário -->
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img 
+                                src="/api/placeholder/64/64" 
+                                alt="Foto do funcionário" 
+                                class="w-16 h-16 rounded-full" 
+                            />
+                            <div>
+                                <h3 class="text-lg font-semibold" id="employeeName">Ana Silva</h3>
+                                <p class="text-gray-600 text-sm" id="employeeContract">CLT - Tempo Integral</p>
+                                <div class="flex space-x-2 mt-1">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        No horário
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Trabalhando
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Informações da Escala:</h4>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <span class="text-gray-500">Horário:</span>
+                                    <p class="font-medium">09:00 - 18:00</p>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Intervalo:</span>
+                                    <p class="font-medium">12:00 - 13:00</p>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Função:</span>
+                                    <p class="font-medium">Atendente</p>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Unidade:</span>
+                                    <p class="font-medium">Café Centro</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coluna de status atual e tempo trabalhado -->
+                    <div class="flex-1 bg-gray-50 p-4 rounded-lg">
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Status do Dia:</h4>
+                        
+                        <div id="clockedOut" class="hidden text-center py-6 px-4">
+                            <p class="text-lg text-gray-500 mb-2">Sem registro de ponto hoje</p>
+                            <p class="text-sm text-gray-500">Registre sua entrada para iniciar o expediente</p>
+                        </div>
+                        
+                        <div id="clockedIn" class="space-y-4">
+                            <!-- Horário de entrada -->
+                            <div class="flex justify-between">
+                                <div class="text-gray-600">Entrada:</div>
+                                <div class="font-medium" id="checkInTime">09:05</div>
+                            </div>
+                            
+                            <!-- Informações de intervalo -->
+                            <div class="flex justify-between border-t pt-2">
+                                <div class="text-gray-600">Intervalo:</div>
+                                <div class="font-medium" id="breakStatus">
+                                    <span class="text-gray-500">Pendente</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Previsão de saída -->
+                            <div class="flex justify-between border-t pt-2">
+                                <div class="text-gray-600">Saída prevista:</div>
+                                <div class="font-medium">18:00</div>
+                            </div>
+                            
+                            <!-- Tempo trabalhado -->
+                            <div class="border-t pt-3">
+                                <div class="mb-2 text-gray-600">Tempo trabalhado hoje:</div>
+                                <div class="flex justify-center items-center text-center">
+                                    <div class="font-bold text-3xl text-blue-700" id="workedTime">
+                                        03:25
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tempo restante até a saída -->
+                            <div class="mt-2">
+                                <div class="mb-1 text-gray-600 text-sm">Tempo restante para saída:</div>
+                                <div class="flex items-center justify-center">
+                                    <div class="font-semibold text-lg text-green-700" id="remainingTime">
+                                        04:35
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Alerta de intervalo -->
+                            <div id="breakAlert" class="mt-2 flex items-start p-2 text-sm text-yellow-800 rounded-lg bg-yellow-50">
+                                <i class="fas fa-bell h-5 w-5 mr-2 text-yellow-600 flex-shrink-0"></i>
+                                <div>
+                                    <span class="font-medium">Lembrete de intervalo:</span> Você ainda não tirou seu intervalo hoje. O horário recomendado é entre 12:00 e 14:00.
+                                </div>
+                            </div>
+                            
+                            <!-- Botão de histórico -->
+                            <button
+                                id="historyButton"
+                                class="mt-2 w-full flex items-center justify-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                            >
+                                <i class="fas fa-history h-4 w-4 mr-1"></i>
+                                Ver histórico de registros
+                            </button>
+                        </div>
+                        
+                        <!-- Tempo em pausa -->
+                        <div id="onBreak" class="hidden space-y-4">
+                            <!-- Horário de entrada -->
+                            <div class="flex justify-between">
+                                <div class="text-gray-600">Entrada:</div>
+                                <div class="font-medium">09:05</div>
+                            </div>
+                            
+                            <!-- Informações de intervalo -->
+                            <div class="flex justify-between border-t pt-2">
+                                <div class="text-gray-600">Intervalo:</div>
+                                <div class="font-medium">
+                                    <span class="text-green-600">12:30 - Em andamento</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Previsão de saída -->
+                            <div class="flex justify-between border-t pt-2">
+                                <div class="text-gray-600">Saída prevista:</div>
+                                <div class="font-medium">18:00</div>
+                            </div>
+                            
+                            <div class="border-t pt-3">
+                                <div class="mb-2 text-yellow-600">Em pausa desde:</div>
+                                <div class="flex justify-center items-center text-center">
+                                    <div class="font-bold text-3xl text-yellow-500" id="breakStartTime">
+                                        12:30
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botão de histórico -->
+                            <button
+                                class="mt-2 w-full flex items-center justify-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                            >
+                                <i class="fas fa-history h-4 w-4 mr-1"></i>
+                                Ver histórico de registros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações disponíveis baseadas no status atual -->
+                <div class="border-t pt-4">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Ações Disponíveis:</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Entrada - só aparece se estiver sem registro -->
+                        <button 
+                            id="clockInButton"
+                            class="p-4 bg-green-100 text-green-800 hover:bg-green-200 rounded-lg font-medium flex items-center justify-center"
+                        >
+                            <i class="fas fa-user h-5 w-5 mr-2"></i>
+                            <span>Registrar Entrada</span>
+                        </button>
+                        
+                        <!-- Início de pausa - só aparece se estiver trabalhando -->
+                        <button 
+                            id="breakStartButton"
+                            class="hidden p-4 bg-yellow-100 text-yellow-800 hover:bg-yellow-200 rounded-lg font-medium flex items-center justify-center"
+                        >
+                            <i class="fas fa-coffee h-5 w-5 mr-2"></i>
+                            <span>Iniciar Pausa</span>
+                        </button>
+                        
+                        <!-- Fim de pausa - só aparece se estiver em pausa -->
+                        <button 
+                            id="breakEndButton"
+                            class="hidden p-4 bg-blue-100 text-blue-800 hover:bg-blue-200 rounded-lg font-medium flex items-center justify-center"
+                        >
+                            <i class="fas fa-check-circle h-5 w-5 mr-2"></i>
+                            <span>Finalizar Pausa</span>
+                        </button>
+                        
+                        <!-- Saída - só aparece se estiver trabalhando -->
+                        <button 
+                            id="clockOutButton"
+                            class="hidden p-4 bg-red-100 text-red-800 hover:bg-red-200 rounded-lg font-medium flex items-center justify-center"
+                        >
+                            <i class="fas fa-sign-out-alt h-5 w-5 mr-2"></i>
+                            <span>Registrar Saída</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button 
+                    id="backButton"
+                    class="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                >
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-chevron-left h-4 w-4 mr-1"></i>
+                        Voltar
+                    </div>
+                </button>
+            </div>
+
+            <!-- Passo 3: Confirmação de sucesso -->
+            <div id="step3" class="hidden text-center py-4">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                    <i class="fas fa-check h-8 w-8 text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1" id="successTitle">
+                    Registro efetuado com sucesso!
+                </h3>
+                <p class="text-gray-600 mb-4" id="successMessage">
+                    Entrada registrada às 09:05
+                </p>
+                <div id="roleDisplay" class="mb-4 hidden">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-blue-500 text-white text-xs font-medium">
+                        Função: Atendente
+                    </span>
+                </div>
+                <div class="mt-2 flex justify-center">
+                    <div class="animate-pulse bg-gray-300 h-1.5 w-24 rounded"></div>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                    Voltando para a tela inicial...
+                </p>
+            </div>
+        </div>
+
+        <!-- Rodapé do card com instruções -->
+        <div id="cardFooter" class="bg-gray-50 px-4 py-3 flex items-start">
+            <i class="fas fa-info-circle text-blue-500 h-5 w-5 mr-2 flex-shrink-0 mt-0.5"></i>
+            <p class="text-sm text-gray-600" id="footerText">
+                Digite seu código de funcionário para registrar seu ponto. Em caso de problemas, contate seu supervisor.
+            </p>
+        </div>
+    </div>
+
+    <!-- Cards secundários com informações adicionais -->
+    <div id="secondaryCards" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="text-lg font-semibold mb-2 flex items-center">
+                <i class="fas fa-calendar mr-2 h-5 w-5 text-blue-600"></i>
+                Escala da Semana
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-4 py-2">Dia</th>
+                            <th scope="col" class="px-4 py-2">Horário</th>
+                            <th scope="col" class="px-4 py-2">Função</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b">
+                            <td class="px-4 py-2 font-medium text-gray-900">Seg</td>
+                            <td class="px-4 py-2">09:00 - 18:00</td>
+                            <td class="px-4 py-2">Atendente</td>
+                        </tr>
+                        <tr class="bg-gray-50 border-b">
+                            <td class="px-4 py-2 font-medium text-gray-900">Ter</td>
+                            <td class="px-4 py-2">09:00 - 18:00</td>
+                            <td class="px-4 py-2">Barista</td>
+                        </tr>
+                        <tr class="bg-white border-b">
+                            <td class="px-4 py-2 font-medium text-gray-900">Qua</td>
+                            <td class="px-4 py-2">Folga</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        <tr class="bg-gray-50 border-b font-medium text-blue-600">
+                            <td class="px-4 py-2">Qui</td>
+                            <td class="px-4 py-2">09:00 - 18:00</td>
+                            <td class="px-4 py-2">Atendente</td>
+                        </tr>
+                        <tr class="bg-white border-b">
+                            <td class="px-4 py-2 font-medium text-gray-900">Sex</td>
+                            <td class="px-4 py-2">09:00 - 18:00</td>
+                            <td class="px-4 py-2">Atendente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="text-lg font-semibold mb-2 flex items-center">
+                <i class="fas fa-clock mr-2 h-5 w-5 text-blue-600"></i>
+                Histórico Recente
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <div>
+                        <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Entrada
+                        </span>
+                        <p class="text-gray-900 text-sm mt-1">Quarta-feira, 04/03</p>
+                    </div>
+                    <span class="text-gray-900 font-medium">09:02</span>
+                </div>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <div>
+                        <span class="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Pausa
+                        </span>
+                        <p class="text-gray-900 text-sm mt-1">Quarta-feira, 04/03</p>
+                    </div>
+                    <span class="text-gray-900 font-medium">12:03</span>
+                </div>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <div>
+                        <span class="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Retorno
+                        </span>
+                        <p class="text-gray-900 text-sm mt-1">Quarta-feira, 04/03</p>
+                    </div>
+                    <span class="text-gray-900 font-medium">13:00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Saída
+                        </span>
+                        <p class="text-gray-900 text-sm mt-1">Quarta-feira, 04/03</p>
+                    </div>
+                    <span class="text-gray-900 font-medium">18:05</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de histórico -->
+<div id="historyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col text-gray-900">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-history mr-2 h-5 w-5 text-blue-600"></i>
+                Histórico de Registros
+            </h2>
+            <button
+                id="closeHistoryModal"
+                class="text-gray-500 hover:text-gray-700"
+            >
+                <i class="fas fa-times h-6 w-6"></i>
+            </button>
+        </div>
+        
+        <div class="p-4 flex items-center space-x-2 border-b">
+            <label class="text-sm font-medium text-gray-700">Selecione um período:</label>
+            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="week">Última semana</option>
+                <option value="month" selected>Último mês</option>
+                <option value="quarter">Último trimestre</option>
+            </select>
+        </div>
+        
+        <div class="overflow-y-auto flex-1 p-4">
+            <div class="space-y-4">
+                <div class="border rounded-lg overflow-hidden">
+                    <div class="p-3 bg-green-50 border-b flex justify-between items-center">
+                        <h3 class="font-medium">Quinta-feira, 04/03/2025</h3>
+                        <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800">
+                            Completo
+                        </span>
+                    </div>
+                    
+                    <div class="p-3 bg-white">
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <p class="text-xs text-gray-500">Entrada</p>
+                                <p class="font-medium">09:02</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Saída</p>
+                                <p class="font-medium">18:05</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Início do intervalo</p>
+                                <p class="font-medium">12:03</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Fim do intervalo</p>
+                                <p class="font-medium">13:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-sm border-t pt-2">
+                            <div>
+                                <span class="text-gray-500">Tempo trabalhado:</span>
+                                <span class="font-medium">08:06</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Horas extras:</span>
+                                <span class="font-medium text-blue-600">00:06</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border rounded-lg overflow-hidden">
+                    <div class="p-3 bg-green-50 border-b flex justify-between items-center">
+                        <h3 class="font-medium">Quarta-feira, 03/03/2025</h3>
+                        <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800">
+                            Completo
+                        </span>
+                    </div>
+                    
+                    <div class="p-3 bg-white">
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <p class="text-xs text-gray-500">Entrada</p>
+                                <p class="font-medium">08:54</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Saída</p>
+                                <p class="font-medium">18:01</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Início do intervalo</p>
+                                <p class="font-medium">12:01</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Fim do intervalo</p>
+                                <p class="font-medium">13:04</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-sm border-t pt-2">
+                            <div>
+                                <span class="text-gray-500">Tempo trabalhado:</span>
+                                <span class="font-medium">08:04</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Horas extras:</span>
+                                <span class="font-medium text-blue-600">00:04</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t flex justify-between items-center">
+            <button
+                id="closeModalButton"
+                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg text-sm px-4 py-2"
+            >
+                Fechar
+            </button>
+            <button
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 flex items-center"
+            >
+                <i class="fas fa-external-link-alt h-4 w-4 mr-1"></i>
+                Relatório completo
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Este script será executado quando a página for carregada dinamicamente
+    document.addEventListener('DOMContentLoaded', function() {
+        // Carregar o script timesheet.js se ainda não estiver carregado
+        if (typeof initPage !== 'function') {
+            const script = document.createElement('script');
+            script.src = '/js/hr/timesheet.js';
+            script.onload = function() {
+                if (typeof initPage === 'function') {
+                    initPage();
+                }
+            };
+            document.body.appendChild(script);
+        } else {
+            initPage();
+        }
+    });
+</script>

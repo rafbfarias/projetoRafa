@@ -1,0 +1,21 @@
+<div class="dashboard-card">
+    <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <h3 class="font-semibold">Contratos Recentes</h3>
+        <a href="#" class="text-brand-600 hover:text-brand-700 text-sm font-medium">Ver todos</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="component-table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="recentContractsTable">
+                <!-- Preenchido via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div> 

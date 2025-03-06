@@ -1,0 +1,16 @@
+<div class="dashboard-card p-6">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold">Contratos Ativos</h3>
+        <div style="background-color: var(--icon-contracts-bg); color: var(--icon-contracts-text);" class="p-2 rounded-lg">
+            <i class="fas fa-file-contract"></i>
+        </div>
+    </div>
+    <p class="text-2xl font-bold" id="activeContracts">78</p>
+    <div class="flex items-center mt-2 text-sm">
+        <span style="color: var(--icon-contracts-text);" class="flex items-center">
+            <i class="fas fa-arrow-down mr-1"></i>
+            <span id="contractsDecrease">2.7%</span>
+        </span>
+        <span class="text-muted ml-2">vs mês anterior</span>
+    </div>
+</div> 

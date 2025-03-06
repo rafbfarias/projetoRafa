@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Receitas - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo principal -->
+        <main class="flex-1 p-8">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Dashboard de Receitas</h1>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Visão geral das receitas</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="new.fact.html" class="bg-brand-600 hover:bg-brand-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        Nova Receita
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cards de Resumo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Total Recebido -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Recebido</p>
+                            <h3 class="text-2xl font-bold mt-1" id="totalReceived">R$ 0,00</h3>
+                            <p class="text-sm text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                <span id="percentageIncrease">0%</span> vs mês anterior
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receitas Pendentes -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Receitas Pendentes</p>
+                            <h3 class="text-2xl font-bold mt-1" id="pendingAmount">R$ 0,00</h3>
+                            <p class="text-sm text-amber-600 mt-1">
+                                <span id="pendingCount">0</span> receitas aguardando
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total de Receitas -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total de Receitas</p>
+                            <h3 class="text-2xl font-bold mt-1" id="totalCount">0</h3>
+                            <p class="text-sm text-slate-500 mt-1">No mês atual</p>
+                        </div>
+                        <div class="w-12 h-12 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-invoice text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Média por Receita -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Média por Receita</p>
+                            <h3 class="text-2xl font-bold mt-1" id="averageAmount">R$ 0,00</h3>
+                            <p class="text-sm text-slate-500 mt-1">No mês atual</p>
+                        </div>
+                        <div class="w-12 h-12 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calculator text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Gráfico de Linha - Evolução Mensal -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <h3 class="text-lg font-medium mb-4">Evolução Mensal</h3>
+                    <canvas id="monthlyChart" height="300"></canvas>
+                </div>
+
+                <!-- Gráfico de Pizza - Distribuição por Status -->
+                <div class="card-bg rounded-lg shadow-sm p-6">
+                    <h3 class="text-lg font-medium mb-4">Distribuição por Status</h3>
+                    <canvas id="statusChart" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Últimas Receitas -->
+            <div class="card-bg rounded-lg shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium">Últimas Receitas</h3>
+                        <a href="list.fact.html" class="text-brand-600 hover:text-brand-700 text-sm font-medium">
+                            Ver todas
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-sm font-medium text-slate-500">
+                                <th class="px-6 py-4">ID</th>
+                                <th class="px-6 py-4">Data</th>
+                                <th class="px-6 py-4">Empresa</th>
+                                <th class="px-6 py-4">Valor</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentIncomes">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../js/finance/income.script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Faturação</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Basic styles to ensure visibility */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+    }
+    .heading {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    .btn {
+      background-color: #4f46e5;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background-color: #4338ca;
+    }
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .user-table th, .user-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-table th {
+      background-color: #f9fafb;
+      font-weight: 600;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-blue {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .badge-green {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .badge-purple {
+      background-color: #f3e8ff;
+      color: #6b21a8;
+    }
+    .link {
+      color: #4f46e5;
+      text-decoration: none;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .link-delete {
+      color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <!-- UserManagement Component -->
+  <div class="card">
+    <h2 class="heading">User Management</h2>
+    
+    <form id="user-form">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" class="form-control">
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+            <option value="guest">Guest</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" class="form-control">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="department">Department</label>
+          <select id="department" class="form-control">
+            <option value="sales">Sales</option>
+            <option value="marketing">Marketing</option>
+            <option value="it">IT</option>
+            <option value="finance">Finance</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="text-align: right;">
+        <button type="submit" class="btn">Add User</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- UserList Component -->
+  <div class="card">
+    <h2 class="heading">User List</h2>
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+      <input type="text" placeholder="Search users..." class="form-control" style="max-width: 300px;">
+      
+      <div style="display: flex; gap: 8px;">
+        <select class="form-control">
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+          <option value="guest">Guest</option>
+        </select>
+        
+        <select class="form-control">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+    </div>
+    
+    <div style="overflow-x: auto;">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Department</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #e5e7eb; margin-right: 12px;"></div>
+                <span>John Doe</span>
+              </div>
+            </td>
+            <td>john.doe@example.com</td>
+            <td><span class="badge badge-blue">Admin</span></td>
+            <td><span class="badge badge-green">Active</span></td>
+            <td>IT</td>
+            <td>
+              <a href="#" class="link">Edit</a>
+              <a href="#" class="link link-delete" style="margin-left: 8px;">Delete</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #e5e7eb; margin-right: 12px;"></div>
+                <span>Jane Smith</span>
+              </div>
+            </td>
+            <td>jane.smith@example.com</td>
+            <td><span class="badge badge-purple">User</span></td>
+            <td><span class="badge badge-green">Active</span></td>
+            <td>Sales</td>
+            <td>
+              <a href="#" class="link">Edit</a>
+              <a href="#" class="link link-delete" style="margin-left: 8px;">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <span>Showing 1 to 10 of 97 results</span>
+      </div>
+      
+      <div style="display: flex; gap: 4px;">
+        <button class="btn" style="background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db;">Previous</button>
+        <button class="btn" style="background-color: #4f46e5;">1</button>
+        <button class="btn" style="background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db;">2</button>
+        <button class="btn" style="background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db;">3</button>
+        <button class="btn" style="background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db;">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Basic form functionality
+    document.getElementById('user-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Form submitted! In a real application, this would add a new user.');
+    });
+  </script>
+</body>
+</html>

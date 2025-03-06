@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conta - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B00',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Overlay para o menu móvel -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="min-h-screen flex">
+        <!-- Menu Lateral -->
+        <aside class="sidebar p-4 relative" id="sidebar">
+            <!-- Botão para fechar o menu em dispositivos móveis -->
+            <button class="absolute top-4 right-4 text-zinc-400 hover:text-white md:hidden" id="closeMobileMenu">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Logo e botão para colapsar o menu -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white">
+                        <span class="text-xl font-bold">D</span>
+                    </div>
+                    <h1 class="text-xl font-bold ml-3 sidebar-logo-text">dineo.</h1>
+                </div>
+                
+                <!-- Botão para colapsar o menu (visível apenas em desktop) -->
+                <button class="sidebar-toggle text-zinc-400 hover:text-white hidden md:block" id="sidebarToggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <!-- Avatar e informações do usuário -->
+            <div class="avatar-container">
+                <div class="avatar">
+                    <img src="/docs/images/people/profile-picture-5.jpg" alt="Avatar do usuário" class="avatar-image">
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Ana Silva</div>
+                    <div class="user-role">Administradora</div>
+                </div>
+                
+                <!-- Botão de tema dentro do container do avatar -->
+                <button class="theme-toggle mt-3" id="themeToggle">
+                    <i class="fas fa-moon mr-2"></i>
+                    <span class="sidebar-text">Modo escuro</span>
+                </button>
+            </div>
+
+            <nav>
+                <div class="mb-4">
+                    <h2 class="text-xs font-semibold uppercase mb-2 px-4 sidebar-text text-muted">Menu</h2>
+                    <ul>
+                        <li>
+                            <a href="/pages/dashboard.html" class="menu-item">
+                                <i class="fas fa-th-large"></i>
+                                <span class="sidebar-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/pages/welcome/welcome.html" class="menu-item">
+                                <i class="fas fa-star"></i>
+                                <span class="sidebar-text">Bem-vindo</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/pages/hr/timesheet/timesheet.html" class="menu-item">
+                                <i class="fas fa-clock"></i>
+                                <span class="sidebar-text">Registro de Ponto</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/pages/finance/finance.html" class="menu-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span class="sidebar-text">Financeiro</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/pages/contracts/contracts.html" class="menu-item">
+                                <i class="fas fa-file-contract"></i>
+                                <span class="sidebar-text">Contratos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-6">
+                    <h2 class="text-xs font-semibold uppercase mb-2 px-4 sidebar-text text-muted">Sistema</h2>
+                    <ul>
+                        <li>
+                            <a href="/pages/account/account.html" class="menu-item active">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="sidebar-text">Conta</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/pages/settings/settings.html" class="menu-item">
+                                <i class="fas fa-cog"></i>
+                                <span class="sidebar-text">Configurações</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/index.html" class="menu-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span class="sidebar-text">Sair</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 overflow-auto main-content" id="mainContent">
+            <!-- Cabeçalho -->
+            <header class="header-bg p-4 shadow-sm">
+                <div class="flex justify-between items-center">
+                    <!-- Botão de menu móvel (visível apenas em dispositivos móveis) -->
+                    <button class="mobile-menu-toggle text-zinc-400 hover:text-white mr-2" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <h1 class="text-xl font-bold">Minha Conta</h1>
+                    <div class="flex items-center space-x-4">
+                        <!-- Notificações -->
+                        <div class="relative">
+                            <button class="text-zinc-400 hover:text-white">
+                                <i class="fas fa-bell"></i>
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Conteúdo da Página -->
+            <div class="p-6">
+                <!-- Informações do Perfil -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Coluna 1: Perfil -->
+                    <div class="card-bg rounded-lg p-6 shadow-sm">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-24 h-24 rounded-full overflow-hidden mb-4">
+                                <img src="/docs/images/people/profile-picture-5.jpg" alt="Foto de perfil" class="w-full h-full object-cover">
+                            </div>
+                            <h2 class="text-xl font-bold">Ana Silva</h2>
+                            <p class="text-muted">Administradora</p>
+                            <p class="text-sm mt-2">ana.silva@dineo.com</p>
+                            
+                            <div class="mt-6 w-full">
+                                <button class="w-full bg-brand-500 hover:bg-brand-600 text-white py-2 rounded-lg">
+                                    Editar Perfil
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-6 border-t border-zinc-700">
+                            <h3 class="font-semibold mb-4">Informações de Contato</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-zinc-700 p-2 rounded-lg">
+                                        <i class="fas fa-phone text-zinc-300"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-muted">Telefone</p>
+                                        <p>+55 (11) 98765-4321</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-zinc-700 p-2 rounded-lg">
+                                        <i class="fas fa-envelope text-zinc-300"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-muted">Email</p>
+                                        <p>ana.silva@dineo.com</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-zinc-700 p-2 rounded-lg">
+                                        <i class="fas fa-map-marker-alt text-zinc-300"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-muted">Localização</p>
+                                        <p>São Paulo, Brasil</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coluna 2: Configurações da Conta -->
+                    <div class="card-bg rounded-lg p-6 shadow-sm">
+                        <h2 class="text-xl font-bold mb-4">Configurações da Conta</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="font-semibold mb-3">Segurança</h3>
+                                <ul class="space-y-2">
+                                    <li>
+                                        <a href="/pages/account/security.html" class="flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-lock text-brand-500"></i>
+                                                <span>Alterar Senha</span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-zinc-500"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/pages/account/security.html" class="flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-shield-alt text-brand-500"></i>
+                                                <span>Autenticação de Dois Fatores</span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-zinc-500"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-semibold mb-3">Notificações</h3>
+                                <ul class="space-y-2">
+                                    <li>
+                                        <a href="/pages/account/notifications.html" class="flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-bell text-brand-500"></i>
+                                                <span>Preferências de Notificação</span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-zinc-500"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/pages/account/email.html" class="flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-envelope text-brand-500"></i>
+                                                <span>Configurações de Email</span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-zinc-500"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-semibold mb-3">Privacidade</h3>
+                                <ul class="space-y-2">
+                                    <li>
+                                        <a href="#" class="flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-user-shield text-brand-500"></i>
+                                                <span>Configurações de Privacidade</span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-zinc-500"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coluna 3: Plano e Faturamento -->
+                    <div class="card-bg rounded-lg p-6 shadow-sm">
+                        <h2 class="text-xl font-bold mb-4">Plano e Faturamento</h2>
+                        
+                        <div class="bg-brand-500/10 p-4 rounded-lg mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-semibold">Plano Atual</h3>
+                                <span class="bg-brand-500 text-white text-xs px-2 py-1 rounded-full">Pro</span>
+                            </div>
+                            <p class="text-sm text-muted mb-4">Seu plano renova em 15 de julho de 2024</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-bold">R$ 99,90 <span class="text-sm font-normal text-muted">/mês</span></span>
+                                <a href="/pages/account/billing.html" class="text-brand-500 hover:text-brand-600 text-sm font-medium">Alterar Plano</a>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold mb-3">Histórico de Pagamentos</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-zinc-800 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">Fatura #12345</p>
+                                        <p class="text-sm text-muted">15 de junho de 2024</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">R$ 99,90</p>
+                                        <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">Pago</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-zinc-800 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">Fatura #12344</p>
+                                        <p class="text-sm text-muted">15 de maio de 2024</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">R$ 99,90</p>
+                                        <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">Pago</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-zinc-800 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">Fatura #12343</p>
+                                        <p class="text-sm text-muted">15 de abril de 2024</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">R$ 99,90</p>
+                                        <span class="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="/pages/account/billing.html" class="text-brand-500 hover:text-brand-600 text-sm font-medium">Ver Histórico Completo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Atividade Recente -->
+                <div class="card-bg rounded-lg p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">Atividade Recente</h2>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left border-b border-zinc-700">
+                                    <th class="p-3">Ação</th>
+                                    <th class="p-3">Data</th>
+                                    <th class="p-3">Dispositivo</th>
+                                    <th class="p-3">Localização</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-zinc-700/50">
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-green-500/20 p-2 rounded-lg">
+                                                <i class="fas fa-sign-in-alt text-green-500 text-sm"></i>
+                                            </div>
+                                            <span>Login bem-sucedido</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">Hoje, 09:45</td>
+                                    <td class="p-3">Chrome em Windows</td>
+                                    <td class="p-3">São Paulo, Brasil</td>
+                                </tr>
+                                <tr class="border-b border-zinc-700/50">
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-blue-500/20 p-2 rounded-lg">
+                                                <i class="fas fa-file-alt text-blue-500 text-sm"></i>
+                                            </div>
+                                            <span>Relatório gerado</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">Ontem, 15:30</td>
+                                    <td class="p-3">Chrome em Windows</td>
+                                    <td class="p-3">São Paulo, Brasil</td>
+                                </tr>
+                                <tr class="border-b border-zinc-700/50">
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-yellow-500/20 p-2 rounded-lg">
+                                                <i class="fas fa-edit text-yellow-500 text-sm"></i>
+                                            </div>
+                                            <span>Perfil atualizado</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">20/06/2024, 11:20</td>
+                                    <td class="p-3">Chrome em Windows</td>
+                                    <td class="p-3">São Paulo, Brasil</td>
+                                </tr>
+                                <tr class="border-b border-zinc-700/50">
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-red-500/20 p-2 rounded-lg">
+                                                <i class="fas fa-sign-out-alt text-red-500 text-sm"></i>
+                                            </div>
+                                            <span>Logout</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">19/06/2024, 18:05</td>
+                                    <td class="p-3">Chrome em Windows</td>
+                                    <td class="p-3">São Paulo, Brasil</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-green-500/20 p-2 rounded-lg">
+                                                <i class="fas fa-sign-in-alt text-green-500 text-sm"></i>
+                                            </div>
+                                            <span>Login bem-sucedido</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">19/06/2024, 08:30</td>
+                                    <td class="p-3">Chrome em Windows</td>
+                                    <td class="p-3">São Paulo, Brasil</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/account/account.js"></script>
+</body>
+</html>

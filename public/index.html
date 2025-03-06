@@ -1,66 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Faturação</title>
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Sistema de Lançamento de Faturação</h1>
-    
-    <div class="form-container">
-      <h2>Novo Lançamento</h2>
-      <form id="faturacao-form">
-        <input type="hidden" id="lancamento-id">
-        <div class="form-group">
-          <label for="cliente">Cliente:</label>
-          <input type="text" id="cliente" required>
-        </div>
-        <div class="form-group">
-          <label for="descricao">Descrição:</label>
-          <input type="text" id="descricao" required>
-        </div>
-        <div class="form-group">
-          <label for="valor">Valor:</label>
-          <input type="number" id="valor" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label for="status">Status:</label>
-          <select id="status">
-            <option value="Pendente">Pendente</option>
-            <option value="Pago">Pago</option>
-            <option value="Cancelado">Cancelado</option>
-          </select>
-        </div>
-        <div class="form-buttons">
-          <button type="submit" id="save-btn">Salvar</button>
-          <button type="button" id="cancel-btn" style="display: none;">Cancelar</button>
-        </div>
-      </form>
-    </div>
-    
-    <div class="list-container">
-      <h2>Lançamentos</h2>
-      <table id="lancamentos-table">
-        <thead>
-          <tr>
-            <th>Cliente</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="lancamentos-list">
-          <!-- Os lançamentos serão inseridos aqui via JavaScript -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script src="js/script.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Gestão</title>
+        <script>
+            // Redirecionar para o layout base
+            window.location.href = '/layout/base.html';
+        </script>
+    </head>
+    <body>
+        <p>Redirecionando...</p>
+    </body>
 </html>
