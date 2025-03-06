@@ -2,3 +2,6 @@ node_modules/
 *.log
 .DS_Store
 .env
+
+# Vídeos
+public/videos/restaurant-ambience.mp4
