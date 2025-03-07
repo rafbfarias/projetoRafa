@@ -196,8 +196,17 @@ const FaturacaoSchema = new mongoose.Schema({
   dayObservations: {
     type: String
   },
-  dayWeather: {
+  dayWeatherDescription: {
     type: String
+  },
+  dayWeatherTemperature: {
+    type: Number
+  },
+  dayWeatherPrecipitation: {
+    type: Number
+  },
+  dayWeatherWindSpeed: {
+    type: Number
   },
   
   // Confirmations
@@ -224,6 +233,12 @@ const FaturacaoSchema = new mongoose.Schema({
   },
   
   // Photos
+  photos: {
+    type: [String],
+    default: []
+  },
+  
+  // Modificação para o campo de fotos como array
   photoFactTotal: {
     type: String
   },

@@ -1,0 +1,1224 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ERP System Use Cases with Business Rules
+
+Table of Contents
+Financial Module Use Cases
+Human Resources Module Use Cases
+Procurement Module Use Cases
+Time Tracking Module Use Cases
+Ticketing Module Use Cases
+Infrastructure Module Use Cases
+Goals Management Module Use Cases
+Workplace Safety and HACCP Module Use Cases
+Kitchen Management Module Use Cases
+Financial Module Use Cases
+UC-1: Record Daily Sales (Income)
+Actors: Unit Employee Preconditions:
+Employee has a valid ID registered in the system
+Employee has access to the invoicing module for their unit
+Business Rules:
+Employee authentication is done via employee ID, not through the regular system login
+The system must support multiple payment methods (credit card, cash, delivery platforms, etc.)
+Photos and supporting documents must be attached to the sales record
+Sales records must track cash withdrawals that occurred during the day
+Each business unit may have specific configuration for cash distribution
+Main Flow:
+Employee accesses the sales recording module for their unit
+Employee authenticates using their unique ID
+Employee enters sales information:
+Total sales amount broken down by payment method (credit card, cash, delivery platforms)
+Cash withdrawals made during the day with specific purposes
+Additional financial information relevant for the day
+Employee attaches supporting photos/documentation
+Employee submits the daily closing information
+System stores the record with a "pending validation" status
+System sends notification to the financial team at HQ for validation
+Alternative Flows:
+If documentation is incomplete, system flags the record and warns the employee
+If employee provides conflicting financial data, system shows validation errors
+Postconditions:
+Daily sales information is recorded in the system with "pending validation" status
+Financial team at HQ is notified of new sales records to validate
+UC-2: Validate Sales Record
+Actors: HQ Financial Staff Preconditions:
+Daily sales have been submitted by a unit
+Financial staff has appropriate authentication credentials
+Business Rules:
+HQ staff access requires more robust login credentials than unit employees
+All validations and changes must be recorded for audit purposes
+Validation can only be performed by authorized financial staff
+Main Flow:
+Financial staff logs into the system using their credentials
+Staff navigates to the pool of pending sales records
+Staff selects a record to review
+System displays the complete sales information with all supporting documentation
+Staff verifies the information for accuracy and completeness
+If information is correct, staff approves the record
+If information is incorrect, staff can:
+Reject the record with comments
+Make corrections and then approve
+System updates the record status to "validated" or returns it to the unit for correction
+Postconditions:
+Sales record is either validated or returned for correction
+Validated records become available for financial reporting and analysis
+UC-3: Manage Cash Distribution
+Actors: Unit Manager Preconditions:
+Validated sales records exist for the unit
+Unit has configured cash distribution rules
+Business Rules:
+Initial date is automatically set to the earliest date with pending cash distribution
+End date is selected by the user
+The system applies unit-specific rules for cash distribution percentages
+Cash cannot remain in the store indefinitely
+Main Flow:
+Unit manager accesses the cash distribution module
+System automatically sets the start date as the earliest date with pending cash distribution
+Manager selects the end date for the distribution period
+System calculates the required distributions based on unit parameters:
+Amount for deposit
+Amount for partner profit-sharing
+Amount for employee payments
+Other distributions as configured
+System displays the distribution breakdown
+Manager confirms the distribution plan
+System records the planned distributions
+Alternative Flows:
+If no cash distribution is pending, system notifies the manager
+Postconditions:
+Cash distribution is planned and recorded
+System tracks which portions of sales have been distributed
+UC-4: Record Expense
+Actors: Financial Staff Preconditions:
+User has appropriate permissions for expense recording
+Expense categorization structure has been configured
+Business Rules:
+Expenses must be categorized using a three-level hierarchy (modality → category → subcategory)
+Expenses can come from different sources (purchases, HR, suppliers)
+Expenses can be associated with supporting documentation
+Expenses must be properly routed based on their type
+Main Flow:
+Staff accesses the expense recording module
+Staff selects the expense modality, category, and subcategory
+Staff selects the expense source:
+Purchase order
+Human resources (contract)
+Supplier (service provider)
+Other
+Staff enters expense details:
+Amount
+Date
+Description
+Additional relevant information
+Staff associates supporting documentation:
+Invoice (for purchases)
+Salary receipt (for HR expenses)
+Government documentation (for taxes/fines)
+Other documentation as needed
+Staff saves the expense record
+Alternative Flows:
+If expense is related to a contract, it is automatically categorized as HR expense
+Postconditions:
+Expense is recorded and categorized in the system
+Expense is available for financial analysis and reconciliation
+UC-5: Record Cash Withdrawal
+Actors: Unit Employee, Financial Staff, Recipient (if applicable) Preconditions: Employee has authenticated in the system
+Business Rules:
+Cash withdrawals must specify their modality (F&B, HR, TIPS, DEPOSIT, DELIVERY, OTHER)
+Company association is always mandatory and automatic
+Unit association is optional except for TIPS (mandatory)
+Different modalities require different additional information
+Authentication is required from both the employee recording the withdrawal and the recipient (for HR and DELIVERY)
+Main Flow:
+Employee navigates to cash withdrawal function
+Employee records the withdrawal amount
+Employee selects the withdrawal modality:
+F&B (Food and Beverage)
+HR (Human Resources)
+TIPS
+DEPOSIT
+DELIVERY
+OTHER
+System presents option: "Associate this cost with something beyond the company?" (company association is mandatory and automatic)
+Employee selects whether to associate with a unit (yes/no)
+If yes, employee selects the specific unit
+Based on selected modality, system presents appropriate follow-up options:
+If F&B modality:
+Employee selects an existing F&B expense or creates a new one
+If creating new, system automatically generates a purchase order
+System provides option to attach an invoice to the purchase order
+System associates the expense with the company and selected unit (if any)
+If HR modality:
+Employee must select a user (recipient)
+System asks whether to associate with a contract of this user
+If yes (and contract exists), system automatically creates an expense for the unit associated with the contract
+If no, system creates an expense for the parent company
+If DEPOSIT modality:
+If unit was selected, system shows bank accounts linked to that unit
+If no unit was selected, system shows bank accounts linked only to the parent company
+Employee must select a bank account (mandatory)
+If DELIVERY modality:
+Employee must select a user (recipient)
+System asks whether to associate with a contract of this user
+If yes (and contract exists), system automatically creates an expense for the unit associated with the contract
+If no, system creates an expense for the parent company
+If TIPS modality:
+Unit selection is mandatory (if not already selected)
+System associates the expense with the selected unit
+If OTHER modality:
+Employee provides description and justification
+Employee enters authentication code to authorize the withdrawal
+For HR and DELIVERY modalities, recipient must enter their authentication code to confirm receipt
+System records the withdrawal with all associations
+System updates financial records accordingly
+Postconditions:
+Cash withdrawal is recorded and reflected in the daily balance
+Expense record is created with appropriate associations
+Human Resources Module Use Cases
+UC-6: Create User Profile
+Actors: HR Staff Preconditions:
+Staff has appropriate HR management permissions
+Business Rules:
+Users exist independently of employment status or contracts
+Each user has a unique identifier separate from their login credentials
+This unique ID serves as a digital signature within the company
+Main Flow:
+HR staff accesses the user management module
+Staff selects "Create New User"
+Staff enters user personal information:
+Full name
+Age
+Gender
+Contact information
+Other personal details
+Staff assigns login credentials:
+Email (for login)
+Initial password
+System generates a unique identifier for the user
+Staff reviews and saves the user profile
+Postconditions:
+User profile is created in the system
+User has a unique identifier for digital signature purposes
+User is not yet associated with any company or unit
+UC-7: Invite User to Company
+Actors: HR Staff, User Preconditions:
+User profile exists in the system
+Staff has company administration permissions
+Business Rules:
+Company association requires explicit acceptance by the user
+Association with a company does not automatically associate with any unit
+Unique ID is assigned at the company level, not unit level
+Main Flow:
+HR staff accesses the company association module
+Staff searches for and selects the user to invite
+Staff initiates the company invitation
+System sends notification to the user
+User receives the invitation
+User accepts the invitation
+System associates the user with the company
+Alternative Flows:
+If user rejects the invitation, system notifies the HR staff
+Postconditions:
+User is associated with the company
+User still has no association with any specific unit
+UC-8: Associate User with Unit
+Actors: HR Staff Preconditions:
+User is already associated with the company
+Staff has unit management permissions
+Business Rules:
+Unit association can exist with or without a contract
+The unit must be created within the company by a super admin first
+User can be associated with multiple units
+Main Flow:
+HR staff accesses the unit management module
+Staff selects the unit for association
+Staff searches for and selects the user to associate
+Staff confirms the association
+System records the user-unit association
+Postconditions:
+User is associated with the specific unit
+User can now access unit-specific features (based on permissions)
+UC-9: Create Employment Contract
+Actors: HR Staff Preconditions:
+User is associated with the company
+Staff has contract management permissions
+Business Rules:
+Every contract must be associated with a user
+Contracts must be linked to a specific unit
+Users can exist without contracts
+Contract status must be tracked (draft, active, expired, terminated)
+Main Flow:
+HR staff accesses the contract management module
+Staff selects "Create New Contract"
+Staff selects the user for the contract
+Staff selects the unit for the contract
+Staff enters contract details:
+Start date
+End date
+Contract terms
+Compensation details
+Weekly required hours
+Vacation days per year
+Other relevant terms
+Staff sets the contract status (typically "draft" or "active")
+Staff saves the contract
+Postconditions:
+Contract is created and associated with both user and unit
+Contract information is available for financial and HR management
+UC-10: Record HR Expense
+Actors: Financial Staff Preconditions:
+User exists in the system
+Staff has expense management permissions
+Business Rules:
+HR expenses must be associated with a user (mandatory)
+Contract association is optional
+Unit association is optional
+Expenses follow a three-tier association pattern:
+User only → expense goes to company level
+User + Unit → expense goes to unit and company levels
+User + Contract → expense goes to contract, its unit, and company levels
+Selecting a contract automatically selects its associated unit
+Main Flow:
+Staff accesses the HR expense module
+Staff selects "Create HR Expense"
+Staff selects a user (mandatory)
+Staff decides on association level:
+Option 1: Associate only with user (expense goes to company level)
+Option 2: Associate with user and specific unit (expense goes to unit and company)
+Option 3: Associate with user's contract (expense goes to contract, its unit, and company)
+If contract is selected, system automatically associates with the contract's unit
+Staff enters expense details:
+Amount
+Date
+Description
+Supporting documentation
+Staff saves the expense record
+Postconditions:
+HR expense is recorded with proper associations
+Expense appears in appropriate financial reports based on associations
+UC-11: Request Time Off
+Actors: User (Employee) Preconditions:
+User is associated with a company
+User has access to the time tracking module
+Business Rules:
+Absences can be of various types (Vacation, Justified/Unjustified Absence, Medical Leave, etc.)
+Absences can be for a specific date or a date range
+Supporting documentation can be attached
+Absences must be approved by HR or management
+Vacation days must be tracked against available balance
+Unit-level absences require association with that unit
+Main Flow:
+User accesses the absence management interface
+User selects "Request Time Off"
+User selects the absence type:
+Vacation (L)
+Justified Absence (FJ)
+Unjustified Absence (FI)
+Medical Leave
+Parental Leave
+COVID Leave
+Unpaid Leave (15 days)
+Unpaid Leave (30 days)
+Suspension
+Partial Justified Absence
+Partial Unjustified Absence
+User enters time off details:
+Single date or date range (start and end dates)
+Justification
+Additional information
+User attaches supporting documentation if applicable
+User submits the request
+System records the request with "pending" status
+System sends notification to the appropriate approver
+Alternative Flows:
+If absence type is Vacation, system checks available vacation days and warns if insufficient
+If user has no unit association, only company admin can process the absence
+Postconditions:
+Absence request is recorded with "pending" status
+Appropriate approver is notified of the request
+UC-12: Approve/Reject Time Off Request
+Actors: HR Staff or Manager Preconditions:
+Absence request has been submitted
+Staff has absence management permissions
+Business Rules:
+Approvals must consider vacation balance for vacation requests
+Only users associated with a unit can approve absences for that unit
+Company administrators can approve any absence
+If user has no unit association, only company admin can approve their absence
+Main Flow:
+Staff accesses the absence management module
+Staff views the list of pending absence requests
+Staff selects a request to review
+System displays request details and supporting documentation
+For vacation requests, system shows:
+Available vacation days
+Vacation days already taken
+Compliance with vacation policy
+Staff decides to approve or reject the request
+If rejecting, staff provides reason
+Staff submits the decision
+System updates the request status and notifies the user
+Postconditions:
+Absence request is approved or rejected
+User is notified of the decision
+If approved, absence is recorded in the system
+UC-13: Create Training Program
+Actors: HR Staff Preconditions:
+Staff has training management permissions
+Business Rules:
+Training programs are created at company level
+Programs can be made available to specific units
+Coach can be a system user or external person
+Training can be mandatory or optional for specific roles
+Main Flow:
+Staff accesses the training management module
+Staff selects "Create New Training Program"
+Staff enters training details:
+Title
+Area/Department
+Description
+Content
+Coach (system user or manually entered name)
+Duration (hours)
+Format (online or in-person)
+Mandatory status (yes/no)
+Applicable positions/roles
+Score points (importance weight)
+Staff selects which units can access this training
+Staff saves the training program
+Postconditions:
+Training program is created
+Program is available to selected units
+UC-14: Request Training Participation
+Actors: User (Employee) Preconditions:
+User has access to the training module
+User is associated with a company and possibly a unit
+Business Rules:
+User can only access trainings available to their company/unit
+Requests can be made via user profile or contract profile
+For unit-specific training, user must have access to that unit
+Main Flow:
+User accesses the training service
+System displays available training programs based on user's company/unit associations
+User selects a training program
+User submits a participation request
+System records the request with "pending" status
+System notifies training administrators
+Postconditions:
+Training request is recorded with "pending" status
+Training administrators are notified
+UC-15: Create Training Event
+Actors: HR Staff Preconditions:
+Training program exists
+Training requests have been submitted
+Business Rules:
+Training events combine multiple individual requests
+Events inherit details from the base training program
+Coach information can be from the base program or modified
+Main Flow:
+Staff accesses the training request management module
+Staff views pending training requests
+Staff selects multiple requests for the same training program
+Staff selects "Create Training Event"
+Staff enters event details:
+Date and time
+Location
+Coach (default from training program, can be modified)
+Additional event-specific information
+Staff confirms the creation of the training event
+System notifies selected users
+Postconditions:
+Training event is created
+Selected users are notified
+UC-16: Record Training Completion
+Actors: User (Employee), HR Staff Preconditions:
+User has participated in a training event
+Business Rules:
+Completion must be documented with observations
+Digital signature (user ID) is required
+Certification can be uploaded
+Main Flow:
+User accesses the training completion form
+User completes required fields:
+Observations
+Self-assessment
+Digital signature
+User uploads certification or completion documents
+User submits the form
+HR staff reviews the submission
+HR staff approves the training completion
+System updates user's training record
+Postconditions:
+Training is recorded as completed
+Record is associated with the user's profile
+Procurement Module Use Cases
+UC-17: Configure Parent Ingredients
+Actors: Kitchen Manager Preconditions:
+Manager has ingredient management permissions
+Business Rules:
+Parent ingredients are generic categories
+They are shared between kitchen and procurement modules
+Average price is calculated from child ingredients
+Main Flow:
+Manager accesses the ingredient management module
+Manager selects "Create New Parent Ingredient"
+Manager enters parent ingredient details:
+Name
+Description
+Standard unit of measure
+Allergen information
+Manager saves the parent ingredient
+Postconditions:
+Parent ingredient is available for supplier child ingredients
+Parent ingredient appears in the online store
+UC-18: Register Supplier Child Ingredient
+Actors: Supplier, Procurement Staff Preconditions:
+Supplier has access to the supplier portal
+Parent ingredients exist in the system
+Business Rules:
+Child ingredients must be associated with a parent ingredient
+Suppliers specify which units they can serve
+Each child ingredient requires approval before becoming available
+Main Flow:
+Supplier accesses the supplier portal
+Supplier browses available parent ingredients
+Supplier selects a parent ingredient to provide
+Supplier enters child ingredient details:
+Supplier-specific name/description
+Quantity and unit of measure
+Price
+Delivery timeframe
+Additional specifications
+Supplier selects which business units they can supply this ingredient to
+Supplier submits the child ingredient for approval
+Procurement staff reviews the submission
+If approved, procurement staff activates the child ingredient
+Postconditions:
+Approved child ingredient is available for purchasing in applicable units
+System can select this supplier when units order the parent ingredient
+UC-19: Create Purchase Order
+Actors: Unit Employee Preconditions:
+Employee has purchasing permissions for their unit
+Ingredients and suppliers are configured in the system
+Business Rules:
+Users can only purchase for units they have permission for
+System automatically selects suppliers based on a predefined algorithm
+Shopping cart appears as a single cart but is divided by supplier behind the scenes
+Users can modify supplier selections before submission
+Main Flow:
+Employee accesses the online store
+Employee selects their unit (or system shows default authorized unit)
+Employee browses available parent ingredients
+Only ingredients with approved suppliers for this unit are shown
+Employee adds ingredients to cart with quantities
+System automatically selects the optimal supplier for each ingredient
+Employee reviews the cart
+System shows the cart broken down by supplier
+Employee can modify supplier selections if desired
+Employee submits the order
+Alternative Flows:
+If an ingredient has no supplier for the selected unit, it is shown as unavailable
+Postconditions:
+Order is created and enters the purchase order processing pool
+Order is divided into supplier-specific purchase orders
+UC-20: Approve and Dispatch Purchase Orders
+Actors: Procurement Staff Preconditions:
+Purchase orders have been created
+Business Rules:
+Purchase orders require approval before dispatch
+Orders are dispatched directly to suppliers
+Suppliers must be notified via email and webhook
+Main Flow:
+Procurement staff accesses the purchase order service
+Staff views pending purchase orders
+Staff reviews each order for accuracy
+Staff approves orders for dispatch
+System automatically sends notifications to suppliers:
+Email notification
+Webhook payload
+System updates order status to "dispatched"
+Postconditions:
+Purchase orders are dispatched to suppliers
+Suppliers are notified of new orders
+UC-21: Receive and Verify Deliveries
+Actors: Unit Manager Preconditions:
+Purchase orders have been dispatched to suppliers
+Business Rules:
+Delivery dates are estimated based on supplier specifications
+All items in an order must be verified
+Orders with any incident items are marked with an incident status
+Orders without incidents can proceed to invoice association
+Main Flow:
+Unit manager accesses the delivery management interface
+System shows pending deliveries with estimated arrival dates
+When delivery arrives, manager selects the order to verify
+Manager checks each item:
+Confirms receipt
+Verifies quantity
+Verifies price
+Verifies product quality
+If any issues are found, manager records the incident:
+Price discrepancy
+Quantity discrepancy
+Product substitution
+Quality issue
+Other incident type
+Manager provides details of the incident
+Manager completes the verification process
+System updates order status:
+"Delivered" if no incidents
+"Delivered with incidents" if any incidents recorded
+Postconditions:
+Delivery is recorded as received
+Order is ready for invoice association (if no incidents)
+Incidents are documented for resolution
+UC-22: Associate Invoice with Purchase Order
+Actors: Procurement Staff Preconditions:
+Purchase order has been delivered
+Staff has invoice management permissions
+Business Rules:
+Invoices must be associated with delivered purchase orders
+One invoice can be associated with multiple purchase orders
+Invoice management is handled separately from delivery verification
+Main Flow:
+Staff accesses the Purchase Invoice Service
+Staff views purchase orders without associated invoices
+Staff selects order(s) to associate with an invoice
+Staff enters invoice details:
+Invoice number
+Invoice date
+Invoice amount
+Staff uploads invoice image/scan
+Staff saves the association
+Postconditions:
+Invoice is associated with purchase order(s)
+Order status is updated to include invoice information
+UC-23: Process Purchase Order Payment
+Actors: Procurement Staff, Financial Staff Preconditions:
+Purchase order has an associated invoice
+Business Rules:
+Payments can be for single or multiple purchase orders
+Payment amount can be adjusted (partial payment)
+Payment confirmation must be documented
+Partial payments must update order status accordingly
+Main Flow:
+Procurement staff selects purchase orders for payment
+Staff creates payment request
+System calculates total payment amount
+Payment request is sent to financial department
+Financial staff reviews the payment request
+Financial staff can adjust payment amount
+Financial staff processes the payment
+Financial staff uploads payment confirmation
+System updates purchase order status:
+"Partially paid" (if payment was partial)
+"Fully paid" (if payment was complete)
+Postconditions:
+Payment is recorded
+Purchase order status is updated
+Procurement staff can see payment status
+Time Tracking Module Use Cases
+UC-24: Record Time Clock Entry
+Actors: User (Employee) Preconditions:
+User is associated with a company
+User has a unique company identifier
+Business Rules:
+Time records use the employee's unique ID for authentication
+Clock entries can follow the same three-tier association pattern as expenses
+Time entries should be compared against planned schedule (if any)
+If no schedule exists, position is customizable
+Main Flow:
+Employee accesses the time clock module at their unit
+Employee enters their unique company identifier
+System validates the identifier and shows employee information
+If employee has a planned schedule:
+System displays planned start time
+System displays assigned role/position
+System indicates whether employee is on time or late
+Employee selects the clock action:
+Clock in
+Start break
+End break
+Clock out
+If no planned position exists, employee selects their role for the shift
+System records the timestamp with employee's digital signature
+System stores the entry with associations to:
+User (always)
+Contract (if applicable)
+Unit (if applicable)
+Company (always)
+Postconditions:
+Time entry is recorded with timestamp and associations
+Entry is available for time tracking and payroll
+UC-25: Create Work Schedule
+Actors: Unit Manager Preconditions:
+Users are associated with the unit
+Manager has schedule management permissions
+Business Rules:
+Schedules can be created with daily, weekly, or monthly views
+System checks for skills match between users and assigned roles
+Breaks can be configured as paid or unpaid
+System calculates labor costs and working hours
+All affected employees must be notified of schedule publication
+Main Flow:
+Manager accesses the schedule planning module
+Manager selects a business unit
+Manager selects a date range for the schedule
+System displays available employees for the selected unit
+For each day in the schedule, manager:
+Selects an employee
+Assigns a shift with start and end times
+Configures break time (duration and paid/unpaid status)
+Assigns a role/position for the shift
+System validates role assignments against employee skills:
+If employee lacks skills for assigned role, system displays a warning
+Manager can override the warning if necessary
+System marks these assignments visually for future reference
+System calculates and displays:
+Total working hours per employee
+Labor costs
+Coverage metrics
+Manager can save the schedule as a draft or publish it
+If published, system sends notifications to all scheduled employees
+Postconditions:
+Schedule is created and optionally published to employees
+If published, employees can view their assigned shifts
+UC-26: Request Schedule Change
+Actors: User (Employee) Preconditions:
+User has been assigned to a published schedule
+Business Rules:
+Change requests are handled through the ticketing system
+Changes must be approved by managers
+All affected employees must be notified of approved changes
+Main Flow:
+Employee accesses their schedule
+Employee identifies a shift they need to change
+Employee selects the shift and chooses "Request Change"
+System creates a ticket with the shift details pre-populated
+Employee adds reason for change and any additional information
+Employee submits the change request
+System routes the ticket to the appropriate manager
+Postconditions:
+Schedule change request is submitted as a ticket
+Manager is notified of the change request
+UC-27: Modify Published Schedule
+Actors: Unit Manager Preconditions:
+A schedule has been published
+Manager has schedule management permissions
+Business Rules:
+Only affected employees should be notified of changes
+Employees must acknowledge schedule changes
+System tracks which employees have acknowledged changes
+Main Flow:
+Manager accesses the schedule management module
+Manager selects a published schedule
+Manager makes necessary modifications:
+Reassigns employees to different shifts
+Changes shift times
+Modifies break configurations
+Changes role assignments
+System highlights changes from the original schedule
+Manager reviews changes and confirms
+System sends notifications only to employees affected by changes
+System requires acknowledgment from affected employees
+System tracks which employees have acknowledged the changes
+Postconditions:
+Schedule is updated
+Affected employees are notified
+System tracks acknowledgments
+UC-28: Manage Hours Bank
+Actors: Unit Manager, User (Employee) Preconditions:
+Employee has recorded time entries
+Employee has a contract with specified weekly hours (if applicable)
+Business Rules:
+Hours bank is calculated as the difference between contracted, planned, and actual hours
+Users without contracts do not have hours bank tracking
+All adjustments require justification
+Hours bank can be used for payment calculation
+Main Flow:
+Manager accesses the hours bank management module
+Manager selects an employee
+System displays:
+Contracted weekly hours (if a contract exists)
+Planned hours for selected period
+Actual hours worked
+Current hours bank balance (overtime or deficit)
+Manager can adjust the hours bank by:
+Adding hours (with justification)
+Removing hours (with justification)
+Forgiving deficit hours (with justification)
+Manager saves changes
+System records the adjustment with justification
+Alternative Flows:
+Manager can use hours bank to generate HR expense for payment
+When hours are paid, they are cleared from the bank with payment reference
+Postconditions:
+Hours bank is updated with justification
+Adjustments are recorded for reporting
+UC-29: Submit TopPerformer Vote
+Actors: User (Employee) Preconditions:
+TopPerformer voting event is active
+User has not yet voted in current period
+Business Rules:
+Voting is configured with specific periods (daily, weekly, monthly)
+Users can only vote once per period
+Voting options can be users, units, text items, or other configurable options
+Results must be stored for reporting
+Main Flow:
+User accesses the time clock module
+System displays active voting event
+User selects "Vote in TopPerformer"
+System displays voting options based on configuration:
+List of users
+List of units
+List of text options
+User selects required number of options
+User confirms their vote
+System records the vote and prevents further voting in this period
+Postconditions:
+Vote is recorded
+User cannot vote again in current period
+Results are updated
+Ticketing Module Use Cases
+UC-30: Configure Ticket Categories
+Actors: System Administrator Preconditions:
+Administrator has appropriate permissions
+Business Rules:
+Categories must be assigned to specific units
+Users need permissions for both unit and category to access tickets
+Double filtering is applied (unit and category)
+Main Flow:
+Administrator accesses the ticket category configuration module
+Administrator creates or modifies ticket categories
+For each category, administrator specifies:
+Category name
+Description
+Default assignees (if any)
+Required fields
+Administrator assigns categories to specific business units
+Administrator assigns user access permissions to categories
+Administrator saves the configuration
+Postconditions:
+Ticket categories are configured
+Categories are assigned to units
+Users have appropriate access permissions
+UC-31: Create Ticket
+Actors: User Preconditions:
+User has access to at least one unit and one category
+Business Rules:
+User must have access to both the unit and category to create a ticket
+Initial ticket status is "Received"
+Tickets can be assigned to a category or to a specific user
+Notifications must be generated for new tickets
+Main Flow:
+User accesses the ticketing module
+User selects "Create New Ticket"
+User selects the target business unit (from those they have access to)
+System displays available categories for the selected unit and user's permissions
+User selects a category
+User completes the ticket form with:
+Subject/title
+Description
+Priority
+Attachments (if needed)
+Additional category-specific fields
+User has the option to:
+Leave the ticket assigned to the category (default)
+Assign the ticket to a specific user (who must have access to the unit and category)
+User submits the ticket
+System creates the ticket with "Received" status
+System generates notifications:
+Category-assigned tickets: notification to all users with category access
+User-assigned tickets: notification to the specific user
+Postconditions:
+Ticket is created with "Received" status
+Appropriate users are notified
+Ticket appears in relevant dashboards
+UC-32: Manage Ticket
+Actors: Ticket Handler (Unit Manager or Assigned User) Preconditions:
+Ticket has been created
+User has access to the unit and category
+Business Rules:
+Ticket status follows a defined lifecycle: Received → Read → Accepted → In Progress → Resolved/Suspended/Canceled
+Users can only see tickets for units and categories they have access to
+Notification counters must be visible in user dashboards
+Main Flow:
+User accesses the ticket management interface
+System displays tickets based on user's unit and category permissions
+User sees notification counter for new and updated tickets
+User selects a ticket to manage
+User can update ticket status:
+Mark as read (changes status from "Received" to "Read")
+Accept ticket (changes status to "Accepted")
+Start work (changes status to "In Progress")
+Suspend ticket (changes status to "Suspended")
+Cancel ticket (changes status to "Canceled")
+Resolve ticket (changes status to "Resolved")
+User can add comments and updates to the ticket
+User can reassign the ticket to another user with appropriate permissions
+User saves ticket changes
+System generates notifications to relevant parties about the update
+Postconditions:
+Ticket status and information is updated
+Notifications are generated for relevant users
+Dashboard counters are updated
+Infrastructure Module Use Cases
+UC-33: Manage Equipment Inventory
+Actors: Infrastructure Manager Preconditions:
+User has infrastructure module access
+Business Rules:
+Equipment can be associated with the company level or specific units
+Infrastructure access can be limited to company level or include specific units
+Equipment status must be trackable (functioning, attention required, problem, decommissioned)
+Main Flow:
+Manager accesses the infrastructure management module
+Manager selects a company or specific unit (based on permissions)
+Manager views the equipment inventory
+Manager can add new equipment with details:
+Sector/department
+Name/identifier
+Description
+Status
+Supplier information (maintenance provider, vendor)
+Purchase price
+Installation date
+Manager can edit existing equipment details
+Manager can update equipment status:
+Functioning
+Attention required
+Problem
+Decommissioned
+Manager can add notes/comments to equipment records
+Manager can view maintenance history and costs for each equipment
+Postconditions:
+Equipment inventory is updated
+Equipment status is current
+UC-34: Schedule Maintenance
+Actors: Infrastructure Manager Preconditions:
+Equipment exists in the system
+Business Rules:
+Maintenance can be preventive or corrective
+Maintenance can be one-time or recurring
+Recurring maintenance must generate notifications before scheduled date
+Maintenance can be for specific equipment or general infrastructure (plumbing, electrical, etc.)
+Main Flow:
+Manager accesses the maintenance management section
+Manager selects "Create New Maintenance"
+Manager selects target (specific equipment or general infrastructure)
+Manager enters maintenance details:
+Type (preventive, corrective)
+Description
+Scheduled date
+Estimated cost
+Maintenance provider
+Recurrence pattern (none, daily, weekly, monthly, yearly)
+If recurring, manager specifies:
+Recurrence frequency
+End date or number of occurrences
+Notification lead time
+Manager saves the maintenance record
+Postconditions:
+Maintenance is scheduled
+For recurring maintenance, notifications are set to trigger before scheduled dates
+UC-35: Record Completed Maintenance
+Actors: Infrastructure Manager Preconditions:
+Maintenance has been performed
+Business Rules:
+Completed maintenance costs must be tracked
+Maintenance costs must be summed for equipment lifetime cost calculations
+Equipment status may need to be updated after maintenance
+Main Flow:
+Manager accesses the maintenance management section
+Manager selects a scheduled maintenance or creates a new unscheduled maintenance record
+Manager updates or enters maintenance details:
+Completion date
+Actual cost
+Work performed
+Results/findings
+Next steps (if any)
+Manager uploads any supporting documentation
+Manager updates the associated equipment status if necessary
+Manager saves the completed maintenance record
+Postconditions:
+Maintenance is recorded
+Equipment maintenance cost is updated
+Equipment status is updated if necessary
+Goals Management Module Use Cases
+UC-36: Create Performance Goal
+Actors: Manager or Administrator Preconditions:
+User has goal management permissions
+Business Rules:
+Goals can be associated with specific modules, units, and users
+Goals must have a time period (daily, weekly, monthly, annual)
+Goal metrics depend on the selected category
+Goal visibility is controlled by associations
+Main Flow:
+Manager accesses the goals management module
+Manager selects "Create New Goal"
+Manager enters goal details:
+Title/name
+Description
+Category (financial, HR, procurement, infrastructure, etc.)
+Time period (daily, weekly, monthly, annual, custom)
+Start and end dates
+Based on the selected category, system presents relevant metric options
+Manager selects metric type and enters target value
+Manager assigns the goal to:
+Specific modules
+Business units
+User groups or individual users
+Manager configures additional parameters:
+Visibility settings
+Notification preferences
+Reporting options
+Manager saves the goal
+Postconditions:
+Goal is created and assigned to relevant entities
+Goal appears in relevant dashboards
+UC-37: Track Goal Progress
+Actors: User with goal access Preconditions:
+Goals have been assigned to the user's scope
+Business Rules:
+Goal progress is calculated automatically based on actual data
+Goals must be visible based on user permissions and associations
+Multiple goals can be tracked simultaneously
+Main Flow:
+User accesses the goals dashboard
+System displays goals relevant to the user based on permissions and associations
+For each goal, system shows:
+Current progress
+Target value
+Time remaining
+Trend indicators
+Comparative metrics (if applicable)
+User can filter goals by:
+Category
+Time period
+Status (on track, at risk, achieved, missed)
+Unit/department
+User can drill down into specific goals for detailed analysis
+User can view historical performance for recurring goals
+Postconditions:
+User has viewed current goal progress
+No changes are made to the goals themselves
+UC-38: Analyze Goal Performance
+Actors: Manager Preconditions:
+Goals have been created and have accumulated data
+Business Rules:
+Analysis can compare performance across units, time periods, and categories
+Analysis must respect user permissions and visibility settings
+Results can be exported for reporting
+Main Flow:
+Manager accesses the goal analysis module
+Manager selects analysis parameters:
+Goal categories
+Time periods
+Units/departments
+Comparison metrics
+System generates analysis including:
+Achievement rates
+Performance trends
+Comparative analysis between units
+Correlation with other business metrics
+Manager can export analysis for reporting
+Manager can use analysis to inform new goal creation
+Postconditions:
+Goal performance analysis is provided
+Analysis is available for export or further action
+Workplace Safety and HACCP Module Use Cases
+UC-39: Configure Safety Checklist Structure
+Actors: Safety Manager or Administrator Preconditions:
+User has appropriate permissions
+Business Rules:
+Checklists are organized in a parent-child structure (sectors → items)
+Each child item has a check frequency (30 min, hourly, daily, weekly, etc.)
+Checklists are configured per unit
+Main Flow:
+Manager accesses the safety checklist configuration module
+Manager selects a business unit
+Manager creates or modifies sectors (parent categories):
+Name
+Description
+Order/priority
+For each sector, manager creates or modifies items (child categories):
+Name
+Description
+Check frequency (30 min, hourly, daily, weekly, etc.)
+Required actions or verification steps
+Pass/fail criteria
+Manager sets activation status for each sector and item
+Manager saves the configuration
+Postconditions:
+Safety checklist structure is configured for the unit
+Checklist is available for daily use
+UC-40: Complete Safety Checks
+Actors: Unit Employee Preconditions:
+Safety checklist has been configured for the unit
+Business Rules:
+System shows time-appropriate items based on current time and check frequency
+Overdue items are highlighted
+All checks require employee's digital signature (unique ID)
+Checklists have status (pending, submitted, validated)
+Main Flow:
+Employee accesses the safety check module
+System displays the current day's checklist with time-appropriate items
+System highlights any overdue items
+For each checklist item, employee:
+Verifies the required condition
+Marks the item as completed
+Adds comments if necessary
+Timestamp is automatically recorded
+Employee continues through all current items
+Employee digitally signs the checklist with their unique ID
+Employee submits the completed checks
+System updates checklist status to "submitted"
+Alternative Flows:
+Employee can create a new checklist even if previous ones are pending
+Previous pending checklists remain in the system for completion
+Postconditions:
+Safety checks are recorded for the time period
+Checklist status is "submitted" awaiting validation
+UC-41: Review Safety Compliance
+Actors: Safety Manager Preconditions:
+Safety checks have been performed
+Business Rules:
+All checklists require validation
+Digital signatures must be recorded for all actions
+Compliance reporting must be available by unit, sector, and time period
+Main Flow:
+Manager accesses the safety compliance dashboard
+Manager selects a unit and date range
+System displays compliance metrics:
+Completion rates by sector and item
+On-time vs. late completion
+Issues identified
+Responsible users
+Manager can drill down to view specific checklists
+Manager can validate submitted checklists
+Manager can generate compliance reports
+Manager can identify areas for improvement
+Postconditions:
+Safety compliance is reviewed
+Submitted checklists are validated
+Reports are available for analysis
+Kitchen Management Module Use Cases
+UC-42: Create Preparation Recipe
+Actors: Kitchen Manager Preconditions:
+Ingredients have been defined in the system
+Business Rules:
+Ingredients are shared with the procurement module
+Preparations can include both ingredients and other preparations
+System must calculate technical price (production cost)
+Technical sheets must be generated as PDFs
+Main Flow:
+Manager accesses the preparation management section
+Manager selects "Create New Preparation"
+Manager enters preparation details:
+Name
+Type/Family
+Description
+Preparation instructions
+Unit of measure
+Shelf life
+Yield
+Waste percentage
+Manager adds ingredients to the preparation:
+Selects from available ingredients or other preparations
+Specifies quantity
+System calculates ingredient cost based on quantity and price
+System calculates total technical price (production cost)
+Manager saves the preparation
+System generates a technical sheet PDF
+Postconditions:
+Preparation recipe is available for production or use in dishes
+Technical sheet can be printed or shared
+UC-43: Create Dish Recipe
+Actors: Kitchen Manager Preconditions:
+Ingredients and preparations have been defined
+Business Rules:
+Dishes can include both ingredients and preparations
+System must calculate ingredient costs and selling price
+F&B percentage must be calculated
+Takeaway options can be specified
+Technical sheets must be generated as PDFs
+Main Flow:
+Manager accesses the dish management section
+Manager selects "Create New Dish"
+Manager enters dish details:
+Name
+Type/Family
+Description
+Preparation instructions
+Takeaway availability
+Takeaway packaging details (if applicable)
+Selling price
+Manager adds ingredients to the dish:
+Selects from available ingredients or preparations
+Specifies quantity
+System calculates ingredient cost based on quantity and price
+System calculates total ingredient cost and F&B percentage
+Manager saves the dish
+System generates a technical sheet PDF
+Postconditions:
+Dish recipe is available for production
+Technical sheet can be printed or shared
+UC-44: Record Production
+Actors: Kitchen Staff Preconditions:
+Preparations have been defined
+Business Rules:
+Production is based on existing preparation recipes
+Freezing and vacuum packaging affect shelf life
+Staff digital signature (unique ID) is required
+Production must be traceable
+Main Flow:
+Staff accesses the production tracking section
+Staff selects "Record New Production"
+Staff enters production details:
+Date
+Staff ID (for responsibility tracking)
+Selects preparation from available recipes
+System displays preparation details (instructions, ingredients, etc.)
+Staff confirms preparation method was followed
+Staff specifies:
+Freezing status (yes/no)
+Vacuum packaging status (yes/no)
+Quantity produced
+System calculates expiration date based on preparation shelf life and storage method
+Staff saves the production record
+Postconditions:
+Production is recorded
+Expiration date is set
+Production appears in inventory
+UC-45: Manage Production Inventory
+Actors: Kitchen Staff Preconditions:
+Productions have been recorded
+Business Rules:
+Productions can be split while maintaining original traceability
+Usage and disposal must be tracked
+Expiration dates must be visible and sorted
+Productions remain in inventory until fully used or disposed
+Main Flow:
+Staff accesses the production inventory section
+System displays productions sorted by expiration date
+Staff can:
+Split a production into multiple parts (maintaining original traceability)
+Record usage of a production (partial or complete)
+Record disposal of a production (partial or complete)
+View production history and traceability
+When splitting, staff specifies:
+Quantities for each new portion
+Reason for splitting
+When recording usage or disposal, staff specifies:
+Quantity used/disposed
+Reason (for disposal)
+System updates inventory based on usage and disposal records
+Postconditions:
+Production inventory is updated
+Usage and disposal are tracked
+Split productions maintain traceability
+
+
+

@@ -15,8 +15,8 @@
     <div class="sidebar-divider"></div>
 
     <!-- Avatar e Informações do Usuário -->
-    <div class="p-4">
-        <div class="flex items-center space-x-4 relative" id="userProfileToggle">
+    <div class="p-4 relative">
+        <button id="avatarButton" class="flex items-center space-x-4 w-full">
             <div class="w-12 h-12 rounded-full overflow-hidden avatar flex-shrink-0">
                 <img src="/images/users/4.png" alt="Avatar" class="avatar-image w-full h-full object-cover">
             </div>
@@ -24,13 +24,38 @@
                 <p class="font-medium truncate text-white">Ana Silva</p>
                 <p class="text-slate-400 text-sm truncate">Administradora</p>
             </div>
-            <button class="text-slate-400 hover:text-white">
-                <i class="fas fa-chevron-down"></i>
-            </button>
-        </div>
-        <button class="theme-toggle mt-4 w-10 h-10 flex items-center justify-center rounded-lg transition-colors text-white" id="themeToggle">
-            <i class="fas fa-moon"></i>
+            <i class="fas fa-chevron-down text-slate-400"></i>
         </button>
+
+        <!-- Dropdown Menu -->
+        <div id="userDropdown" class="hidden absolute left-4 right-4 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600">
+            <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                <div>Ana Silva</div>
+                <div class="font-medium truncate">ana.silva@dineo.com</div>
+            </div>
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <i class="fas fa-user-circle mr-2"></i>Perfil
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <i class="fas fa-cog mr-2"></i>Configurações
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <i class="fas fa-bell mr-2"></i>Notificações
+                    </a>
+                </li>
+            </ul>
+            <div class="py-2">
+                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-500 dark:hover:text-red-400">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Menu de Navegação -->
@@ -108,13 +133,28 @@
                             <span class="sidebar-text">Nova Receita</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/pages/finance/cashout/dash.cashout.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-plus w-5 text-center"></i>
+                            <span class="sidebar-text">Cashout</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
         </ul>
     </div>
 
-    <!-- Linha divisória antes do botão de logoff -->
+    <!-- Linha divisória antes do botão de tema e logoff -->
     <div class="sidebar-divider"></div>
+
+    <!-- Botão de Toggle Dark/Light -->
+    <div class="p-4">
+        <button class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors w-full" id="themeToggle">
+            <i class="fas fa-moon w-5 text-center"></i>
+            <span class="sidebar-text">Alternar Tema</span>
+        </button>
+    </div>
 
     <!-- Botão de Logoff -->
     <div class="p-4 mt-auto">

@@ -17,6 +17,7 @@ const CashOutflowSchema = new mongoose.Schema({
   // Transaction Type and Company Info
   outflowType: {
     type: String,
+    enum: ['Depósito', 'Entrega', 'Pagamento RH','Pagamento F&B','Saída Tips'],
     required: true
   },
   company: {

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Transação - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold">Depósito Bancário #DEP-2025030501</h1>
+                        <span class="ml-4 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">Concluído</span>
+                    </div>
+                    <p class="text-muted">Registrado em 05/03/2025 às 14:30 por João Silva</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="/pages/finance/cashout/dash.cashout.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Voltar</span>
+                    </a>
+                    <div class="relative inline-block">
+                        <button id="actionsDropdown" class="btn btn-primary flex items-center">
+                            <span>Ações</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-print mr-2"></i>Imprimir
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-file-pdf mr-2"></i>Exportar PDF
+                                </a>
+                                <a href="/finance/cashout/edit-transaction/123" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-edit mr-2"></i>Editar
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-trash-alt mr-2"></i>Excluir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo Principal -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna Esquerda - Detalhes da Transação -->
+                <div class="md:col-span-1">
+                    <!-- Card de Resumo -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Resumo da Transação</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Tipo:</span>
+                                <span class="font-medium">Depósito Bancário</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Data:</span>
+                                <span class="font-medium">05/03/2025 14:30</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Unidade:</span>
+                                <span class="font-medium">Matosinhos</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Realizado por:</span>
+                                <span class="font-medium">João Silva</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Destinatário:</span>
+                                <span class="font-medium">Banco XX</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-muted">Método:</span>
+                                <span class="font-medium">Depósito Bancário</span>
+                            </div>
+                            <div class="border-t pt-4 mt-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-muted">Valor Esperado:</span>
+                                    <span class="font-medium">€ 1.250,00</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-muted">Valor Real:</span>
+                                    <span class="font-medium">€ 1.250,00</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-muted">Diferença:</span>
+                                    <span class="font-medium">€ 0,00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Observações -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Observações</h3>
+                        <p class="text-sm text-gray-600">
+                            Depósito realizado no terminal Multibanco do Shopping. Todas as faturações foram alocadas integralmente.
+                        </p>
+                    </div>
+
+                    <!-- Card de Documentos -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Documentos</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium mb-2">Comprovante de Depósito</h4>
+                                <div class="bg-gray-100 p-2 rounded">
+                                    <a href="#" class="flex items-center">
+                                        <i class="fas fa-file-image text-brand-600 mr-2"></i>
+                                        <span class="text-sm">comprovante_deposito_050325.jpg</span>
+                                        <i class="fas fa-download ml-auto text-gray-500"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium mb-2">Confirmação Bancária</h4>
+                                <div class="bg-gray-100 p-2 rounded">
+                                    <a href="#" class="flex items-center">
+                                        <i class="fas fa-file-pdf text-brand-600 mr-2"></i>
+                                        <span class="text-sm">confirmacao_banco_050325.pdf</span>
+                                        <i class="fas fa-download ml-auto text-gray-500"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Alocações e Histórico -->
+                <div class="md:col-span-2">
+                    <!-- Tabs Navigation -->
+                    <div class="border-b border-gray-200 mb-6">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="alocacoes">
+                                    <i class="fas fa-exchange-alt w-4 h-4 me-2"></i>Alocações
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="comprovantes">
+                                    <i class="fas fa-file-alt w-4 h-4 me-2"></i>Comprovantes
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="historico">
+                                    <i class="fas fa-history w-4 h-4 me-2"></i>Histórico
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Conteúdo das Abas -->
+                    <!-- Aba de Alocações -->
+                    <div id="tab-alocacoes" class="tab-content">
+                        <div class="dashboard-card p-6 mb-6">
+                            <h3 class="text-lg font-semibold mb-4">Detalhes das Alocações</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data Faturação</th>
+                                            <th class="px-4 py-2 text-left text-sm font-medium text-muted">Faturação ID</th>
+                                            <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor Original</th>
+                                            <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor Alocado</th>
+                                            <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <a href="/finance/income/fact/2025.03.05.MAT.125000" class="text-brand-600 hover:underline">2025.03.05.MAT.125000</a>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-right">€ 1.250,00</td>
+                                            <td class="px-4 py-3 text-sm text-right">€ 1.250,00</td>
+                                            <td class="px-4 py-3 text-sm text-center">
+                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Completo</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2" class="px-4 py-3 text-sm font-bold text-right">Totais:</td>
+                                            <td class="px-4 py-3 text-sm font-bold text-right">€ 1.250,00</td>
+                                            <td class="px-4 py-3 text-sm font-bold text-right">€ 1.250,00</td>
+                                            <td class="px-4 py-3"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Detalhes de Pendências -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-4">Status das Alocações</h3>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-gray-100 p-3 rounded">
+                                            <p class="text-xs text-muted mb-1">Faturações Processadas</p>
+                                            <p class="text-xl font-bold">1</p>
+                                        </div>
+                                        <div class="bg-gray-100 p-3 rounded">
+                                            <p class="text-xs text-muted mb-1">Completamente Alocadas</p>
+                                            <p class="text-xl font-bold">1</p>
+                                        </div>
+                                        <div class="bg-gray-100 p-3 rounded">
+                                            <p class="text-xs text-muted mb-1">Parcialmente Alocadas</p>
+                                            <p class="text-xl font-bold">0</p>
+                                        </div>
+                                        <div class="bg-gray-100 p-3 rounded">
+                                            <p class="text-xs text-muted mb-1">Valor Pendente Total</p>
+                                            <p class="text-xl font-bold">€ 0,00</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Método de Alocação -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-4">Método de Alocação</h3>
+                                    <div class="bg-gray-100 p-4 rounded">
+                                        <div class="flex items-center mb-2">
+                                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                            <span class="font-medium">Alocação Total</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">
+                                            Todas as faturações foram alocadas integralmente. Não há pendências remanescentes.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aba de Comprovantes -->
+                    <div id="tab-comprovantes" class="tab-content hidden">
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Visualização de Comprovantes</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-md font-medium mb-2">Comprovante de Depósito</h4>
+                                    <div class="bg-gray-100 p-4 rounded flex items-center justify-center h-64">
+                                        <img src="/api/placeholder/300/250" alt="Comprovante de Depósito" class="max-h-full object-contain">
+                                    </div>
+                                    <div class="mt-2 flex justify-between">
+                                        <p class="text-sm text-muted">Enviado em: 05/03/2025 14:35</p>
+                                        <a href="#" class="text-sm text-brand-600 hover:underline">Download</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-md font-medium mb-2">Confirmação Bancária</h4>
+                                    <div class="bg-gray-100 p-4 rounded flex items-center justify-center h-64">
+                                        <div class="text-center">
+                                            <i class="fas fa-file-pdf text-brand-600 text-6xl mb-2"></i>
+                                            <p class="text-sm">confirmacao_banco_050325.pdf</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 flex justify-between">
+                                        <p class="text-sm text-muted">Enviado em: 05/03/2025 14:40</p>
+                                        <a href="#" class="text-sm text-brand-600 hover:underline">Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aba de Histórico -->
+                    <div id="tab-historico" class="tab-content hidden">
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Histórico de Alterações</h3>
+                            <div class="space-y-4">
+                                <div class="border-l-2 border-green-500 pl-4 pb-4">
+                                    <div class="flex items-center mb-1">
+                                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                        <span class="font-medium">Transação concluída</span>
+                                        <span class="ml-auto text-sm text-muted">05/03/2025 14:45</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Operação confirmada e finalizada por João Silva.</p>
+                                </div>
+                                <div class="border-l-2 border-blue-500 pl-4 pb-4">
+                                    <div class="flex items-center mb-1">
+                                        <i class="fas fa-file-upload text-blue-600 mr-2"></i>
+                                        <span class="font-medium">Comprovante anexado</span>
+                                        <span class="ml-auto text-sm text-muted">05/03/2025 14:40</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Confirmação bancária anexada ao registro por João Silva.</p>
+                                </div>
+                                <div class="border-l-2 border-blue-500 pl-4 pb-4">
+                                    <div class="flex items-center mb-1">
+                                        <i class="fas fa-file-upload text-blue-600 mr-2"></i>
+                                        <span class="font-medium">Comprovante anexado</span>
+                                        <span class="ml-auto text-sm text-muted">05/03/2025 14:35</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Comprovante de depósito anexado ao registro por João Silva.</p>
+                                </div>
+                                <div class="border-l-2 border-gray-500 pl-4 pb-4">
+                                    <div class="flex items-center mb-1">
+                                        <i class="fas fa-plus-circle text-gray-600 mr-2"></i>
+                                        <span class="font-medium">Transação criada</span>
+                                        <span class="ml-auto text-sm text-muted">05/03/2025 14:30</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Transação registrada por João Silva.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle dropdown menu
+            const actionsDropdown = document.getElementById('actionsDropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            actionsDropdown.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!actionsDropdown.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+            
+            // Tab navigation
+            const tabButtons = document.querySelectorAll('[data-tab]');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Remove active class from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('tab-inactive');
+                    });
+                    
+                    // Show active tab content
+                    const tabName = this.getAttribute('data-tab');
+                    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('tab-active');
+                    this.classList.remove('tab-inactive');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

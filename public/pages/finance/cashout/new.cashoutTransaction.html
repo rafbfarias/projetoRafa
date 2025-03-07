@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Transação de Caixa - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="--bg-primary dark:--bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Nova Transação de Caixa</h1>
+                    <p class="text-muted">Registre saídas de caixa e aloque valores para múltiplas faturações</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Voltar</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="saveButton">
+                        <i class="fas fa-save mr-2"></i>
+                        <span>Salvar Transação</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulário Principal -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna Esquerda - Detalhes da Transação -->
+                <div class="md:col-span-1">
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Detalhes da Transação</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Tipo de Transação</label>
+                                <select id="transactionType" class="w-full p-2 rounded form-select">
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="DEPOSIT">Depósito Bancário</option>
+                                    <option value="HAND_DELIVERY">Entrega em Mãos</option>
+                                    <option value="TIPS">Saída de Gorjetas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Data da Transação</label>
+                                <input type="datetime-local" id="transactionDate" class="w-full p-2 rounded form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Empresa</label>
+                                <select id="companySelect" class="w-full p-2 rounded form-select">
+                                    <option value="1">Plateiapositiva, Lda</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Unidade</label>
+                                <select id="unitSelect" class="w-full p-2 rounded form-select">
+                                    <option value="">Selecione a unidade</option>
+                                    <option value="1">Matosinhos</option>
+                                    <option value="2">Porto</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Valor Total Esperado</label>
+                                <input type="number" id="expectedAmount" class="w-full p-2 rounded form-input bg-gray-100" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Valor Real da Transação</label>
+                                <input type="number" id="actualAmount" class="w-full p-2 rounded form-input" step="0.01">
+                                <div id="manualMessage" class="text-xs text-muted mt-1 hidden">
+                                    Defina as alocações diretamente no painel de seleção de faturações
+                                </div>
+                            </div>
+                            <div id="differenceAmountContainer" class="hidden">
+                                <label class="block text-sm font-medium mb-1">Diferença</label>
+                                <div class="flex items-center">
+                                    <input type="number" id="differenceAmount" class="w-full p-2 rounded form-input bg-gray-100" readonly>
+                                    <span id="differenceIcon" class="ml-2 text-xl"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações Adicionais</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Realizado por</label>
+                                <select id="actionBy" class="w-full p-2 rounded form-select">
+                                    <option value="">Selecione</option>
+                                    <option value="1">João Silva</option>
+                                    <option value="2">Maria Santos</option>
+                                    <option value="3">Pedro Costa</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Destinatário</label>
+                                <select id="actionTo" class="w-full p-2 rounded form-select">
+                                    <option value="">Selecione</option>
+                                    <option value="1">Banco XX</option>
+                                    <option value="2">Carlos Oliveira</option>
+                                    <option value="3">Ana Ferreira</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Método da Transação</label>
+                                <select id="transactionMethod" class="w-full p-2 rounded form-select">
+                                    <option value="">Selecione</option>
+                                    <option value="BANK_DEPOSIT">Depósito Bancário</option>
+                                    <option value="CASH_DELIVERY">Entrega em Dinheiro</option>
+                                    <option value="OTHER">Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Observações</label>
+                                <textarea id="notes" class="w-full p-2 rounded form-textarea" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Comprovantes</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Comprovante da Transação</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <i class="fas fa-upload text-gray-400 text-3xl mb-2"></i>
+                                        <div class="flex text-sm">
+                                            <label for="receiptDocument" class="relative cursor-pointer bg-white rounded-md font-medium text-brand-600 hover:text-brand-700">
+                                                <span>Carregar arquivo</span>
+                                                <input id="receiptDocument" name="receiptDocument" type="file" class="sr-only">
+                                            </label>
+                                            <p class="pl-1">ou arraste e solte</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PNG, JPG, PDF até 10MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Confirmação/Assinatura</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <i class="fas fa-signature text-gray-400 text-3xl mb-2"></i>
+                                        <div class="flex text-sm">
+                                            <label for="confirmationDocument" class="relative cursor-pointer bg-white rounded-md font-medium text-brand-600 hover:text-brand-700">
+                                                <span>Carregar arquivo</span>
+                                                <input id="confirmationDocument" name="confirmationDocument" type="file" class="sr-only">
+                                            </label>
+                                            <p class="pl-1">ou arraste e solte</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PNG, JPG, PDF até 10MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Alocação de Faturações -->
+                <div class="md:col-span-2">
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Seleção de Faturações</h3>
+                        
+                        <!-- Filtros de Pesquisa -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Data Inicial</label>
+                                <input type="date" id="startDate" class="w-full p-2 rounded form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Data Final</label>
+                                <input type="date" id="endDate" class="w-full p-2 rounded form-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Status</label>
+                                <select id="statusFilter" class="w-full p-2 rounded form-select">
+                                    <option value="PENDING">Pendentes</option>
+                                    <option value="PARTIAL">Parciais</option>
+                                    <option value="ALL">Todos</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button id="searchButton" class="btn btn-primary w-full">
+                                    <i class="fas fa-search mr-2"></i>Buscar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabela de Faturações -->
+                        <div class="overflow-x-auto mb-4">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted" style="width: 40px">
+                                                <input type="checkbox" id="selectAll" class="mr-2">
+                                        </th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted" style="width: 120px">Data</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted" style="width: 150px">Unidade</th>
+                                        <th class="px-4 py-2 text-right text-sm font-medium text-muted" style="width: 140px">Valor Pendente</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted" style="width: 120px">Status</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted" style="width: 140px">Alocar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <input type="checkbox" name="factSelection" data-id="1" data-amount="850.00" class="factCheckbox">
+                                        </td>
+                                        <td class="px-4 py-3 text-sm whitespace-nowrap">06/03/2025</td>
+                                        <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                        <td class="px-4 py-3 text-sm text-right whitespace-nowrap">€ 850,00</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pendente</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <input type="number" class="allocation-input w-28 p-1 text-center rounded" data-id="1" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <input type="checkbox" name="factSelection" data-id="2" data-amount="1100.00" class="factCheckbox">
+                                        </td>
+                                        <td class="px-4 py-3 text-sm whitespace-nowrap">05/03/2025</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm text-right whitespace-nowrap">€ 1.100,00</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pendente</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <input type="number" class="allocation-input w-28 p-1 text-center rounded" data-id="2" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <input type="checkbox" name="factSelection" data-id="3" data-amount="675.00" class="factCheckbox">
+                                        </td>
+                                        <td class="px-4 py-3 text-sm whitespace-nowrap">04/03/2025</td>
+                                        <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                        <td class="px-4 py-3 text-sm text-right whitespace-nowrap">€ 675,00</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pendente</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <input type="number" class="allocation-input w-28 p-1 text-center rounded" data-id="3" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <input type="checkbox" name="factSelection" data-id="4" data-amount="800.50" class="factCheckbox">
+                                        </td>
+                                        <td class="px-4 py-3 text-sm whitespace-nowrap">03/03/2025</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm text-right whitespace-nowrap">€ 800,50</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pendente</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <input type="number" class="allocation-input w-28 p-1 text-center rounded" data-id="4" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-3 text-sm font-bold text-right">Total Selecionado:</td>
+                                        <td class="px-4 py-3 text-sm font-bold text-right" id="totalSelected">€ 0,00</td>
+                                        <td class="px-4 py-3 text-center text-sm font-bold">Total Alocado:</td>
+                                        <td class="px-4 py-3 text-center text-sm font-bold" id="totalAllocated">€ 0,00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Resumo da Alocação -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Resumo da Alocação</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                            <div class="text-center p-4 --component-bg rounded">
+                                <p class="text-sm text-muted mb-1">Valor Total Selecionado</p>
+                                <p class="text-xl font-bold" id="summaryTotalSelected">€ 0,00</p>
+                            </div>
+                            <div class="text-center p-4 --component-bg rounded">
+                                <p class="text-sm text-muted mb-1">Valor Real da Transação</p>
+                                <p class="text-xl font-bold" id="summaryActualAmount">€ 0,00</p>
+                            </div>
+                            <div class="text-center p-4 --component-bg rounded">
+                                <p class="text-sm text-muted mb-1">Diferença</p>
+                                <p class="text-xl font-bold" id="summaryDifference">€ 0,00</p>
+                            </div>
+                        </div>
+                        
+                        <div id="allocationAlertContainer" class="hidden mb-4 p-4 rounded">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-xl mt-1 mr-3"></i>
+                                <div>
+                                    <h4 class="font-medium mb-1" id="allocationAlertTitle"></h4>
+                                    <p class="text-sm" id="allocationAlertMessage"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="allocationMethodsContainer" class="hidden">
+                            <h4 class="text-lg font-semibold mb-4">Métodos de Alocação da Diferença</h4>
+                            
+                            <!-- Método de Alocação -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="p-4 --component-bg rounded cursor-pointer transition-all hover:--component-bg allocation-method-card" data-method="proportional">
+                                    <label class="flex items-center justify-between cursor-pointer">
+                                        <div>
+                                            <span class="block font-medium mb-1">Proporcional</span>
+                                            <span class="text-xs text-muted">Distribuição proporcional ao valor original</span>
+                                        </div>
+                                        <input type="radio" name="allocationMethod" value="proportional" class="hidden" checked>
+                                        <div class="method-check w-6 h-6 rounded-full border-2 border-brand-600 flex items-center justify-center">
+                                            <i class="fas fa-check text-brand-600 hidden"></i>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="p-4 --component-bg rounded cursor-pointer transition-all hover:--component-bg allocation-method-card" data-method="oldest">
+                                    <label class="flex items-center justify-between cursor-pointer">
+                                        <div>
+                                            <span class="block font-medium mb-1">Mais Antigos</span>
+                                            <span class="text-xs text-muted">Prioridade para faturações antigas</span>
+                                        </div>
+                                        <input type="radio" name="allocationMethod" value="oldest" class="hidden">
+                                        <div class="method-check w-6 h-6 rounded-full border-2 border-brand-600 flex items-center justify-center">
+                                            <i class="fas fa-check text-brand-600 hidden"></i>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="p-4 --component-bg rounded cursor-pointer transition-all hover:--component-bg allocation-method-card" data-method="manual">
+                                    <label class="flex items-center justify-between cursor-pointer">
+                                        <div>
+                                            <span class="block font-medium mb-1">Manual</span>
+                                            <span class="text-xs text-muted">Defina valores individualmente</span>
+                                        </div>
+                                        <input type="radio" name="allocationMethod" value="manual" class="hidden">
+                                        <div class="method-check w-6 h-6 rounded-full border-2 border-brand-600 flex items-center justify-center">
+                                            <i class="fas fa-check text-brand-600 hidden"></i>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            </div>
+                            
+                        <div id="justificationContainer" class="space-y-4 hidden">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Justificativa (se houver diferença)</label>
+                                <textarea id="justification" class="w-full p-2 rounded form-textarea" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preview da Alocação -->
+                    <div class="dashboard-card p-6" id="allocationPreviewContainer">
+                        <h3 class="text-lg font-semibold mb-4">Preview da Alocação</h3>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
+                                        <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor Original</th>
+                                        <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor Alocado</th>
+                                        <th class="px-4 py-2 text-right text-sm font-medium text-muted">Diferença</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allocationPreviewBody">
+                                    <!-- Será preenchido via JavaScript -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-3 text-sm font-bold text-right">Totais:</td>
+                                        <td class="px-4 py-3 text-sm font-bold text-right" id="previewTotalOriginal">€ 0,00</td>
+                                        <td class="px-4 py-3 text-sm font-bold text-right" id="previewTotalAllocated">€ 0,00</td>
+                                        <td class="px-4 py-3 text-sm font-bold text-right" id="previewTotalDifference">€ 0,00</td>
+                                        <td class="px-4 py-3"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="./new.cashoutTransaction.js"></script>
+
+    <style>
+        .method-check {
+            transition: all 0.2s ease-in-out;
+        }
+
+        [name="allocationMethod"]:checked + .method-check {
+            background-color: var(--brand-50);
+        }
+
+        .bg-brand-50 {
+            background-color: var(--brand-50);
+        }
+
+        input[readonly] {
+            background-color: var(--gray-100);
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        input[readonly]:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+
+    <script>
+        document.querySelectorAll('.allocation-method-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const newMethod = this.dataset.method;
+                changeAllocationMethod(newMethod);
+            });
+        });
+
+        document.querySelectorAll('.allocation-input').forEach(input => {
+            input.addEventListener('input', function() {
+                // Garantir que o valor seja positivo
+                if (parseFloat(this.value) < 0) {
+                    this.value = "0.00";
+                }
+                
+                // Se estiver no modo manual, recalcular
+                const method = document.querySelector('input[name="allocationMethod"]:checked').value;
+                if (method === 'manual') {
+                    recalculateAllocation();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

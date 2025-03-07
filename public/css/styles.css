@@ -66,6 +66,14 @@
   --icon-contracts-text: #8b5cf6;
   --icon-employees-bg: #fee2e2;
   --icon-employees-text: #ef4444;
+
+  /* Cores para o dropdown do usuário */
+  --dropdown-bg: #ffffff;
+  --dropdown-border: #e2e8f0;
+  --dropdown-text: #0f172a;
+  --dropdown-text-secondary: #64748b;
+  --dropdown-hover: #f1f5f9;
+  --dropdown-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* Variáveis para tema escuro */
@@ -124,6 +132,14 @@
   --icon-contracts-text: #a78bfa;
   --icon-employees-bg: rgba(239, 68, 68, 0.2);
   --icon-employees-text: #f87171;
+
+  /* Cores para o dropdown do usuário */
+  --dropdown-bg: #1e293b;
+  --dropdown-border: #334155;
+  --dropdown-text: #f8fafc;
+  --dropdown-text-secondary: #94a3b8;
+  --dropdown-hover: #334155;
+  --dropdown-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 /* Estilos base */
@@ -512,6 +528,8 @@ select {
 
 .sidebar.collapsed .menu-item {
   justify-content: center;
+  align-items: center;
+  padding: 0.75rem 0;
 }
 
 .sidebar.collapsed .theme-toggle {
@@ -850,4 +868,579 @@ select {
 
 .text-secondary {
   color: var(--text-secondary);
+}
+
+/* Estilos para o formulário de faturação */
+/* Estilos Base para Formulários */
+.form-input, .form-select, .form-textarea {
+    height: 3.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-component);
+    transition: all 0.3s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--brand-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    outline: none;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.form-label.required::after {
+    content: "*";
+    color: #ef4444;
+    margin-left: 0.25rem;
+}
+
+/* Cards Principais */
+.info-card {
+    padding: 1.5rem;
+    background-color: var(--bg-component);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s;
+}
+
+.info-card:hover {
+    border-color: var(--brand-500);
+}
+
+.info-card-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.info-card-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Container Principal */
+.main-container {
+    background-color: var(--bg-component);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Tabs */
+.tabs-container {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: -1px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.tab-item {
+    margin-right: 0.5rem;
+}
+
+.tab-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-bottom: 2px solid transparent;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    transition: all 0.3s;
+}
+
+.tab-button:hover {
+    color: var(--text-secondary);
+    border-bottom-color: var(--border-color);
+}
+
+.tab-button.active {
+    color: var(--brand-600);
+    border-bottom-color: var(--brand-600);
+}
+
+.tab-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+/* Área de Upload */
+.photo-upload {
+    border: 2px dashed var(--border-color);
+    border-radius: 0.5rem;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.photo-upload:hover {
+    border-color: var(--brand-500);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: var(--bg-alt);
+    min-height: 400px;
+}
+
+.upload-area.has-image {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+}
+
+.upload-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    min-height: 400px;
+}
+
+/* Seleção de Unidade */
+.unit-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.unit-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.unit-avatar.selected {
+    box-shadow: 0 0 0 2px var(--brand-500), 0 0 0 4px white;
+    transform: scale(1.05);
+}
+
+.unit-code {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.unit-name {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.unit-avatar:hover .unit-name {
+    opacity: 1;
+}
+
+/* Estilos específicos para o talão */
+.receipt-container {
+    background-color: var(--bg-component);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.receipt-section {
+    border-bottom: 1px dashed var(--border-color);
+    padding: 1rem;
+}
+
+.receipt-section:last-child {
+    border-bottom: none;
+}
+
+.receipt-header {
+    text-align: center;
+    font-weight: 600;
+}
+
+.receipt-divider {
+    border-top: 1px dashed var(--border-color);
+    margin: 1rem 0;
+}
+
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-table th,
+.receipt-table td {
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.receipt-table td:last-child {
+    text-align: right;
+}
+
+.receipt-total {
+    font-weight: bold;
+    border-top: 1px dashed var(--border-color);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.input-highlight {
+    background-color: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    transition: all 0.3s;
+}
+
+.input-highlight:focus {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--brand-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Estilos para tabs */
+.tab-active {
+    color: var(--brand-600);
+    border-bottom: 2px solid var(--brand-600);
+}
+
+.tab-inactive {
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+}
+
+.tab-inactive:hover {
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* Weather Banner Styles */
+.weather-banner {
+    display: flex;
+    width: 100%;
+    height: 120px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.weather-section {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, flex 0.3s ease;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.weather-section:last-child {
+    border-right: none;
+}
+
+.weather-section:hover {
+    flex: 1.5;
+    transform: translateY(-5px);
+}
+
+.weather-content {
+    text-align: center;
+    z-index: 2;
+    color: white;
+    padding: 0 10px;
+}
+
+.weather-section h2 {
+    margin: 0;
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.weather-section .temp {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.weather-section p {
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Sunny Section */
+.sunny {
+    background: linear-gradient(to right, #FF9900, #FFCC00);
+}
+
+.sun {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #FFFF00, #FFA500);
+    border-radius: 50%;
+    box-shadow: 0 0 25px #FFFF00;
+    animation: sunRotate 15s linear infinite, pulse 3s infinite;
+}
+
+@keyframes sunRotate {
+    0% { box-shadow: 0 0 20px 5px #FFFF00; }
+    25% { box-shadow: 0 0 30px 8px #FFFF00; }
+    50% { box-shadow: 0 0 40px 10px #FFFF00; }
+    75% { box-shadow: 0 0 30px 8px #FFFF00; }
+    100% { box-shadow: 0 0 20px 5px #FFFF00; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Rainy Section */
+.rainy {
+    background: linear-gradient(to right, #4682B4, #5F9EA0);
+}
+
+.cloud {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 25px;
+    background: #F0F0F0;
+    border-radius: 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cloud:before, .cloud:after {
+    content: '';
+    position: absolute;
+    background: #F0F0F0;
+    border-radius: 50%;
+}
+
+.cloud:before {
+    width: 30px;
+    height: 30px;
+    top: -10px;
+    left: 8px;
+}
+
+.cloud:after {
+    width: 20px;
+    height: 20px;
+    top: -5px;
+    right: 10px;
+}
+
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: #A4D3EE;
+    border-radius: 5px;
+    animation-name: rain;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes rain {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(120px);
+        opacity: 0;
+    }
+}
+
+/* Windy Section */
+.windy {
+    background: linear-gradient(to right, #7CB9E8, #B0C4DE);
+}
+
+.wind {
+    position: absolute;
+    width: 60px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+    animation-name: wind;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes wind {
+    0% {
+        transform: translateX(-60px) scaleX(0.5);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(180px) scaleX(1);
+        opacity: 0;
+    }
+}
+
+/* Star Rating */
+.star-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.star-rating button {
+    font-size: 2rem;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 0.25rem;
+}
+
+.star-rating button:hover,
+.star-rating button.active {
+    color: #F59E0B;
+}
+
+/* Ajustes de layout */
+main {
+    padding: 2rem !important;
+}
+
+.sidebar-collapsed main {
+    margin-left: 5rem !important;
+}
+
+.sidebar-expanded main {
+    margin-left: 16rem !important;
+}
+
+/* Estilos para o dropdown do usuário */
+#userDropdown {
+    z-index: 1000;
+    min-width: 200px;
+    transition: all 0.2s ease-in-out;
+}
+
+#avatarButton {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#avatarButton:hover {
+    opacity: 0.9;
+}
+
+/* Animação do ícone de chevron */
+#avatarButton i {
+    transition: transform 0.2s ease-in-out;
+}
+
+#avatarButton:focus i,
+#avatarButton[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+/* Adicionar os estilos do dropdown */
+#userDropdown {
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  box-shadow: var(--dropdown-shadow);
+  color: var(--dropdown-text);
+  z-index: 1000;
+  min-width: 200px;
+  transition: all 0.2s ease-in-out;
+}
+
+#userDropdown .px-4.py-3 {
+  border-bottom: 1px solid var(--dropdown-border);
+}
+
+#userDropdown .text-sm {
+  color: var(--dropdown-text);
+}
+
+#userDropdown .font-medium.truncate {
+  color: var(--dropdown-text-secondary);
+}
+
+#userDropdown a {
+  color: var(--dropdown-text);
+  transition: all 0.2s ease-in-out;
+}
+
+#userDropdown a:hover {
+  background-color: var(--dropdown-hover);
+}
+
+#userDropdown .text-red-600 {
+  color: var(--button-danger);
+}
+
+#userDropdown .text-red-600:hover {
+  color: var(--button-danger-hover);
+}
+
+/* Ajustes para o botão do avatar */
+#avatarButton {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#avatarButton i {
+  transition: transform 0.2s ease-in-out;
+  color: var(--text-secondary);
+}
+
+#avatarButton[aria-expanded="true"] i {
+  transform: rotate(180deg);
 }

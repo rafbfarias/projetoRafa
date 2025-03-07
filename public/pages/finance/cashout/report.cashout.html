@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Consolidado de Caixa - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Relatório Consolidado de Caixa</h1>
+                    <p class="text-muted">Análise completa de saídas de caixa e pendências</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <div class="flex items-center space-x-2">
+                        <label for="reportPeriod" class="text-sm text-gray-600">Período:</label>
+                        <select id="reportPeriod" class="form-select">
+                            <option>Último mês</option>
+                            <option>Últimos 3 meses</option>
+                            <option>Este ano</option>
+                            <option>Personalizado</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-file-export mr-2"></i>
+                        Exportar
+                    </button>
+                    <a href="/pages/finance/cashout/dash.cashout.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cards de Resumo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Card Total Faturado -->
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
+                            <i class="fas fa-chart-line text-xl" style="color: var(--icon-revenue-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Total Faturado</h3>
+                            <p class="text-2xl font-bold">€ 36.425,75</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-green-600 flex items-center mr-2">
+                            <i class="fas fa-arrow-up mr-1"></i>12.5%
+                        </span>
+                        <span class="text-sm text-muted">vs. período anterior</span>
+                    </div>
+                </div>
+
+                <!-- Card Total Processado -->
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
+                            <i class="fas fa-exchange-alt text-xl" style="color: var(--icon-clients-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Total Processado</h3>
+                            <p class="text-2xl font-bold">€ 30.555,05</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-muted">83.9% do total faturado</span>
+                    </div>
+                </div>
+
+                <!-- Card Total Pendente -->
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
+                            <i class="fas fa-clock text-xl" style="color: var(--icon-contracts-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Total Pendente</h3>
+                            <p class="text-2xl font-bold">€ 5.870,70</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-muted">16.1% do total faturado</span>
+                    </div>
+                </div>
+
+                <!-- Card Transações Realizadas -->
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
+                            <i class="fas fa-file-invoice-dollar text-xl" style="color: var(--icon-employees-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Transações</h3>
+                            <p class="text-2xl font-bold">42</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-muted">Completas: 38</span>
+                        <span class="text-sm text-muted">Parciais: 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos de Análise -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Gráfico de Faturação vs. Processamento -->
+                <div class="dashboard-card p-6 lg:col-span-2">
+                    <h3 class="text-lg font-semibold mb-4">Faturação vs. Processamento</h3>
+                    <div class="h-80">
+                        <canvas id="billingProcessingChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Distribuição por Tipo -->
+                <div class="dashboard-card p-6">
+                    <h3 class="text-lg font-semibold mb-4">Distribuição por Tipo</h3>
+                    <div class="h-80">
+                        <canvas id="transactionTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progresso por Categoria e Transações -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Progresso por Categoria -->
+                <div class="dashboard-card p-6">
+                    <h3 class="text-lg font-semibold mb-4">Progresso por Categoria</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="text-md font-medium">Depósitos Bancários</span>
+                                    <div class="flex items-center">
+                                        <span class="text-sm text-muted mr-2">€ 21.355,00 de € 25.230,50</span>
+                                        <span class="text-sm font-medium text-green-600">84,6%</span>
+                                    </div>
+                                </div>
+                                <a href="#" class="text-sm text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-blue-600 h-3 rounded-full" style="width: 84.6%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="text-md font-medium">Entregas em Mãos</span>
+                                    <div class="flex items-center">
+                                        <span class="text-sm text-muted mr-2">€ 7.100,00 de € 8.950,00</span>
+                                        <span class="text-sm font-medium text-green-600">79,3%</span>
+                                    </div>
+                                </div>
+                                <a href="#" class="text-sm text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full" style="width: 79.3%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="text-md font-medium">Gorjetas</span>
+                                    <div class="flex items-center">
+                                        <span class="text-sm text-muted mr-2">€ 2.100,05 de € 2.245,25</span>
+                                        <span class="text-sm font-medium text-green-600">93,5%</span>
+                                    </div>
+                                </div>
+                                <a href="#" class="text-sm text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-purple-500 h-3 rounded-full" style="width: 93.5%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transações Recentes -->
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">Transações Recentes</h3>
+                        <a href="/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Tipo</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
+                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor</th>
+                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="inline-flex items-center">
+                                            <i class="fas fa-university text-blue-600 mr-2"></i>Depósito
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                    <td class="px-4 py-3 text-sm text-right">€ 1.250,00</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm">03/03/2025</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="inline-flex items-center">
+                                            <i class="fas fa-hand-holding-usd text-green-600 mr-2"></i>Entrega
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">Porto</td>
+                                    <td class="px-4 py-3 text-sm text-right">€ 750,00</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Parcial</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm">01/03/2025</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="inline-flex items-center">
+                                            <i class="fas fa-coins text-purple-600 mr-2"></i>Gorjetas
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                    <td class="px-4 py-3 text-sm text-right">€ 325,50</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm">28/02/2025</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="inline-flex items-center">
+                                            <i class="fas fa-university text-blue-600 mr-2"></i>Depósito
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">Porto</td>
+                                    <td class="px-4 py-3 text-sm text-right">€ 2.100,00</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pendências Detalhadas -->
+            <div class="dashboard-card p-6 mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Pendências Detalhadas</h3>
+                    <div class="flex items-center space-x-2">
+                        <label for="pendingFilter" class="text-sm text-gray-600">Filtrar por:</label>
+                        <select id="pendingFilter" class="form-select">
+                            <option>Todos</option>
+                            <option>Depósitos</option>
+                            <option>Entregas</option>
+                            <option>Gorjetas</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-muted">Faturação ID</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium text-muted">Depósito</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium text-muted">Entrega</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium text-muted">Gorjetas</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium text-muted">Total</th>
+                                <th class="px-4 py-2 text-center text-sm font-medium text-muted">Idade</th>
+                                <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium">06/03/2025</td>
+                                <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="#" class="text-brand-600 hover:underline">2025.03.06.MAT.140000</a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-right">€ 850,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 425,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 125,00</td>
+                                <td class="px-4 py-3 text-sm font-medium text-right">€ 1.400,00</td>
+                                <td class="px-4 py-3 text-sm text-center">1 dia</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="text-brand-600 hover:text-brand-800 mx-1"><i class="fas fa-money-bill-wave"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium">05/03/2025</td>
+                                <td class="px-4 py-3 text-sm">Porto</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="#" class="text-brand-600 hover:underline">2025.03.05.POR.182550</a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-right">€ 1.100,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 550,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 175,50</td>
+                                <td class="px-4 py-3 text-sm font-medium text-right">€ 1.825,50</td>
+                                <td class="px-4 py-3 text-sm text-center">2 dias</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="text-brand-600 hover:text-brand-800 mx-1"><i class="fas fa-money-bill-wave"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium">04/03/2025</td>
+                                <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="#" class="text-brand-600 hover:underline">2025.03.04.MAT.109500</a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-right">€ 675,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 325,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 95,00</td>
+                                <td class="px-4 py-3 text-sm font-medium text-right">€ 1.095,00</td>
+                                <td class="px-4 py-3 text-sm text-center">3 dias</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="text-brand-600 hover:text-brand-800 mx-1"><i class="fas fa-money-bill-wave"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium">03/03/2025</td>
+                                <td class="px-4 py-3 text-sm">Porto</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="#" class="text-brand-600 hover:underline">2025.03.03.POR.155020</a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-right">€ 800,50</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 550,00</td>
+                                <td class="px-4 py-3 text-sm text-right">€ 199,70</td>
+                                <td class="px-4 py-3 text-sm font-medium text-right">€ 1.550,20</td>
+                                <td class="px-4 py-3 text-sm text-center">4 dias</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="text-brand-600 hover:text-brand-800 mx-1"><i class="fas fa-money-bill-wave"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-right" colspan="3">
+                                    <strong>Total Pendente:</strong>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-bold text-right">€ 3.425,50</td>
+                                <td class="px-4 py-3 text-sm font-bold text-right">€ 1.850,00</td>
+                                <td class="px-4 py-3 text-sm font-bold text-right">€ 595,20</td>
+                                <td class="px-4 py-3 text-sm font-bold text-right">€ 5.870,70</td>
+                                <td class="px-4 py-3" colspan="2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resumo por Unidade -->
+            <div class="dashboard-card p-6">
+                <h3 class="text-lg font-semibold mb-4">Resumo por Unidade</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Matosinhos -->
+                    <div class="bg-gray-100 p-4 rounded">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-medium">Matosinhos</h4>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">85.7% processado</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm">Faturado:</span>
+                                    <span class="text-sm font-medium">€ 17.468,25</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm">Processado:</span>
+                                    <span class="text-sm font-medium">€ 14.973,25</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm">Pendente:</span>
+                                    <span class="text-sm font-medium">€ 2.495,00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-brand-600 h-2.5 rounded-full" style="width: 85.7%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Porto -->
+                    <div class="bg-gray-100 p-4 rounded">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-medium">Porto</h4>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">82.2% processado</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm">Faturado:</span>
+                                    <span class="text-sm font-medium">€ 18.957,50</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm">Processado:</span>
+                                    <span class="text-sm font-medium">€ 15.581,80</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm">Pendente:</span>
+                                    <span class="text-sm font-medium">€ 3.375,70</span>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-brand-600 h-2.5 rounded-full" style="width: 82.2%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico de Faturação vs. Processamento
+            const billingProcessingChart = document.getElementById('billingProcessingChart');
+            new Chart(billingProcessingChart, {
+                type: 'bar',
+                data: {
+                    labels: ['07/02', '14/02', '21/02', '28/02', '07/03', '14/03', '21/03', '28/03'],
+                    datasets: [
+                        {
+                            label: 'Faturado',
+                            data: [4250, 4800, 5100, 4600, 5200, 4900, 5300, 4750],
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderWidth: 0
+                        },
+                        {
+                            label: 'Processado',
+                            data: [3950, 4500, 4800, 4400, 4200, 3900, 3800, 1650],
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderWidth: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '€ ' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': € ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Distribuição por Tipo
+            const transactionTypeChart = document.getElementById('transactionTypeChart');
+            new Chart(transactionTypeChart, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Depósitos', 'Entregas', 'Gorjetas'],
+                    datasets: [{
+                        data: [25230.50, 8950.00, 2245.25],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value * 100) / total).toFixed(1);
+                                    return context.label + ': € ' + value.toFixed(2) + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
