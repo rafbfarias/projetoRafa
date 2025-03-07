@@ -4,6 +4,7 @@ class Sidebar extends HTMLElement {
         this.currentTheme = localStorage.getItem('theme') || 'light';
         this.sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         this.openSubmenus = JSON.parse(localStorage.getItem('openSubmenus')) || [];
+        this.userData = null;
         
         // Aplicar o tema atual ao documento
         document.documentElement.setAttribute('data-theme', this.currentTheme);
@@ -12,9 +13,16 @@ class Sidebar extends HTMLElement {
 
     async connectedCallback() {
         try {
+            // Carregar dados do usuário
+            await this.loadUserData();
+
             const response = await fetch('/components/sidebar.html');
             const html = await response.text();
             this.innerHTML = html;
+
+            // Atualizar informações do usuário na sidebar
+            this.updateUserInfo();
+
             this.setupEventListeners();
             this.setupDropdown();
             
@@ -57,8 +65,47 @@ class Sidebar extends HTMLElement {
             });
 
             this.setupDropdownHoverEffects();
+            this.loadInvitationNotification();
         } catch (error) {
             console.error('Erro ao carregar o sidebar:', error);
+            // Se houver erro de autenticação, redirecionar para o login
+            if (error.status === 401) {
+                window.location.href = '/login.html';
+            }
+        }
+    }
+
+    async loadUserData() {
+        const response = await fetch('/api/auth/me');
+        if (!response.ok) {
+            throw { status: response.status, message: 'Erro ao carregar dados do usuário' };
+        }
+        const data = await response.json();
+        this.userData = data.user;
+    }
+
+    updateUserInfo() {
+        if (!this.userData) return;
+
+        // Atualizar avatar
+        const avatarImg = this.querySelector('.avatar-image');
+        if (avatarImg) {
+            avatarImg.src = this.userData.photo;
+            avatarImg.alt = `Avatar de ${this.userData.preferredName}`;
+        }
+
+        // Atualizar nome e email no botão do avatar
+        const userInfo = this.querySelector('.sidebar-user-info');
+        if (userInfo) {
+            userInfo.querySelector('p:first-child').textContent = this.userData.preferredName;
+            userInfo.querySelector('p:last-child').textContent = this.userData.email;
+        }
+
+        // Atualizar informações no dropdown
+        const dropdownInfo = this.querySelector('#userDropdown .px-4.py-3');
+        if (dropdownInfo) {
+            dropdownInfo.querySelector('div:first-child').textContent = this.userData.preferredName;
+            dropdownInfo.querySelector('.font-medium').textContent = this.userData.email;
         }
     }
 
@@ -85,6 +132,24 @@ class Sidebar extends HTMLElement {
             icon.classList.toggle('fa-chevron-right');
             localStorage.setItem('sidebarCollapsed', this.sidebarCollapsed);
         });
+
+        // Logout
+        const logoutButton = this.querySelector('a[href="/index.html"]');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    const response = await fetch('/api/auth/logout', {
+                        method: 'POST'
+                    });
+                    if (response.ok) {
+                        window.location.href = '/login.html';
+                    }
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            });
+        }
 
         // User Dropdown
         const userProfileToggle = this.querySelector('#userProfileToggle');
@@ -220,6 +285,22 @@ class Sidebar extends HTMLElement {
                 item.style.backgroundColor = 'transparent';
             });
         });
+    }
+
+    async loadInvitationNotification() {
+        try {
+            const response = await fetch('/components/invitation-notification.html');
+            const html = await response.text();
+            
+            // Criar um container para a notificação
+            const notificationContainer = document.createElement('div');
+            notificationContainer.innerHTML = html;
+            
+            // Adicionar ao body
+            document.body.appendChild(notificationContainer);
+        } catch (error) {
+            console.error('Erro ao carregar notificação de convites:', error);
+        }
     }
 }
 

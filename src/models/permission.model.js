@@ -33,6 +33,10 @@ const permissionSchema = new mongoose.Schema({
     enum: ['Pendente', 'Ativa', 'Inativa'],
     default: 'Pendente'
   },
+  invitationId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Invitation'
+  }
 }, {
   timestamps: true
 });

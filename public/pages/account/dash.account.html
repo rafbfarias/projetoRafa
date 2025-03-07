@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Conta - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../css/styles.css" rel="stylesheet">
+    <script src="../../js/Sidebar.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Dashboard de Conta</h1>
+                    <p class="text-muted">Gerencie usuários, acessos e permissões do sistema</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="/users/user-management.html" class="btn btn-primary">
+                        <i class="fas fa-users-cog mr-2"></i>
+                        <span>Gestão de Usuários</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cards de Estatísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-brand-100 dark:bg-brand-800 text-brand-600 dark:text-brand-200 mr-4">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-muted">Total de Usuários</p>
+                            <h3 class="text-2xl font-bold">24</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 mr-4">
+                            <i class="fas fa-user-check text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-muted">Usuários Ativos</p>
+                            <h3 class="text-2xl font-bold">18</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-600 dark:text-yellow-200 mr-4">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-muted">Convites Pendentes</p>
+                            <h3 class="text-2xl font-bold">6</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 mr-4">
+                            <i class="fas fa-building text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-muted">Empresas Vinculadas</p>
+                            <h3 class="text-2xl font-bold">3</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atividade Recente e Convites -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Atividade Recente -->
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Atividade Recente</h3>
+                        <a href="#" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todas</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="p-2 rounded-full bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 mr-3">
+                                <i class="fas fa-user-plus text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">Novo usuário adicionado</p>
+                                <p class="text-xs text-muted">Carlos Oliveira foi adicionado à unidade Porto</p>
+                                <p class="text-xs text-muted mt-1">Há 2 horas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 mr-3">
+                                <i class="fas fa-envelope-open-text text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">Convite aceito</p>
+                                <p class="text-xs text-muted">Maria Santos aceitou o convite para Matosinhos</p>
+                                <p class="text-xs text-muted mt-1">Há 5 horas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-600 dark:text-yellow-200 mr-3">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">Convite enviado</p>
+                                <p class="text-xs text-muted">Convite enviado para pedro.costa@email.com</p>
+                                <p class="text-xs text-muted mt-1">Há 1 dia</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 rounded-full bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 mr-3">
+                                <i class="fas fa-user-times text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">Acesso revogado</p>
+                                <p class="text-xs text-muted">Acesso de João Silva à unidade Porto foi revogado</p>
+                                <p class="text-xs text-muted mt-1">Há 2 dias</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convites Recentes -->
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Convites Recentes</h3>
+                        <a href="invitations.html" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todos</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-600 dark:text-yellow-200 mr-3">
+                                    <i class="fas fa-envelope text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">ana.ferreira@email.com</p>
+                                    <p class="text-xs text-muted">Unidade: Matosinhos</p>
+                                </div>
+                            </div>
+                            <div class="text-xs px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200">
+                                Pendente
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-600 dark:text-yellow-200 mr-3">
+                                    <i class="fas fa-envelope text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">roberto.santos@email.com</p>
+                                    <p class="text-xs text-muted">Unidade: Porto</p>
+                                </div>
+                            </div>
+                            <div class="text-xs px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200">
+                                Pendente
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 mr-3">
+                                    <i class="fas fa-envelope-open-text text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">maria.santos@email.com</p>
+                                    <p class="text-xs text-muted">Unidade: Matosinhos</p>
+                                </div>
+                            </div>
+                            <div class="text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
+                                Aceito
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 mr-3">
+                                    <i class="fas fa-envelope-open text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">carlos.oliveira@email.com</p>
+                                    <p class="text-xs text-muted">Unidade: Porto</p>
+                                </div>
+                            </div>
+                            <div class="text-xs px-2 py-1 rounded-full bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200">
+                                Recusado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribuição de Usuários -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Distribuição por Unidade -->
+                <div class="dashboard-card p-6">
+                    <h3 class="text-lg font-semibold mb-6">Usuários por Unidade</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Porto</span>
+                                <span class="text-sm text-muted">10 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-brand-600 h-2.5 rounded-full" style="width: 42%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Matosinhos</span>
+                                <span class="text-sm text-muted">8 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-brand-600 h-2.5 rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Lisboa</span>
+                                <span class="text-sm text-muted">6 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-brand-600 h-2.5 rounded-full" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distribuição por Função -->
+                <div class="dashboard-card p-6">
+                    <h3 class="text-lg font-semibold mb-6">Usuários por Função</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Administradores</span>
+                                <span class="text-sm text-muted">4 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-red-600 h-2.5 rounded-full" style="width: 17%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Gerentes</span>
+                                <span class="text-sm text-muted">8 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Operadores</span>
+                                <span class="text-sm text-muted">12 usuários</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notificações de Convites -->
+                <div class="dashboard-card p-6">
+                    <h3 class="text-lg font-semibold mb-6">Notificações</h3>
+                    <div id="notificationArea" class="space-y-4">
+                        <div class="p-3 bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-medium">6 convites pendentes</p>
+                                    <p class="text-xs">Alguns convites estão aguardando resposta há mais de 7 dias</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle mt-0.5 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Novos acessos disponíveis</p>
+                                    <p class="text-xs">3 novos módulos foram adicionados ao sistema</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-check-circle mt-0.5 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-medium">2 novos usuários esta semana</p>
+                                    <p class="text-xs">O número de usuários ativos aumentou</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/account/accountDashboard.js"></script>
+</body>
+</html> 

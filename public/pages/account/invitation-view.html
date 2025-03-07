@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Convite - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../css/styles.css" rel="stylesheet">
+    <link href="../../css/account.css" rel="stylesheet">
+    <script src="../../js/Sidebar.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Visualizar Convite</h1>
+                    <p class="text-muted">Detalhes do convite e opções de resposta</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <a href="invitations.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Voltar para Convites</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Detalhes do Convite -->
+            <div class="dashboard-card p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-2">Convite para Unidade Porto</h2>
+                <p class="text-muted mb-6">Convite pendente desde 12/05/2023</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Detalhes do Convite</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">De</label>
+                                <p class="font-medium">João Silva (joao.silva@email.com)</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Empresa</label>
+                                <p class="font-medium">Plateiapositiva, Lda</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Unidade</label>
+                                <p class="font-medium">Porto</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Função</label>
+                                <p class="font-medium">Gerente</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Mensagem</h3>
+                        <p class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
+                            Olá, gostaria de convidá-lo para se juntar à nossa equipe na unidade Porto como Gerente. Teremos prazer em contar com sua experiência e conhecimento em nossa equipe.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-4">Permissões</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full component-table">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 text-left">Módulo</th>
+                                <th class="px-4 py-3 text-center">Visualizar</th>
+                                <th class="px-4 py-3 text-center">Criar</th>
+                                <th class="px-4 py-3 text-center">Editar</th>
+                                <th class="px-4 py-3 text-center">Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-3">Finanças</td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3">RH</td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3">Administração</td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Formulário de Resposta -->
+            <div class="dashboard-card p-6">
+                <h3 class="text-lg font-semibold mb-4">Responder ao Convite</h3>
+                <form id="invitationResponseForm">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Mensagem (opcional)</label>
+                        <textarea id="responseMessage" class="form-textarea w-full" rows="3" placeholder="Escreva uma mensagem de resposta..."></textarea>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button type="button" id="acceptInvitationBtn" class="btn btn-primary">
+                            <i class="fas fa-check mr-2"></i>Aceitar Convite
+                        </button>
+                        <button type="button" id="rejectInvitationBtn" class="btn btn-secondary">
+                            <i class="fas fa-times mr-2"></i>Recusar Convite
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full mx-4 overflow-hidden shadow-xl transform transition-all">
+            <div class="p-6">
+                <div class="flex items-start mb-4">
+                    <div id="confirmationIcon" class="flex-shrink-0 mr-4">
+                        <i class="fas fa-question-circle text-yellow-500 text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 id="confirmationTitle" class="text-lg font-medium text-gray-900 dark:text-white mb-2">Confirmar Ação</h3>
+                        <p id="confirmationMessage" class="text-sm text-gray-500 dark:text-gray-300">Tem certeza que deseja realizar esta ação?</p>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button id="cancelConfirmationBtn" class="btn btn-secondary">
+                        Cancelar
+                    </button>
+                    <button id="confirmActionBtn" class="btn btn-primary">
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/account/invitationView.js"></script>
+</body>
+</html> 

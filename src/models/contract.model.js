@@ -152,7 +152,12 @@ const ContractSchema = new mongoose.Schema({
   employeeId: {
     type: Schema.Types.ObjectId,
     ref: 'Employee'
-  }
+  },  
+  // Campo a adicionar (se não existir):
+invitationId: {
+  type: Schema.Types.ObjectId,
+  ref: 'Invitation'
+}
 }, {
   timestamps: true
 });

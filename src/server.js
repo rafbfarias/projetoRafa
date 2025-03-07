@@ -1,119 +1,171 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const faturacaoRoutes = require('./routes/faturacao');
+const nodemailer = require('nodemailer');
+const faturacaoRoutes = require('./routes/faturacao.routes');
 const userRoutes = require('./routes/user.routes');
 const timesheetRoutes = require('./routes/timesheet.routes');
 const unitRoutes = require('./routes/unit.routes');
+const authRoutes = require('./routes/auth.routes');
 
 const session = require('express-session');
 
 const app = express();
-// Modificar a porta para usar 3001 ou outra porta disponível
-const PORT = process.env.PORT || 3001;
+// Modificar a porta para usar 3000
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use('/api', userRoutes);
+// Configurar o transporter do Nodemailer
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASSWORD
+    },
+    tls: {
+        rejectUnauthorized: false
+    },
+    debug: true // Ativar logs de debug
+});
+
+// Verificar conexão do email
+emailTransporter.verify()
+    .then(() => {
+        console.log('Conexão com servidor de email estabelecida');
+    })
+    .catch((error) => {
+        console.error('Erro ao verificar conexão com servidor de email:', error);
+    });
+
+// URL base da aplicação (usar a mesma porta do servidor)
+const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+
+// Adicionar configurações ao app
+app.locals.config = {
+    emailTransporter,
+    appUrl: APP_URL
+};
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.json());
 
-// Configuração de sessão (necessário para autenticação)
+// Configuração de sessão
 app.use(session({
-  secret: 'sua_chave_secreta',
-  resave: false,
-  saveUninitialized: true
+    secret: 'sua_chave_secreta',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // em produção deve ser true
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    }
 }));
 
-// Modificar a conexão do MongoDB LOCAL
-/*mongoose.connect('mongodb://localhost:27017/faturacao_db')
-.then(() => console.log('Conectado ao MongoDB'))
-.catch(err => console.error('Erro ao conectar ao MongoDB:', err));*/
+// Middleware para disponibilizar o usuário logado em todas as views
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
 
-// NÃO APAGAR A CONEXÃO DO MONGODB PARA ATLAS
-mongoose.connect('mongodb+srv://rafbfarias:ecrb1QaKVbqHN8Wy@cluster0.swhzv.mongodb.net/faturacao_db?retryWrites=true&w=majority')
-.then(() => console.log('Conectado ao MongoDB Atlas'))
-.catch(err => console.error('Erro ao conectar ao MongoDB Atlas:', err));
+// Conectar ao MongoDB Atlas
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('Conectado ao MongoDB Atlas');
+    })
+    .catch((error) => {
+        console.error('Erro ao conectar ao MongoDB Atlas:', error);
+    });
 
-// Rotas
-app.use('/api/faturacao', faturacaoRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/timesheet', timesheetRoutes);
-app.use('/api/units', unitRoutes);
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Rotas que não precisam de autenticação
+const publicPaths = [
+    '/',
+    '/index.html',
+    '/login.html',
+    '/api/auth/login',
+    '/api/users/validate-token',
+    '/api/users/first-access',
+    '/pages/account/first-access.html',
+    '/js/account/firstAccess.js',
+    '/css/account/firstAccess.css',
+    '/css/styles.css',
+    '/dineo-logo.png',
+    '/images/users/default-avatar.svg'
+];
 
 // Middleware de autenticação
 const authMiddleware = (req, res, next) => {
-  if (!req.session.user) {
-    return res.redirect('/index.html');
-  }
-  next();
+    // Verificar se é um arquivo estático público
+    if (req.path.startsWith('/css/') || 
+        req.path.startsWith('/js/') || 
+        req.path.startsWith('/images/') || 
+        req.path.startsWith('/fonts/')) {
+        return next();
+    }
+
+    // Verificar se o caminho é público
+    if (publicPaths.some(path => req.path === path)) {
+        return next();
+    }
+
+    // Se não estiver autenticado
+    if (!req.session.user) {
+        // Se for uma requisição AJAX/API
+        if (req.xhr || req.path.startsWith('/api/')) {
+            return res.status(401).json({
+                status: 'error',
+                code: 'UNAUTHORIZED',
+                message: 'Sessão expirada ou usuário não autenticado'
+            });
+        }
+        // Se for uma requisição normal, redirecionar para o login
+        return res.redirect('/login.html');
+    }
+
+    next();
 };
+
+// Aplicar middleware de autenticação
+app.use(authMiddleware);
+
+// Rotas da API
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/faturacao', faturacaoRoutes);
+app.use('/api/timesheet', timesheetRoutes);
+app.use('/api/units', unitRoutes);
 
 // Rota raiz
 app.get('/', (req, res) => {
-  if (req.session.user) {
-    res.redirect('/dashboard.html');
-  } else {
-    res.redirect('/index.html');
-  }
+    if (req.session.user) {
+        res.redirect('/pages/dashboard.html');
+    } else {
+        res.redirect('/login.html');
+    }
 });
 
 // Protege o dashboard
-app.get('/dashboard.html', authMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/pages/dashboard.html'));
+app.get('/pages/dashboard.html', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login.html');
+    }
+    res.sendFile(path.join(__dirname, '../public/pages/dashboard.html'));
 });
 
-// Protege o index.html
-app.get('/index.html', authMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-});
-
-// Rota específica para o login
-app.get('/index.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/login.html'));
-});
-
-// Servir arquivos estáticos - DEVE VIR DEPOIS das rotas específicas
-app.use(express.static('public'));
-
-// Credenciais dummy
-const DUMMY_USER = {
-  email: 'admin@admin.com',
-  password: 'admin123'
-};
-
-// Login dummy
-app.post('/api/auth/login', (req, res) => {
-  console.log('Tentativa de login:', req.body); // Debug
-  const { email, password } = req.body;
-  
-  if (email === DUMMY_USER.email && password === DUMMY_USER.password) {
-    req.session.user = { email };
-    console.log('Login bem-sucedido'); // Debug
-    res.json({ success: true });
-  } else {
-    console.log('Login falhou'); // Debug
-    res.status(401).json({ 
-      success: false, 
-      message: 'Use: admin@admin.com / admin123' 
-    });
-  }
-});
-
-// Rota de logout
-app.post('/api/auth/logout', (req, res) => {
-  req.session.destroy();
-  res.json({ success: true });
+// Rota de login
+app.get('/login.html', (req, res) => {
+    if (req.session.user) {
+        return res.redirect('/pages/dashboard.html');
+    }
+    res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-  console.log('Use estas credenciais:');
-  console.log('Email: admin@admin.com');
-  console.log('Senha: admin123');
+    console.log(`Servidor rodando na porta ${PORT}`);
 });

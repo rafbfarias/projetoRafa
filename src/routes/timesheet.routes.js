@@ -16,4 +16,9 @@ router.get('/unit/:unit', timesheetController.findByUnit);
 // Rota para exportação
 router.get('/reports/export', timesheetController.export);
 
+// Rota base de timesheet (placeholder)
+router.get('/', (req, res) => {
+    res.json({ message: 'Módulo de timesheet em desenvolvimento' });
+});
+
 module.exports = router; 

@@ -7,110 +7,63 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  
   fullName: {
-    type: String,
-    required: true
+    type: String
   },
-  
   email: {
     type: String,
     required: true,
     unique: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
+  password: {
+    type: String,
+    required: function() {
+      return !this.isFirstAccess; // Senha só é obrigatória após o primeiro acesso
+    }
+  },
+  
+  // Controle de Acesso
+  isFirstAccess: {
+    type: Boolean,
+    default: true
+  },
+  firstAccessToken: String,
+  firstAccessTokenExpires: Date,
   
   // Identification Documents
-  idDocumentType: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
+  idDocumentType: String,
   idDocumentNumber: {
     type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    },
-    unique: true
+    sparse: true
   },
-  idDocumentValidity: {
-    type: Date,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
+  idDocumentValidity: Date,
   
   // Tax & Social Security
   taxNumber: {
     type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    },
-    unique: true
+    sparse: true
   },
   socialSecurityNumber: {
     type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
+    sparse: true
   },
   
   // Personal Details
-  birthDate: {
-    type: Date,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
-  contactPhone: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
-  
-  nationality: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
+  birthDate: Date,
+  contactPhone: String,
+  nationality: String,
   
   // Address Information
-  address: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
-  postalCode: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
-
-  city: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
-  country: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
+  address: String,
+  postalCode: String,
+  city: String,
+  country: String,
 
   // Family Information
   maritalStatus: {
     type: String,
-    enum: ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'Domestic Partnership'],
-    required: function() {
-        return this.status !== 'Pendente';
-    }
+    enum: ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'Domestic Partnership']
   },
   dependents: {
     type: Number,
@@ -118,62 +71,61 @@ const userSchema = new mongoose.Schema({
   },
   
   // Education & Financial
-  education: {
-    type: String
-  },
-  bankAccountNumber: {
-    type: String
-  },
+  education: String,
+  bankAccountNumber: String,
   
   // Employment Information
-  currentUnit: {
-    type: String,
-    required: function() {
-        return this.status !== 'Pendente';
-    }
-  },
+  currentUnit: String,
   userStatus: {
     type: String,
     enum: ['Pendente', 'Ativa', 'Inativa'],
-    required: function() {
-        return this.status !== 'Pendente';
-    },
     default: 'Pendente'
   },
   
   // Document Files
-  idDocumentFront: {
-    type: String
-  },
-  idDocumentBack: {
-    type: String
-  },
-  otherDocuments: {
-    type: String
-  },
-  photo: {
-    type: String
-  },
-  signature: {
-    type: String
-  },
+  idDocumentFront: String,
+  idDocumentBack: String,
+  otherDocuments: String,
+  photo: String,
+  signature: String,
   
-
-  // Referencias 
-
+  // Referencias a outros modelos
   idRefFact: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'Fact'
+  },
+  idRefCompany: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company'
   },
   idRefUnit: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'Unit'
   },
   idRefContract: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'Contract'
   },
   idRefPermission: [{
     type: Schema.Types.ObjectId,
     ref: 'Permission'
   }],
+
+  // Último convite recebido (referência)
+  lastInvitation: {
+    type: Schema.Types.ObjectId,
+    ref: 'Invitation'
+  },
+
+  // Status de onboarding e rascunho
+  onboardingCompleted: {
+    type: Boolean,
+    default: false
+  },
+  isDraft: {
+    type: Boolean,
+    default: false
+  },
 
   // Timestamps
   timestamp: {
@@ -183,5 +135,21 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+
+// Remover todos os índices existentes
+userSchema.pre('save', async function() {
+  try {
+    await this.collection.dropIndexes();
+  } catch (error) {
+    console.log('Erro ao remover índices:', error);
+  }
+});
+
+// Método para gerar token de primeiro acesso
+userSchema.methods.generateFirstAccessToken = function() {
+  const crypto = require('crypto');
+  this.firstAccessToken = crypto.randomBytes(32).toString('hex');
+  this.firstAccessTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 horas
+};
 
 module.exports = mongoose.model('User', userSchema);

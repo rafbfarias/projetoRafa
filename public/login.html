@@ -71,7 +71,7 @@
                             <img src="/dineo-logo.png" alt="Logo" class="w-full h-full object-contain p-2">
                         </div>
                     </div>
-                    <h2 class="text-2xl font-semibold">dineo.</h2>
+                    <h2 class="text-6xl text-brand-100 font-semibold">dineo.</h2>
                     <p class="text-brand-100 text-sm mt-1">
                         Sistema de Gestão Empresarial
                     </p>
@@ -194,13 +194,27 @@
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 
-                // Validação simples para demonstração
-                if (email === 'admin@admin.com' && password === 'admin123') {
-                    // Redirecionar para o dashboard
-                    window.location.href = '/layout/base.html';
-                } else {
-                    alert('Credenciais inválidas. Use admin@admin.com / admin123');
-                }
+                // Fazer a requisição de login para o servidor
+                fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Redirecionar para o dashboard em caso de sucesso
+                        window.location.href = '/pages/dashboard.html';
+                    } else {
+                        alert(data.message || 'Credenciais inválidas');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro no login:', error);
+                    alert('Erro ao fazer login. Tente novamente.');
+                });
             });
         }
 

@@ -9,4 +9,4 @@ router.post('/', faturacaoController.createLancamento);
 router.put('/:id', faturacaoController.updateLancamento);
 router.delete('/:id', faturacaoController.deleteLancamento);
 
-module.exports = router;
+module.exports = router; 
