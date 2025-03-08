@@ -1,0 +1,762 @@
+import React, { useState } from 'react';
+import { 
+  Save, 
+  Plus, 
+  Trash2, 
+  Package, 
+  Tag, 
+  Star, 
+  DollarSign, 
+  Truck, 
+  Image as ImageIcon, 
+  Map, 
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  Info
+} from 'lucide-react';
+
+const ProductForm = () => {
+  const [isNewProduct, setIsNewProduct] = useState(true);
+  const [formState, setFormState] = useState({
+    name: '',
+    description: '',
+    sku: '',
+    category: '',
+    isUmbrellaProduct: true,
+    active: true,
+    image: null
+  });
+  
+  const [variants, setVariants] = useState([
+    {
+      id: 'new-variant-1',
+      supplier: '',
+      price: '',
+      unit: 'kg',
+      minOrder: '1',
+      available: true,
+      priority: 3,
+      servedUnits: ['Porto', 'Matosinhos'],
+      company: 'Restaurante A'
+    }
+  ]);
+  
+  const [expandedVariant, setExpandedVariant] = useState('new-variant-1');
+  const [previewImage, setPreviewImage] = useState(null);
+  const [errors, setErrors] = useState({});
+  
+  // Mock data for dropdowns
+  const categories = [
+    { id: 'cat1', name: 'Carnes' },
+    { id: 'cat2', name: 'Bebidas' },
+    { id: 'cat3', name: 'Vegetais' },
+    { id: 'cat4', name: 'Laticínios' },
+    { id: 'cat5', name: 'Embalagens' }
+  ];
+  
+  const suppliers = [
+    { id: 'sup1', name: 'FreshMeat Distribuidora' },
+    { id: 'sup2', name: 'DistribeBem Bebidas' },
+    { id: 'sup3', name: 'Horta Orgânica' },
+    { id: 'sup4', name: 'Laticínios do Sul' },
+    { id: 'sup5', name: 'EmbalaFácil' },
+    { id: 'sup6', name: 'Açougue Premium' },
+    { id: 'sup7', name: 'CarnesOnline' },
+    { id: 'sup8', name: 'Fazenda Verde' }
+  ];
+  
+  const units = ['kg', 'g', 'un', 'L', 'ml', 'pct', 'cx'];
+  
+  const locations = ['Porto', 'Matosinhos', 'Braga', 'Lisboa', 'Setúbal', 'Faro', 'Coimbra'];
+  
+  const companies = [
+    { id: 'comp1', name: 'Restaurante A' },
+    { id: 'comp2', name: 'Restaurante B' },
+    { id: 'comp3', name: 'Café C' }
+  ];
+  
+  // Update main form
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormState({
+      ...formState,
+      [name]: type === 'checkbox' ? checked : value
+    });
+    
+    // Clear error when input changes
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: null
+      });
+    }
+  };
+  
+  // Handle image selection
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (event) => {
+        setPreviewImage(event.target.result);
+        setFormState({
+          ...formState,
+          image: file
+        });
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  // Add new variant
+  const addVariant = () => {
+    const newVariantId = `new-variant-${variants.length + 1}`;
+    const newVariant = {
+      id: newVariantId,
+      supplier: '',
+      price: '',
+      unit: 'kg',
+      minOrder: '1',
+      available: true,
+      priority: 3,
+      servedUnits: ['Porto'],
+      company: 'Restaurante A'
+    };
+    
+    setVariants([...variants, newVariant]);
+    setExpandedVariant(newVariantId);
+  };
+  
+  // Remove variant
+  const removeVariant = (variantId) => {
+    if (variants.length === 1) {
+      alert('O produto deve ter pelo menos uma variante.');
+      return;
+    }
+    
+    setVariants(variants.filter(v => v.id !== variantId));
+    
+    // If the removed variant was expanded, collapse all
+    if (expandedVariant === variantId) {
+      setExpandedVariant(null);
+    }
+  };
+  
+  // Update variant
+  const updateVariant = (variantId, field, value) => {
+    setVariants(variants.map(variant => {
+      if (variant.id === variantId) {
+        return {
+          ...variant,
+          [field]: value
+        };
+      }
+      return variant;
+    }));
+  };
+  
+  // Toggle variant expansion
+  const toggleVariantExpansion = (variantId) => {
+    setExpandedVariant(expandedVariant === variantId ? null : variantId);
+  };
+  
+  // Toggle served unit
+  const toggleServedUnit = (variantId, unit) => {
+    setVariants(variants.map(variant => {
+      if (variant.id === variantId) {
+        const servedUnits = [...variant.servedUnits];
+        if (servedUnits.includes(unit)) {
+          return {
+            ...variant,
+            servedUnits: servedUnits.filter(u => u !== unit)
+          };
+        } else {
+          return {
+            ...variant,
+            servedUnits: [...servedUnits, unit]
+          };
+        }
+      }
+      return variant;
+    }));
+  };
+  
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formState.name.trim()) {
+      newErrors.name = 'Nome do produto é obrigatório';
+    }
+    
+    if (!formState.sku.trim()) {
+      newErrors.sku = 'SKU é obrigatório';
+    }
+    
+    if (!formState.category) {
+      newErrors.category = 'Categoria é obrigatória';
+    }
+    
+    // Validate variants
+    const variantErrors = [];
+    variants.forEach((variant, index) => {
+      const vError = {};
+      
+      if (!variant.supplier) {
+        vError.supplier = 'Fornecedor é obrigatório';
+      }
+      
+      if (!variant.price || parseFloat(variant.price) <= 0) {
+        vError.price = 'Preço válido é obrigatório';
+      }
+      
+      if (!variant.minOrder || parseInt(variant.minOrder) <= 0) {
+        vError.minOrder = 'Pedido mínimo é obrigatório';
+      }
+      
+      if (variant.servedUnits.length === 0) {
+        vError.servedUnits = 'Selecione pelo menos uma unidade';
+      }
+      
+      if (Object.keys(vError).length > 0) {
+        variantErrors[index] = vError;
+      }
+    });
+    
+    if (variantErrors.length > 0) {
+      newErrors.variants = variantErrors;
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  // Submit form
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      alert('Por favor, corrija os erros no formulário antes de salvar.');
+      return;
+    }
+    
+    // Format data for submission
+    const formData = new FormData();
+    formData.append('name', formState.name);
+    formData.append('description', formState.description);
+    formData.append('sku', formState.sku);
+    formData.append('category', formState.category);
+    formData.append('isUmbrellaProduct', formState.isUmbrellaProduct);
+    formData.append('active', formState.active);
+    
+    if (formState.image) {
+      formData.append('image', formState.image);
+    }
+    
+    formData.append('variants', JSON.stringify(variants));
+    
+    // Here you would normally submit the form data to your API
+    console.log('Submitting form data:', formData);
+    
+    // Simulate API call
+    setTimeout(() => {
+      alert(`Produto ${isNewProduct ? 'criado' : 'atualizado'} com sucesso!`);
+      // Redirect or reset form as needed
+    }, 1000);
+  };
+  
+  return (
+    <div className="bg-gray-50 min-h-screen p-4">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          {isNewProduct ? 'Novo Produto' : 'Editar Produto'}
+        </h1>
+        <p className="text-gray-600">
+          {isNewProduct 
+            ? 'Crie um novo produto guarda-chuva e suas variantes específicas de fornecedores' 
+            : 'Edite as informações do produto e suas variantes'}
+        </p>
+      </div>
+      
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Main Product Information */}
+          <div className="md:col-span-2">
+            <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Informações do Produto</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nome do Produto <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formState.name}
+                    onChange={handleInputChange}
+                    className={`w-full p-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                    placeholder="Ex: Filé Mignon"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+                  )}
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    SKU <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="sku"
+                    value={formState.sku}
+                    onChange={handleInputChange}
+                    className={`w-full p-2 border ${errors.sku ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                    placeholder="Ex: CAR-FIM-001"
+                  />
+                  {errors.sku && (
+                    <p className="mt-1 text-xs text-red-500">{errors.sku}</p>
+                  )}
+                </div>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Descrição
+                </label>
+                <textarea
+                  name="description"
+                  value={formState.description}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="Descreva o produto..."
+                ></textarea>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Categoria <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="category"
+                    value={formState.category}
+                    onChange={handleInputChange}
+                    className={`w-full p-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                  >
+                    <option value="">Selecione uma categoria</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.category && (
+                    <p className="mt-1 text-xs text-red-500">{errors.category}</p>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="isUmbrellaProduct"
+                      name="isUmbrellaProduct"
+                      checked={formState.isUmbrellaProduct}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="isUmbrellaProduct" className="ml-2 block text-sm text-gray-700">
+                      Produto Guarda-chuva
+                    </label>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="active"
+                      name="active"
+                      checked={formState.active}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="active" className="ml-2 block text-sm text-gray-700">
+                      Ativo
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Product Variants */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Variantes do Produto</h2>
+                <button
+                  type="button"
+                  onClick={addVariant}
+                  className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Adicionar Variante
+                </button>
+              </div>
+              
+              {formState.isUmbrellaProduct ? (
+                <div className="space-y-4">
+                  {variants.map((variant, index) => (
+                    <div 
+                      key={variant.id} 
+                      className="border border-gray-200 rounded-lg overflow-hidden"
+                    >
+                      {/* Variant Header */}
+                      <div 
+                        className={`p-3 ${expandedVariant === variant.id ? 'bg-blue-50 border-b border-gray-200' : 'bg-gray-50'} cursor-pointer flex justify-between items-center`}
+                        onClick={() => toggleVariantExpansion(variant.id)}
+                      >
+                        <div className="flex items-center">
+                          <Package className="w-5 h-5 text-gray-500 mr-2" />
+                          <span className="font-medium text-gray-800">
+                            {variant.supplier ? suppliers.find(s => s.id === variant.supplier)?.name || variant.supplier : `Variante ${index + 1}`}
+                          </span>
+                          {variant.price && (
+                            <span className="ml-2 text-sm text-gray-600">
+                              - {new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(variant.price)}/{variant.unit}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeVariant(variant.id);
+                            }}
+                            className="p-1 text-red-600 hover:text-red-800 rounded-full hover:bg-red-50 mr-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                          {expandedVariant === variant.id ? (
+                            <ChevronUp className="w-5 h-5 text-gray-500" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5 text-gray-500" />
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Variant Details */}
+                      {expandedVariant === variant.id && (
+                        <div className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Fornecedor <span className="text-red-500">*</span>
+                              </label>
+                              <select
+                                value={variant.supplier}
+                                onChange={(e) => updateVariant(variant.id, 'supplier', e.target.value)}
+                                className={`w-full p-2 border ${errors.variants?.[index]?.supplier ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                              >
+                                <option value="">Selecione um fornecedor</option>
+                                {suppliers.map((supplier) => (
+                                  <option key={supplier.id} value={supplier.id}>
+                                    {supplier.name}
+                                  </option>
+                                ))}
+                              </select>
+                              {errors.variants?.[index]?.supplier && (
+                                <p className="mt-1 text-xs text-red-500">{errors.variants[index].supplier}</p>
+                              )}
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Preço <span className="text-red-500">*</span>
+                              </label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <DollarSign className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={variant.price}
+                                  onChange={(e) => updateVariant(variant.id, 'price', e.target.value)}
+                                  className={`pl-10 w-full p-2 border ${errors.variants?.[index]?.price ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                                  placeholder="0.00"
+                                />
+                              </div>
+                              {errors.variants?.[index]?.price && (
+                                <p className="mt-1 text-xs text-red-500">{errors.variants[index].price}</p>
+                              )}
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Unidade
+                                </label>
+                                <select
+                                  value={variant.unit}
+                                  onChange={(e) => updateVariant(variant.id, 'unit', e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md"
+                                >
+                                  {units.map((unit) => (
+                                    <option key={unit} value={unit}>
+                                      {unit}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Pedido Mínimo <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  step="1"
+                                  value={variant.minOrder}
+                                  onChange={(e) => updateVariant(variant.id, 'minOrder', e.target.value)}
+                                  className={`w-full p-2 border ${errors.variants?.[index]?.minOrder ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                                />
+                                {errors.variants?.[index]?.minOrder && (
+                                  <p className="mt-1 text-xs text-red-500">{errors.variants[index].minOrder}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Empresa
+                              </label>
+                              <select
+                                value={variant.company}
+                                onChange={(e) => updateVariant(variant.id, 'company', e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                              >
+                                {companies.map((company) => (
+                                  <option key={company.id} value={company.id}>
+                                    {company.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Prioridade
+                              </label>
+                              <div className="flex items-center">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => updateVariant(variant.id, 'priority', star)}
+                                    className="p-1 focus:outline-none"
+                                  >
+                                    <Star
+                                      className={`h-5 w-5 ${star <= variant.priority ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
+                                    />
+                                  </button>
+                                ))}
+                                <span className="ml-2 text-sm text-gray-600">
+                                  {variant.priority === 1 && 'Baixa'}
+                                  {variant.priority === 2 && 'Média-baixa'}
+                                  {variant.priority === 3 && 'Média'}
+                                  {variant.priority === 4 && 'Média-alta'}
+                                  {variant.priority === 5 && 'Alta'}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Disponibilidade
+                              </label>
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id={`available-${variant.id}`}
+                                  checked={variant.available}
+                                  onChange={(e) => updateVariant(variant.id, 'available', e.target.checked)}
+                                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                />
+                                <label htmlFor={`available-${variant.id}`} className="ml-2 block text-sm text-gray-700">
+                                  Disponível para pedidos
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Unidades Atendidas <span className="text-red-500">*</span>
+                            </label>
+                            
+                            {errors.variants?.[index]?.servedUnits && (
+                              <p className="mb-1 text-xs text-red-500">{errors.variants[index].servedUnits}</p>
+                            )}
+                            
+                            <div className="flex flex-wrap gap-2">
+                              {locations.map((location) => (
+                                <button
+                                  key={location}
+                                  type="button"
+                                  onClick={() => toggleServedUnit(variant.id, location)}
+                                  className={`px-3 py-1 text-sm rounded-full ${
+                                    variant.servedUnits.includes(location)
+                                      ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                                  }`}
+                                >
+                                  {location}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
+                  <AlertTriangle className="w-6 h-6 text-yellow-500 mr-2" />
+                  <p className="text-gray-600">
+                    Variantes só estão disponíveis para produtos guarda-chuva. Ative a opção "Produto Guarda-chuva" para adicionar variantes.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Sidebar - Image and Info */}
+          <div className="md:col-span-1">
+            <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Imagem do Produto</h2>
+              
+              <div className="mb-4">
+                <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border-2 border-gray-300 border-dashed">
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                      <p className="mt-1 text-sm text-gray-500">
+                        Clique para selecionar uma imagem
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  id="image-upload"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="mt-2 cursor-pointer block w-full bg-gray-100 text-center text-sm font-medium text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200"
+                >
+                  {previewImage ? 'Alterar Imagem' : 'Selecionar Imagem'}
+                </label>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Informações de Matching</h2>
+              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                <div className="flex items-start">
+                  <Info className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
+                  <div>
+                    <h3 className="text-sm font-medium text-blue-800">Sobre o Matching de Produtos</h3>
+                    <p className="mt-1 text-xs text-blue-600">
+                      Quando um cliente seleciona este produto na loja online, o sistema automaticamente direciona para a variante específica do fornecedor mais adequado com base nos critérios de matching.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                    <DollarSign className="w-3 h-3 mr-1" />
+                    Prioridade por Preço
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    O sistema seleciona automaticamente a variante com o menor preço entre os fornecedores disponíveis.
+                  </p>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                    <Map className="w-3 h-3 mr-1" />
+                    Compatibilidade de Unidade
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    Somente fornecedores que atendem a unidade do usuário serão considerados para o matching.
+                  </p>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                    <Star className="w-3 h-3 mr-1" />
+                    Prioridade Manual
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    Fornecedores com maior prioridade definida manualmente têm preferência quando os preços são iguais.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Ações</h2>
+                <span className={`px-2 py-1 text-xs rounded-full ${formState.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {formState.active ? 'Ativo' : 'Inativo'}
+                </span>
+              </div>
+              
+              <div className="space-y-3">
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <Save className="w-5 h-5 mr-2" />
+                  {isNewProduct ? 'Criar Produto' : 'Salvar Alterações'}
+                </button>
+                
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                  onClick={() => window.history.back()}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default ProductForm;

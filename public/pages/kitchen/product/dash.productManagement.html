@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Produtos - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/kitchen/product.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar (carregado via JavaScript) -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-left text-2xl font-bold">Gerenciamento de Produtos</h1>
+                    <p class="text-muted">Gerencie produtos guarda-chuva e suas variantes específicas de fornecedores</p>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <!-- Total Products Card -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 mr-4">
+                            <i class="fas fa-box h-6 w-6 text-blue-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Total de Produtos</p>
+                            <p class="text-2xl font-bold text-gray-800" id="totalProducts">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Products Card -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 mr-4">
+                            <i class="fas fa-tag h-6 w-6 text-green-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Produtos Ativos</p>
+                            <p class="text-2xl font-bold text-gray-800" id="activeProducts">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Variants Card -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 mr-4">
+                            <i class="fas fa-chart-bar h-6 w-6 text-purple-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Variantes de Produto</p>
+                            <p class="text-2xl font-bold text-gray-800" id="totalVariants">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suppliers Card -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 mr-4">
+                            <i class="fas fa-shopping-cart h-6 w-6 text-yellow-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Fornecedores</p>
+                            <p class="text-2xl font-bold text-gray-800" id="totalSuppliers">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-lg shadow mb-6 p-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i class="fas fa-search w-5 h-5 text-gray-500"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchProduct"
+                            class="form-input w-full pl-10"
+                            placeholder="Buscar produto por nome, SKU..."
+                        />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button 
+                            id="filterButton"
+                            class="btn btn-secondary"
+                        >
+                            <i class="fas fa-filter w-4 h-4 mr-2"></i>
+                            Filtros
+                            <i class="fas fa-chevron-down w-4 h-4 ml-2 transition-transform"></i>
+                        </button>
+                        <a 
+                            href="new.product.html" 
+                            class="btn btn-primary"
+                        >
+                            <i class="fas fa-plus w-4 h-4 mr-2"></i>
+                            Novo Produto
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Filters Panel -->
+                <div id="filtersPanel" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                            <select 
+                                id="categoryFilter"
+                                class="form-select w-full"
+                            >
+                                <option value="all">Todas as Categorias</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Fornecedor</label>
+                            <select 
+                                id="supplierFilter"
+                                class="form-select w-full"
+                            >
+                                <option value="all">Todos os Fornecedores</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ordenar por</label>
+                            <div class="flex gap-2">
+                                <select 
+                                    id="sortBy"
+                                    class="form-select w-full"
+                                >
+                                    <option value="name">Nome</option>
+                                    <option value="category">Categoria</option>
+                                    <option value="variants">Número de Variantes</option>
+                                </select>
+                                <button 
+                                    id="sortOrder"
+                                    class="px-3 py-2 border border-gray-300 bg-gray-50 text-gray-500 rounded-lg hover:bg-gray-100"
+                                >
+                                    <i class="fas fa-sort-amount-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-4 border-b border-gray-200">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                    <li class="mr-2">
+                        <button
+                            class="tab-button active inline-flex items-center p-4 border-b-2 rounded-t-lg"
+                            data-tab="all"
+                        >
+                            <i class="fas fa-sync-alt w-4 h-4 mr-2"></i>
+                            Todos
+                        </button>
+                    </li>
+                    <li class="mr-2">
+                        <button
+                            class="tab-button inline-flex items-center p-4 border-b-2 rounded-t-lg"
+                            data-tab="active"
+                        >
+                            <i class="fas fa-check w-4 h-4 mr-2"></i>
+                            Ativos
+                        </button>
+                    </li>
+                    <li class="mr-2">
+                        <button
+                            class="tab-button inline-flex items-center p-4 border-b-2 rounded-t-lg"
+                            data-tab="inactive"
+                        >
+                            <i class="fas fa-exclamation-triangle w-4 h-4 mr-2"></i>
+                            Inativos
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Products List -->
+            <div id="productsList" class="bg-white rounded-lg shadow">
+                <!-- Products will be loaded here via JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden bg-white p-8 text-center rounded-lg shadow">
+                <i class="fas fa-box text-gray-400 text-5xl mb-4"></i>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum produto encontrado</h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    Não encontramos produtos com os filtros selecionados.
+                </p>
+                <div class="mt-6">
+                    <button
+                        id="clearFilters"
+                        class="btn btn-secondary"
+                    >
+                        Limpar filtros
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Template (Hidden) -->
+    <template id="productTemplate">
+        <div class="product-card hover:bg-gray-50">
+            <div class="p-4 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img class="product-image w-12 h-12 object-cover rounded-lg mr-4" src="" alt="">
+                        <div>
+                            <h3 class="product-name text-sm font-medium text-gray-900"></h3>
+                            <div class="product-tags flex items-center flex-wrap gap-1 mt-1">
+                                <!-- Tags will be inserted here -->
+                            </div>
+                            <p class="product-info mt-1 text-xs text-gray-500"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <span class="product-variants text-sm text-gray-600"></span>
+                        </div>
+                        <button class="expand-button">
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="variant-list px-4 pb-4">
+                <!-- Variants will be inserted here -->
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="../../../js/kitchen/product/dash.productManagement.js"></script>
+</body>
+</html>

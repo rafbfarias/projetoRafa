@@ -1,7 +1,7 @@
 <!-- Sidebar -->
-<nav id="sidebar" class="sidebar h-full bg-slate-900 shadow-lg overflow-y-auto">
-    <!-- Logo -->
-    <div class="flex items-center p-4">
+<nav id="sidebar" class="sidebar h-screen bg-slate-900 shadow-lg flex flex-col">
+    <!-- Logo (Fixo no topo) -->
+    <div class="flex items-center p-4 flex-shrink-0">
         <div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
             <img src="/images/dineo-logo.png" alt="Dineo Logo" class="w-8 h-8">
         </div>
@@ -11,11 +11,8 @@
         </button>
     </div>
 
-    <!-- Linha divisória após o cabeçalho -->
-    
-
-    <!-- Avatar e Informações do Usuário -->
-    <div class="p-4 relative">
+    <!-- Avatar e Informações do Usuário (Fixo no topo) -->
+    <div class="p-4 relative flex-shrink-0">
         <button id="avatarButton" class="flex items-center space-x-4 w-full">
             <div class="w-12 h-12 rounded-full overflow-hidden avatar flex-shrink-0">
                 <img src="/images/users/4.png" alt="Avatar" class="avatar-image w-full h-full object-cover">
@@ -58,9 +55,9 @@
         </div>
     </div>
 
-    <!-- Menu de Navegação -->
-    <div class="p-4 overflow-y-auto" style="max-height: calc(100vh - 280px);">
-        <ul class="space-y-1">
+    <!-- Menu de Navegação (Área scrollável) -->
+    <div class="flex-1 overflow-y-auto">
+        <ul class="p-4 space-y-1">
             <li>
                 <a href="/pages/dashboard.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
                     <i class="fas fa-th-large w-5 text-center"></i>
@@ -75,8 +72,9 @@
             </li>
             <li>
                 <a href="/pages/reminder/dash.reminder.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
-                    <i class="fas fa-calendar-alt w-5 text-center"></i>
-                    <span class="sidebar-text">Reminders</span>
+                    <i class="fas fa-sticky-note w-5 text-center"></i>
+                    <span class="sidebar-text">Reminder Board</span>
+                    <span class="ml-auto bg-brand-600 text-white text-xs font-medium px-2 py-0.5 rounded-full sidebar-text">Novo</span>
                 </a>
             </li>
             <!-- Account - Nova seção -->
@@ -202,25 +200,68 @@
 
                 </ul>
             </li>
+
+            <!-- Nova seção Procurement -->
+            <li>
+                <div class="menu-item flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer" data-submenu="procurement">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-shopping-cart w-5 text-center"></i>
+                        <span class="sidebar-text">Compras</span>
+                    </div>
+                    <i class="fas fa-chevron-right sidebar-text transition-transform"></i>
+                </div>
+                <ul class="submenu pl-4 space-y-1" id="procurement-submenu">
+                    <li>
+                        <a href="/pages/procurement/orders/dash.orders.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-shopping-basket w-5 text-center"></i>
+                            <span class="sidebar-text">Pedidos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/procurement/suppliers/suppliers.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span class="sidebar-text">Fornecedores</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Kitchen -->
+            <li>
+                <div class="menu-item flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer" data-submenu="kitchen">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-utensils w-5 text-center"></i>
+                        <span class="sidebar-text">Cozinha</span>
+                    </div>
+                    <i class="fas fa-chevron-right sidebar-text transition-transform"></i>
+                </div>
+                <ul class="submenu pl-4 space-y-1" id="kitchen-submenu">
+                    <li>
+                        <a href="/pages/kitchen/product/dash.productManagement.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-box w-5 text-center"></i>
+                            <span class="sidebar-text">Produtos</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <!-- Linha divisória antes do botão de tema e logoff -->
-    <div class="sidebar-divider"></div>
-
-    <!-- Botão de Toggle Dark/Light -->
-    <div class="p-4">
-        <button class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors w-full" id="themeToggle">
-            <i class="fas fa-moon w-5 text-center"></i>
-            <span class="sidebar-text">Alternar Tema</span>
-        </button>
-    </div>
-
-    <!-- Botão de Logoff -->
-    <div class="p-4 mt-auto">
-        <a href="/index.html" class="flex items-center space-x-3 p-3 rounded-lg text-red-500 hover:bg-slate-800 transition-colors">
-            <i class="fas fa-sign-out-alt w-5 text-center"></i>
-            <span class="sidebar-text">Sair do Sistema</span>
-        </a>
+    <!-- Footer com Tema e Logoff (Fixo na base) -->
+    <div class="flex-shrink-0">
+        <!-- Linha sutil -->
+        <div class="mx-auto w-[70%] h-px bg-slate-700/50 mb-2"></div>
+        
+        <!-- Botões mais compactos -->
+        <div class="px-4 py-2">
+            <button class="menu-item flex items-center space-x-3 p-2 rounded-lg transition-colors w-full text-sm text-slate-400 hover:text-slate-200" id="themeToggle">
+                <i class="fas fa-moon w-4 text-center"></i>
+                <span class="sidebar-text">Alternar Tema</span>
+            </button>
+            <a href="/index.html" class="menu-item flex items-center space-x-3 p-2 rounded-lg transition-colors w-full text-sm text-slate-400 hover:text-red-400">
+                <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                <span class="sidebar-text">Sair do Sistema</span>
+            </a>
+        </div>
     </div>
 </nav> 

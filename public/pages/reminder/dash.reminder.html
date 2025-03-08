@@ -8,10 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../css/styles.css" rel="stylesheet">
-    <link href="../../css/reminder.css" rel="stylesheet">
     <script src="../../js/Sidebar.js"></script>
 </head>
-<body class="bg-primary reminder-board">
+<body class="bg-primary">
     <div class="flex min-h-screen">
         <!-- Sidebar (carregado via JavaScript) -->
         <app-sidebar></app-sidebar>
@@ -82,21 +81,25 @@
                 </div>
             </div>
 
-            <!-- Board de Lembretes -->
-            <div id="board-container" class="board-container rounded-lg overflow-hidden">
-                <div id="board" class="bg-grid relative w-full h-[calc(100vh-12rem)] overflow-auto p-4">
-                    <!-- Notas serão adicionadas aqui dinamicamente -->
-                    
-                    <!-- Mensagem de board vazio -->
-                    <div id="empty-board-message" class="hidden flex flex-col items-center justify-center h-full">
-                        <img src="/images/empty-notes.svg" alt="Board vazio" class="w-48 h-48 mb-4 opacity-50">
-                        <h3 class="text-xl font-medium mb-2">Seu quadro está vazio</h3>
-                        <p class="text-muted mb-4">Adicione sua primeira nota para começar a organizar suas ideias</p>
-                        <button id="addInitialNoteBtn" class="btn btn-primary">
-                            <i class="fas fa-plus mr-2"></i>
-                            Adicionar Nota
-                        </button>
-                    </div>
+            <!-- Área do Board -->
+            <div id="board-container" class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full" style="height: calc(100vh - 220px); overflow: hidden;">
+                <!-- Background com grid -->
+                <div class="absolute inset-0 bg-grid opacity-10"></div>
+                
+                <!-- Container para as notas -->
+                <div id="board" class="absolute inset-0 overflow-auto p-4">
+                    <!-- Notas serão inseridas aqui dinamicamente -->
+                </div>
+                
+                <!-- Mensagem de board vazio -->
+                <div id="empty-board" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+                    <i class="fas fa-sticky-note text-6xl mb-4"></i>
+                    <p class="text-xl font-medium">Seu board está vazio</p>
+                    <p class="text-sm mt-2">Adicione notas ou selecione elementos do sistema para começar</p>
+                    <button id="addInitialNoteBtn" class="mt-4 btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span>Adicionar nota</span>
+                    </button>
                 </div>
             </div>
             
@@ -129,13 +132,13 @@
 
     <!-- Modais -->
     <!-- Modal de Nova Nota -->
-    <div id="newNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
-            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
-                <h3 class="text-lg font-semibold">
+    <div id="newNoteModal" class="hidden fixed inset-0 bg-black/50 dark:bg-gray-900/80 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Nova Nota
                 </h3>
-                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
+                <button type="button" class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -143,77 +146,85 @@
                 <form id="newNoteForm">
                     <div class="space-y-4">
                         <div>
-                            <label for="noteTitle" class="block text-sm font-medium mb-1">Título *</label>
-                            <input type="text" id="noteTitle" name="noteTitle" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="noteContent" class="block text-sm font-medium mb-1">Conteúdo *</label>
-                            <textarea id="noteContent" name="noteContent" rows="3" class="form-textarea w-full" required></textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="noteType" class="block text-sm font-medium mb-1">Tipo</label>
-                                <select id="noteType" name="noteType" class="form-select w-full">
-                                    <option value="task">Tarefa</option>
-                                    <option value="user">Usuário</option>
-                                    <option value="contract">Contrato</option>
-                                    <option value="expense">Despesa</option>
-                                    <option value="revenue">Receita</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="notePriority" class="block text-sm font-medium mb-1">Prioridade</label>
-                                <select id="notePriority" name="notePriority" class="form-select w-full">
-                                    <option value="low">Baixa</option>
-                                    <option value="medium" selected>Média</option>
-                                    <option value="high">Alta</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="referenceContainer" class="hidden">
-                            <label for="noteReference" class="block text-sm font-medium mb-1">Referência</label>
-                            <select id="noteReference" name="noteReference" class="form-select w-full">
-                                <option value="">Selecione uma referência</option>
-                                <!-- Opções serão carregadas via JavaScript -->
+                            <label for="noteType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Tipo
+                            </label>
+                            <select id="noteType" class="form-select w-full">
+                                <option value="task">Tarefa</option>
+                                <option value="user">Usuário</option>
+                                <option value="contract">Contrato</option>
+                                <option value="expense">Despesa</option>
+                                <option value="revenue">Receita</option>
                             </select>
                         </div>
+                        
+                        <div id="referenceElementContainer" class="hidden">
+                            <label for="referenceElement" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Elemento de referência
+                            </label>
+                            <select id="referenceElement" class="form-select w-full">
+                                <option value="">Selecione um elemento...</option>
+                                <!-- Será preenchido via JavaScript dependendo do tipo selecionado -->
+                            </select>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-medium mb-1">Cor</label>
-                            <div class="flex space-x-2 mt-1">
+                            <label for="noteTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Título
+                            </label>
+                            <input type="text" id="noteTitle" class="form-input w-full" placeholder="Digite um título para a nota">
+                        </div>
+
+                        <div>
+                            <label for="noteContent" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Conteúdo
+                            </label>
+                            <textarea id="noteContent" rows="3" class="form-textarea w-full" placeholder="Digite o conteúdo da nota"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="notePriority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Prioridade
+                            </label>
+                            <select id="notePriority" class="form-select w-full">
+                                <option value="low">Baixa</option>
+                                <option value="medium" selected>Média</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="noteColor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Cor
+                            </label>
+                            <div class="flex space-x-2">
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-yellow-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="yellow" class="sr-only" checked>
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-blue-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="blue" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-green-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="green" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-red-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="red" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-purple-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="purple" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-pink-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="pink" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-gray-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="noteColor" value="gray" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
+            <div class="flex justify-end items-center p-4 border-t dark:border-gray-700">
                 <button type="button" class="close-modal btn btn-secondary mr-2">
                     Cancelar
                 </button>
@@ -226,13 +237,14 @@
     </div>
 
     <!-- Modal de Edição de Nota -->
-    <div id="editNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
-            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
-                <h3 class="text-lg font-semibold">
+    <div id="editNoteModal" class="hidden fixed inset-0 bg-black/50 dark:bg-gray-900/80 flex items-center justify-center z-50">
+        <!-- Conteúdo similar ao modal de nova nota, mas para edição -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Editar Nota
                 </h3>
-                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
+                <button type="button" class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -241,77 +253,85 @@
                     <input type="hidden" id="editNoteId">
                     <div class="space-y-4">
                         <div>
-                            <label for="editNoteTitle" class="block text-sm font-medium mb-1">Título *</label>
-                            <input type="text" id="editNoteTitle" name="editNoteTitle" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="editNoteContent" class="block text-sm font-medium mb-1">Conteúdo *</label>
-                            <textarea id="editNoteContent" name="editNoteContent" rows="3" class="form-textarea w-full" required></textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="editNoteType" class="block text-sm font-medium mb-1">Tipo</label>
-                                <select id="editNoteType" name="editNoteType" class="form-select w-full">
-                                    <option value="task">Tarefa</option>
-                                    <option value="user">Usuário</option>
-                                    <option value="contract">Contrato</option>
-                                    <option value="expense">Despesa</option>
-                                    <option value="revenue">Receita</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="editNotePriority" class="block text-sm font-medium mb-1">Prioridade</label>
-                                <select id="editNotePriority" name="editNotePriority" class="form-select w-full">
-                                    <option value="low">Baixa</option>
-                                    <option value="medium">Média</option>
-                                    <option value="high">Alta</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="editReferenceContainer" class="hidden">
-                            <label for="editNoteReference" class="block text-sm font-medium mb-1">Referência</label>
-                            <select id="editNoteReference" name="editNoteReference" class="form-select w-full">
-                                <option value="">Selecione uma referência</option>
-                                <!-- Opções serão carregadas via JavaScript -->
+                            <label for="editNoteType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Tipo
+                            </label>
+                            <select id="editNoteType" class="form-select w-full">
+                                <option value="task">Tarefa</option>
+                                <option value="user">Usuário</option>
+                                <option value="contract">Contrato</option>
+                                <option value="expense">Despesa</option>
+                                <option value="revenue">Receita</option>
                             </select>
                         </div>
+                        
+                        <div id="editReferenceElementContainer">
+                            <label for="editReferenceElement" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Elemento de referência
+                            </label>
+                            <select id="editReferenceElement" class="form-select w-full">
+                                <option value="">Selecione um elemento...</option>
+                                <!-- Será preenchido via JavaScript dependendo do tipo selecionado -->
+                            </select>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-medium mb-1">Cor</label>
-                            <div class="flex space-x-2 mt-1">
+                            <label for="editNoteTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Título
+                            </label>
+                            <input type="text" id="editNoteTitle" class="form-input w-full" placeholder="Digite um título para a nota">
+                        </div>
+
+                        <div>
+                            <label for="editNoteContent" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Conteúdo
+                            </label>
+                            <textarea id="editNoteContent" rows="3" class="form-textarea w-full" placeholder="Digite o conteúdo da nota"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="editNotePriority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Prioridade
+                            </label>
+                            <select id="editNotePriority" class="form-select w-full">
+                                <option value="low">Baixa</option>
+                                <option value="medium">Média</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="editNoteColor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Cor
+                            </label>
+                            <div class="flex space-x-2">
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-yellow-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="yellow" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-blue-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="blue" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-green-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="green" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-red-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="red" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-purple-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="purple" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-pink-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="pink" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                                 <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-gray-100 border-2 border-transparent hover:border-gray-400">
                                     <input type="radio" name="editNoteColor" value="gray" class="sr-only">
-                                    <span class="block w-full h-full rounded-full"></span>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
+            <div class="flex justify-end items-center p-4 border-t dark:border-gray-700">
                 <button type="button" class="close-modal btn btn-secondary mr-2">
                     Cancelar
                 </button>
@@ -323,26 +343,25 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmação de Exclusão -->
-    <div id="deleteNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
-            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
-                <h3 class="text-lg font-semibold">
-                    Confirmar Exclusão
-                </h3>
-                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+    <!-- Confirmação de Exclusão de Nota -->
+    <div id="deleteNoteModal" class="hidden fixed inset-0 bg-black/50 dark:bg-gray-900/80 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
             <div class="p-6">
-                <p>Tem certeza que deseja excluir esta nota? Esta ação não pode ser desfeita.</p>
+                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                </div>
+                <h3 class="text-xl font-medium text-center text-gray-900 dark:text-white mb-2">
+                    Confirmar exclusão
+                </h3>
+                <p class="text-center text-gray-600 dark:text-gray-400">
+                    Tem certeza que deseja excluir esta nota? Esta ação não pode ser desfeita.
+                </p>
             </div>
-            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
-                <button type="button" class="close-modal btn btn-secondary mr-2">
+            <div class="flex border-t dark:border-gray-700">
+                <button type="button" class="close-modal w-full py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium">
                     Cancelar
                 </button>
-                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
-                    <i class="fas fa-trash-alt mr-2"></i>
+                <button type="button" id="confirmDeleteBtn" class="w-full py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium border-l dark:border-gray-700">
                     Excluir
                 </button>
             </div>

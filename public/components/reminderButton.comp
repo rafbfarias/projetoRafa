@@ -1,0 +1,149 @@
+/**
+ * Reminder Button Component
+ * 
+ * Este script cria um botão que pode ser adicionado a qualquer elemento do sistema
+ * para transformá-lo em uma nota no Reminder Board.
+ * 
+ * Uso:
+ * 1. Incluir este script na página
+ * 2. Adicionar o atributo data-reminder="true" ao elemento que deve ter o botão
+ * 3. Adicionar os atributos data-type, data-id, data-title e data-content
+ */
+
+(function() {
+    // Inicializar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', initReminderButtons);
+    
+    /**
+     * Inicializa todos os botões de reminder na página
+     */
+    function initReminderButtons() {
+        // Buscar todos os elementos com o atributo data-reminder="true"
+        const reminderElements = document.querySelectorAll('[data-reminder="true"]');
+        
+        // Para cada elemento, adicionar o botão
+        reminderElements.forEach(element => {
+            addReminderButton(element);
+        });
+    }
+    
+    /**
+     * Adiciona um botão de reminder a um elemento
+     */
+    function addReminderButton(element) {
+        // Certificar-se de que o elemento tem position relative
+        if (getComputedStyle(element).position === 'static') {
+            element.style.position = 'relative';
+        }
+        
+        // Criar o botão
+        const button = document.createElement('button');
+        button.className = 'reminder-button';
+        button.innerHTML = '<i class="fas fa-thumbtack"></i>';
+        button.title = 'Adicionar aos lembretes';
+        
+        // Estilizar o botão
+        button.style.position = 'absolute';
+        button.style.top = '5px';
+        button.style.right = '5px';
+        button.style.zIndex = '10';
+        button.style.width = '28px';
+        button.style.height = '28px';
+        button.style.borderRadius = '50%';
+        button.style.backgroundColor = 'var(--brand-600, #2563eb)';
+        button.style.color = 'white';
+        button.style.border = 'none';
+        button.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+        button.style.cursor = 'pointer';
+        button.style.display = 'flex';
+        button.style.alignItems = 'center';
+        button.style.justifyContent = 'center';
+        button.style.transition = 'transform 0.2s';
+        
+        // Adicionar hover effect
+        button.addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+        
+        button.addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        // Adicionar event listener para clique
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Obter dados do elemento
+            const type = element.dataset.type || 'task';
+            const id = element.dataset.id || '';
+            const title = element.dataset.title || 'Lembrete sem título';
+            const content = element.dataset.content || '';
+            
+            // Criar a nota
+            createReminderNote(type, id, title, content);
+        });
+        
+        // Adicionar o botão ao elemento
+        element.appendChild(button);
+    }
+    
+    /**
+     * Cria uma nota no Reminder Board
+     */
+    function createReminderNote(type, id, title, content) {
+        // Verificar se a função global existe
+        if (typeof window.createNoteFromElement === 'function') {
+            // Usar a função do reminder-board.js
+            window.createNoteFromElement(type, id, title, content);
+        } else {
+            // Salvar os dados no localStorage
+            saveNoteData(type, id, title, content);
+            
+            // Perguntar se o usuário quer ir para o Reminder Board
+            const wantToNavigate = confirm('Nota adicionada aos lembretes. Deseja ir para o Reminder Board agora?');
+            if (wantToNavigate) {
+                window.location.href = '/pages/reminder-board.html';
+            }
+        }
+    }
+    
+    /**
+     * Salva os dados da nota no localStorage
+     */
+    function saveNoteData(type, id, title, content) {
+        // Criar ID único
+        const noteId = 'note-' + Date.now();
+        
+        // Definir posição aleatória no board
+        const posX = Math.random() * 500 + 50;
+        const posY = Math.random() * 300 + 50;
+        
+        // Criar objeto da nota
+        const newNote = {
+            id: noteId,
+            type: type,
+            title: title,
+            content: content,
+            priority: 'medium',
+            color: 'yellow',
+            elementId: id,
+            posX: posX,
+            posY: posY,
+            date: new Date().toISOString()
+        };
+        
+        // Carregar notas existentes
+        let existingNotes = [];
+        const savedNotes = localStorage.getItem('reminderNotes');
+        if (savedNotes) {
+            existingNotes = JSON.parse(savedNotes);
+        }
+        
+        // Adicionar nova nota
+        existingNotes.push(newNote);
+        
+        // Salvar de volta no localStorage
+        localStorage.setItem('reminderNotes', JSON.stringify(existingNotes));
+    }
+})();
