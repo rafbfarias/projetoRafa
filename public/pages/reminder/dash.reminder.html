@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder Board - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../css/styles.css" rel="stylesheet">
+    <link href="../../css/reminder.css" rel="stylesheet">
+    <script src="../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary reminder-board">
+    <div class="flex min-h-screen">
+        <!-- Sidebar (carregado via JavaScript) -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-left text-2xl font-bold">Reminder Board</h1>
+                    <p class="text-muted">Organize suas tarefas e lembretes em um quadro visual</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <div class="relative">
+                        <button id="filterDropdownButton" class="btn btn-secondary">
+                            <i class="fas fa-filter mr-2"></i>
+                            <span>Filtrar</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
+                            <div class="p-4">
+                                <h4 class="font-medium mb-2">Filtrar por tipo</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" checked data-filter="all">
+                                        <span class="ml-2">Todos</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="user">
+                                        <span class="ml-2">Usuários</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="contract">
+                                        <span class="ml-2">Contratos</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="expense">
+                                        <span class="ml-2">Despesas</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="revenue">
+                                        <span class="ml-2">Receitas</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="task">
+                                        <span class="ml-2">Tarefas</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-200 dark:border-gray-700 p-4">
+                                <h4 class="font-medium mb-2">Ordenar por</h4>
+                                <select class="form-select w-full">
+                                    <option value="date-desc">Data (mais recente)</option>
+                                    <option value="date-asc">Data (mais antiga)</option>
+                                    <option value="priority-high">Prioridade (alta → baixa)</option>
+                                    <option value="priority-low">Prioridade (baixa → alta)</option>
+                                </select>
+                            </div>
+                            <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-end">
+                                <button class="btn btn-primary">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addNoteBtn" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span>Nova Nota</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Board de Lembretes -->
+            <div id="board-container" class="board-container rounded-lg overflow-hidden">
+                <div id="board" class="bg-grid relative w-full h-[calc(100vh-12rem)] overflow-auto p-4">
+                    <!-- Notas serão adicionadas aqui dinamicamente -->
+                    
+                    <!-- Mensagem de board vazio -->
+                    <div id="empty-board-message" class="hidden flex flex-col items-center justify-center h-full">
+                        <img src="/images/empty-notes.svg" alt="Board vazio" class="w-48 h-48 mb-4 opacity-50">
+                        <h3 class="text-xl font-medium mb-2">Seu quadro está vazio</h3>
+                        <p class="text-muted mb-4">Adicione sua primeira nota para começar a organizar suas ideias</p>
+                        <button id="addInitialNoteBtn" class="btn btn-primary">
+                            <i class="fas fa-plus mr-2"></i>
+                            Adicionar Nota
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nota Exemplo para debug - será removida -->
+            <div id="note-template" class="hidden">
+                <div class="note absolute bg-yellow-100 dark:bg-yellow-700 shadow-lg rounded-lg p-4 w-64" style="top: 50px; left: 100px;" data-id="nota-exemplo" data-type="task">
+                    <div class="note-header flex justify-between items-center mb-2">
+                        <div class="note-type px-2 py-1 rounded text-xs font-semibold bg-blue-500 text-white">Tarefa</div>
+                        <div class="note-actions flex space-x-1">
+                            <button class="note-edit text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="note-delete text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="font-medium text-gray-800 dark:text-white mb-1">Título da Nota</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Conteúdo da nota para demonstração</p>
+                    </div>
+                    <div class="note-footer mt-3 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                        <span class="note-date">05/03/2025</span>
+                        <span class="note-priority px-2 py-1 rounded bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400">Alta</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modais -->
+    <!-- Modal de Nova Nota -->
+    <div id="newNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">
+                    Nova Nota
+                </h3>
+                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <form id="newNoteForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="noteTitle" class="block text-sm font-medium mb-1">Título *</label>
+                            <input type="text" id="noteTitle" name="noteTitle" class="form-input w-full" required>
+                        </div>
+                        <div>
+                            <label for="noteContent" class="block text-sm font-medium mb-1">Conteúdo *</label>
+                            <textarea id="noteContent" name="noteContent" rows="3" class="form-textarea w-full" required></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="noteType" class="block text-sm font-medium mb-1">Tipo</label>
+                                <select id="noteType" name="noteType" class="form-select w-full">
+                                    <option value="task">Tarefa</option>
+                                    <option value="user">Usuário</option>
+                                    <option value="contract">Contrato</option>
+                                    <option value="expense">Despesa</option>
+                                    <option value="revenue">Receita</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="notePriority" class="block text-sm font-medium mb-1">Prioridade</label>
+                                <select id="notePriority" name="notePriority" class="form-select w-full">
+                                    <option value="low">Baixa</option>
+                                    <option value="medium" selected>Média</option>
+                                    <option value="high">Alta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="referenceContainer" class="hidden">
+                            <label for="noteReference" class="block text-sm font-medium mb-1">Referência</label>
+                            <select id="noteReference" name="noteReference" class="form-select w-full">
+                                <option value="">Selecione uma referência</option>
+                                <!-- Opções serão carregadas via JavaScript -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor</label>
+                            <div class="flex space-x-2 mt-1">
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-yellow-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="yellow" class="sr-only" checked>
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-blue-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="blue" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-green-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="green" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-red-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="red" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-purple-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="purple" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-pink-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="pink" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-gray-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="noteColor" value="gray" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
+                <button type="button" class="close-modal btn btn-secondary mr-2">
+                    Cancelar
+                </button>
+                <button type="button" id="saveNoteBtn" class="btn btn-primary">
+                    <i class="fas fa-save mr-2"></i>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Nota -->
+    <div id="editNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">
+                    Editar Nota
+                </h3>
+                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <form id="editNoteForm">
+                    <input type="hidden" id="editNoteId">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editNoteTitle" class="block text-sm font-medium mb-1">Título *</label>
+                            <input type="text" id="editNoteTitle" name="editNoteTitle" class="form-input w-full" required>
+                        </div>
+                        <div>
+                            <label for="editNoteContent" class="block text-sm font-medium mb-1">Conteúdo *</label>
+                            <textarea id="editNoteContent" name="editNoteContent" rows="3" class="form-textarea w-full" required></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="editNoteType" class="block text-sm font-medium mb-1">Tipo</label>
+                                <select id="editNoteType" name="editNoteType" class="form-select w-full">
+                                    <option value="task">Tarefa</option>
+                                    <option value="user">Usuário</option>
+                                    <option value="contract">Contrato</option>
+                                    <option value="expense">Despesa</option>
+                                    <option value="revenue">Receita</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="editNotePriority" class="block text-sm font-medium mb-1">Prioridade</label>
+                                <select id="editNotePriority" name="editNotePriority" class="form-select w-full">
+                                    <option value="low">Baixa</option>
+                                    <option value="medium">Média</option>
+                                    <option value="high">Alta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="editReferenceContainer" class="hidden">
+                            <label for="editNoteReference" class="block text-sm font-medium mb-1">Referência</label>
+                            <select id="editNoteReference" name="editNoteReference" class="form-select w-full">
+                                <option value="">Selecione uma referência</option>
+                                <!-- Opções serão carregadas via JavaScript -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor</label>
+                            <div class="flex space-x-2 mt-1">
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-yellow-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="yellow" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-blue-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="blue" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-green-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="green" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-red-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="red" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-purple-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="purple" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-pink-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="pink" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                                <label class="color-option cursor-pointer inline-block w-8 h-8 rounded-full bg-gray-100 border-2 border-transparent hover:border-gray-400">
+                                    <input type="radio" name="editNoteColor" value="gray" class="sr-only">
+                                    <span class="block w-full h-full rounded-full"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
+                <button type="button" class="close-modal btn btn-secondary mr-2">
+                    Cancelar
+                </button>
+                <button type="button" id="updateNoteBtn" class="btn btn-primary">
+                    <i class="fas fa-save mr-2"></i>
+                    Atualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteNoteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="reminder-modal rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="reminder-modal-header flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">
+                    Confirmar Exclusão
+                </h3>
+                <button type="button" class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p>Tem certeza que deseja excluir esta nota? Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="reminder-modal-footer flex justify-end items-center p-4 border-t">
+                <button type="button" class="close-modal btn btn-secondary mr-2">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
+                    <i class="fas fa-trash-alt mr-2"></i>
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../js/reminder/dash.reminder.js"></script>
+    <script>
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            initReminderBoard();
+        });
+    </script>
+</body>
+</html>

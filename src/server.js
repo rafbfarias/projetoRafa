@@ -10,6 +10,7 @@ const userRoutes = require('./routes/user.routes');
 const timesheetRoutes = require('./routes/timesheet.routes');
 const unitRoutes = require('./routes/unit.routes');
 const authRoutes = require('./routes/auth.routes');
+const permissionTemplateRoutes = require('./routes/permissionTemplate.routes');
 
 const session = require('express-session');
 
@@ -95,7 +96,9 @@ const publicPaths = [
     '/css/account/firstAccess.css',
     '/css/styles.css',
     '/dineo-logo.png',
-    '/images/users/default-avatar.svg'
+    '/images/users/default-avatar.svg',
+    '/pages/config/permission-templates.html',
+    '/js/config/permissionTemplates.js'
 ];
 
 // Middleware de autenticação
@@ -139,6 +142,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/faturacao', faturacaoRoutes);
 app.use('/api/timesheet', timesheetRoutes);
 app.use('/api/units', unitRoutes);
+app.use('/api/permission-templates', permissionTemplateRoutes);
 
 // Rota raiz
 app.get('/', (req, res) => {

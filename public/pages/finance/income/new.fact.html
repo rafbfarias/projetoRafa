@@ -25,8 +25,8 @@
                 <!-- Cabeçalho -->
                 <div class="flex items-start justify-between mb-6">
                     <div class="flex flex-col items-start">
-                        <h1 class="text-2xl font-bold text-gray-800">Novo Registro de Faturação</h1>
-                        <p class="text-sm text-gray-600 mt-1">Preencha os dados da faturação conforme o talão fiscal</p>
+                        <h1 class="text-left text-2xl font-bold">Novo Registro de Faturação</h1>
+                        <p class="text-muted">Preencha os dados da faturação conforme o talão fiscal</p>
                     </div>
                     <div class="flex items-center gap-4">
                         <button type="button" class="btn btn-secondary" onclick="history.back()">
@@ -94,7 +94,7 @@
 
                         <!-- Business Information -->
                         <div class="bg-primary rounded-lg shadow-sm p-6 mb-6">
-                            <h3 class="text-lg font-semibold mb-4">Informações do Negócio</h3>
+                            <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Informações do Negócio</h3>
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
@@ -122,7 +122,7 @@
                             <div class="weather-section sunny">
                                 <div class="sun"></div>
                                 <div class="weather-content">
-                                    <h2>Temperatura</h2>
+                                    <h2 class="text-left">Temperatura</h2>
                                     <div class="temp" id="weatherTemp">--°C</div>
                                     <p id="weatherDesc">Carregando...</p>
                                 </div>
@@ -133,7 +133,7 @@
                                 <div class="raindrop" style="left: 20%; animation-duration: 1s;"></div>
                                 <div class="raindrop" style="left: 30%; animation-duration: 1.2s;"></div>
                                 <div class="weather-content">
-                                    <h2>Precipitação</h2>
+                                    <h2 class="text-left">Precipitação</h2>
                                     <div class="temp" id="weatherPrecip">--%</div>
                                     <p>Probabilidade</p>
                                 </div>
@@ -143,7 +143,7 @@
                                 <div class="wind" style="top: 30%; animation-duration: 2s;"></div>
                                 <div class="wind" style="top: 60%; animation-duration: 1.8s;"></div>
                                 <div class="weather-content">
-                                    <h2>Vento</h2>
+                                    <h2 class="text-left">Vento</h2>
                                     <div class="temp" id="weatherWind">-- km/h</div>
                                     <p>Velocidade</p>
                                 </div>
@@ -152,7 +152,7 @@
 
                         <!-- Day Evaluation -->
                         <div class="bg-secondary rounded-lg shadow-sm p-6">
-                            <h3 class="text-lg font-semibold mb-4">Avaliação do Dia</h3>
+                            <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Avaliação do Dia</h3>
                             <div class="space-y-4">
                                 <div class="flex items-center justify-right mb-4">
                                     <div class="flex space-x-1" id="starRating">
@@ -196,7 +196,7 @@
                             <!-- Receipt Header -->
                             <div class="receipt-section receipt-header">
                                 <div class="text-center mb-4" id="businessInfo">
-                                    <h3 class="text-2xl font-bold mb-1">Plateiapositiva, Lda</h3>
+                                    <h3 class="text-left" class="text-2xl font-bold mb-1 text-left">Plateiapositiva, Lda</h3>
                                     <p class="text-sm" id="selectedUnit">Selecione uma unidade</p>
                                     <p class="text-sm">Nr. Contribuinte: 510885411</p>
                                     <div class="font-bold mb-2">Fecho do dia por: <span id="selectedResp" class="text-blue-600">Selecione um responsável</span></div>
@@ -228,7 +228,7 @@
 
                             <!-- Total por Modos de Pagamento -->
                             <div class="receipt-section">
-                                <h3 class="font-bold text-gray-800 mb-3">Total por Modos de Pagamento</h3>
+                                <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Total por Modos de Pagamento</h3>
                                 <table class="receipt-table">
                                     <tr>
                                         <td>Numerário Euro</td>
@@ -278,8 +278,8 @@
                             <div class="receipt-section">
                                 <div class="grid grid-cols-1 gap-6">
                                     <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <h3 class="font-bold text-gray-800 mb-3">Movimentos Anulados</h3>
+                                        <div class="text-left">
+                                            <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Movimentos Anulados</h3>
                                             <div class="space-y-4">
                                                 <div>
                                                     <label class="text-sm">Total Transações:</label>
@@ -296,8 +296,8 @@
                                             </div>
                                         </div>
                                         
-                                        <div>
-                                            <h3 class="font-bold text-gray-800 mb-3">Descontos</h3>
+                                        <div class="text-left">
+                                            <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Descontos</h3>
                                             <div class="space-y-4">
                                                 <div>
                                                     <label class="text-sm">Total:</label>
@@ -316,16 +316,16 @@
                             <!-- Consumo Interno e Gift Cards -->
                             <div class="receipt-section">
                                 <div class="grid grid-cols-2 gap-6">
-                                    <div>
-                                        <h3 class="font-bold text-gray-800 mb-3">Consumo Interno</h3>
+                                    <div class="text-left">
+                                        <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Consumo Interno</h3>
                                         <div class="flex items-center gap-4">
                                             <label class="text-sm">Total:</label>
                                             <input type="number" id="internalConsumption" name="internalConsumption" class="w-48 p-2 text-right input-highlight" value="0.00" step="0.01">
                                         </div>
                                     </div>
                                     
-                                    <div>
-                                        <h3 class="font-bold text-gray-800 mb-3">Gift Cards</h3>
+                                    <div class="text-left">
+                                        <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Gift Cards</h3>
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <label class="text-sm">Vendidos:</label>

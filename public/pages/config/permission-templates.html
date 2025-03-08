@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates de Permissões | Dineo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    <style>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .dashboard-card {
+            background-color: var(--component-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--btn-primary-bg, #3b82f6);
+            color: var(--btn-primary-text, #ffffff);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--btn-primary-hover, #2563eb);
+        }
+        
+        .btn-secondary {
+            background-color: var(--btn-secondary-bg, #f3f4f6);
+            color: var(--btn-secondary-text, #374151);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--btn-secondary-hover, #e5e7eb);
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 0.375rem;
+            background-color: var(--component-bg, #ffffff);
+            color: var(--text-primary, #111827);
+        }
+        
+        .text-muted {
+            color: var(--text-muted, #6b7280);
+        }
+        
+        .bg-primary {
+            background-color: var(--bg-primary, #f9fafb);
+        }
+        
+        /* Estilos para ícones */
+        .icon-container {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+        
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div class="text-left">
+                    <h1 class="text-left text-2xl font-bold">Templates de Permissões</h1>
+                    <p class="text-muted">Gerencie os templates de permissões do sistema</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="/pages/config/new-permission-template.html" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        Novo Template
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Cards de Estatísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Card de Templates Ativos -->
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
+                            <i class="fas fa-key text-xl" style="color: var(--icon-clients-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Templates Ativos</h3>
+                            <p class="text-2xl font-bold" id="active-templates-count">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card de Páginas Configuradas -->
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
+                            <i class="fas fa-file-alt text-xl" style="color: var(--icon-revenue-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Páginas Configuradas</h3>
+                            <p class="text-2xl font-bold" id="pages-count">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card de Áreas Cobertas -->
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
+                            <i class="fas fa-sitemap text-xl" style="color: var(--icon-contracts-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Áreas Cobertas</h3>
+                            <p class="text-2xl font-bold" id="areas-count">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card de Templates Inativos -->
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
+                            <i class="fas fa-ban text-xl" style="color: var(--icon-employees-text);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Templates Inativos</h3>
+                            <p class="text-2xl font-bold" id="inactive-templates-count">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="dashboard-card p-6 mb-6">
+                <h3 class="text-lg font-semibold mb-4">Filtros</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="filter-area" class="block text-sm font-medium mb-1">Área</label>
+                        <select id="filter-area" class="form-select">
+                            <option value="">Todas as áreas</option>
+                            <!-- Opções serão carregadas via JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filter-status" class="block text-sm font-medium mb-1">Status</label>
+                        <select id="filter-status" class="form-select">
+                            <option value="">Todos os status</option>
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="search-template" class="block text-sm font-medium mb-1">Buscar</label>
+                        <input type="text" id="search-template" placeholder="Buscar por nome..." class="form-input">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabela de Templates -->
+            <div class="dashboard-card overflow-hidden">
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold">Templates de Permissões</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nome</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Área</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Páginas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Criado por</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Data de Criação</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="templates-table-body" class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Mensagem de carregamento/sem dados -->
+                <div id="templates-loading" class="py-4 text-center text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Carregando templates...
+                </div>
+                <div id="templates-empty" class="py-4 text-center text-gray-500 dark:text-gray-400 hidden">
+                    Nenhum template encontrado.
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Toast para mensagens -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+    
+    <!-- Scripts -->
+    <script src="/js/Sidebar.js"></script>
+    <script>
+        // Função para mostrar toast
+        window.showToast = function(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container');
+            
+            // Criar toast
+            const toast = document.createElement('div');
+            toast.className = `p-4 mb-3 rounded-lg shadow-lg flex items-center max-w-md transition-all duration-300 transform translate-x-full`;
+            
+            // Definir cor com base no tipo
+            let bgColor, icon;
+            switch (type) {
+                case 'success':
+                    bgColor = 'bg-green-500';
+                    icon = 'fa-check-circle';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-500';
+                    icon = 'fa-exclamation-circle';
+                    break;
+                case 'warning':
+                    bgColor = 'bg-yellow-500';
+                    icon = 'fa-exclamation-triangle';
+                    break;
+                default:
+                    bgColor = 'bg-blue-500';
+                    icon = 'fa-info-circle';
+            }
+            
+            toast.classList.add(bgColor);
+            
+            // Conteúdo do toast
+            toast.innerHTML = `
+                <i class="fas ${icon} text-white mr-3"></i>
+                <div class="text-white">${message}</div>
+                <button class="ml-auto text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Adicionar ao container
+            toastContainer.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Configurar fechamento
+            const closeBtn = toast.querySelector('button');
+            closeBtn.addEventListener('click', () => {
+                closeToast(toast);
+            });
+            
+            // Fechar automaticamente após 5 segundos
+            setTimeout(() => {
+                closeToast(toast);
+            }, 5000);
+        };
+        
+        function closeToast(toast) {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
+    </script>
+    <script src="/js/config/permissionTemplates.js"></script>
+    <script>
+        // Atualizar contadores de estatísticas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Função para atualizar os contadores
+            function updateCounters() {
+                // Estas funções seriam substituídas por dados reais da API
+                document.getElementById('active-templates-count').textContent = '5';
+                document.getElementById('pages-count').textContent = '24';
+                document.getElementById('areas-count').textContent = '4';
+                document.getElementById('inactive-templates-count').textContent = '2';
+            }
+            
+            // Atualizar contadores ao carregar a página
+            updateCounters();
+        });
+    </script>
+</body>
+</html> 

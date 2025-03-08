@@ -8,10 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
-    <link href="../../../css/account.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
+<body class="bg-primary">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
@@ -20,13 +19,13 @@
         <main class="flex-1 p-8 overflow-y-auto">
             <!-- Cabeçalho -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                <div>
-                    <h1 class="text-2xl font-bold">Novo Usuário</h1>
+                <div class="text-left">
+                    <h1 class="text-left text-2xl font-bold">Novo Usuário</h1>
                     <p class="text-muted">Adicione um novo usuário ao sistema</p>
                 </div>
                 <div class="mt-4 md:mt-0">
                     <a href="user-management.html" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left mr-2"></i>
+                        <i class="fas fa-arrow-left mr-2 text-xl" style="color: var(--icon-clients-text);""></i>
                         <span>Voltar para Usuários</span>
                     </a>
                 </div>
@@ -39,10 +38,10 @@
                     <div class="relative">
                         <div class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
                             <img id="userPhoto" src="../../../images/default-avatar.svg" alt="Foto do usuário" class="w-full h-full object-cover hidden">
-                            <i class="fas fa-user text-4xl text-gray-400 dark:text-gray-500" id="defaultAvatar"></i>
+                            <i class="fas fa-user text-4xl text-gray-400 dark:text-gray-500 text-xl" style="color: var(--icon-clients-text);"" id="defaultAvatar"></i>
                         </div>
                         <label for="photoInput" class="absolute bottom-0 right-0 w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600">
-                            <i class="fas fa-camera text-white text-sm"></i>
+                            <i class="fas fa-camera text-white text-sm "" style="color: var(--icon-clients-text);"></i>
                         </label>
                         <input type="file" id="photoInput" class="hidden" accept="image/*">
                     </div>
@@ -50,8 +49,8 @@
                     <!-- Informações do Usuário -->
                     <div class="flex-1">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <h2 id="displayName" class="text-xl font-bold">Novo Usuário</h2>
+                            <div class="text-left">
+                                <h2 class="text-left" id="displayName" class="text-xl font-bold">Novo Usuário</h2>
                                 <p id="displayEmail" class="text-muted">Email não definido</p>
                             </div>
                         </div>
@@ -71,8 +70,8 @@
             <div class="dashboard-card">
                 <div class="p-6 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-user-plus text-xl text-brand-500"></i>
-                        <h2 class="text-xl font-bold">Informações do Usuário</h2>
+                        <i class="fas fa-user-plus text-xl text-brand-500 "" style="color: var(--icon-clients-text);"></i>
+                        <h2 class="text-left" class="text-xl font-bold text-left">Informações do Usuário</h2>
                     </div>
                 </div>
 
@@ -205,7 +204,7 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Criando...';
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2 text-xl" style="color: var(--icon-clients-text);""></i>Criando...';
 
             try {
                 // Preparar os dados do usuário conforme o modelo existente

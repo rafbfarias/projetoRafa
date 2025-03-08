@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../../js/Sidebar.js"></script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
+<body class="bg-primary">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
@@ -20,8 +20,8 @@
         <main class="flex-1 p-8 overflow-y-auto">
             <!-- Cabeçalho -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                <div>
-                    <h1 class="text-2xl font-bold">Gestão de Caixa</h1>
+                <div class="text-left">
+                    <h1 class="text-left text-2xl font-bold">Gestão de Caixa</h1>
                     <p class="text-muted">Controle e gerenciamento de saídas de caixa</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -47,7 +47,7 @@
                             <i class="fas fa-university text-xl" style="color: var(--icon-clients-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Depósitos Pendentes</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Depósitos Pendentes</h3>
                             <p class="text-2xl font-bold">€ 3.425,50</p>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                             <i class="fas fa-hand-holding-usd text-xl" style="color: var(--icon-revenue-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Entregas Pendentes</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Entregas Pendentes</h3>
                             <p class="text-2xl font-bold">€ 1.850,00</p>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             <i class="fas fa-coins text-xl" style="color: var(--icon-contracts-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Gorjetas Pendentes</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Gorjetas Pendentes</h3>
                             <p class="text-2xl font-bold">€ 795,20</p>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <i class="fas fa-exchange-alt text-xl" style="color: var(--icon-employees-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Transações Recentes</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Transações Recentes</h3>
                             <p class="text-2xl font-bold">12</p>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Gráfico de Distribuição de Pendências -->
                 <div class="dashboard-card p-6 lg:col-span-2">
-                    <h3 class="text-lg font-semibold mb-4">Distribuição de Pendências</h3>
+                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Distribuição de Pendências</h3>
                     <div class="h-80">
                         <canvas id="distributionChart"></canvas>
                     </div>
@@ -160,7 +160,7 @@
 
                 <!-- Tabela de Pendências por Categoria -->
                 <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Pendências por Categoria</h3>
+                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Pendências por Categoria</h3>
                     <div class="space-y-4">
                         <div>
                             <div class="flex justify-between items-center mb-2">
@@ -221,7 +221,7 @@
                 <!-- Transações Recentes -->
                 <div class="dashboard-card p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Transações Recentes</h3>
+                        <h3 class="text-left" class="text-lg font-semibold text-left">Transações Recentes</h3>
                         <a href="/pages/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
                     </div>
                     <div class="overflow-x-auto">
@@ -319,7 +319,7 @@
                 <!-- Pendências por Dia -->
                 <div class="dashboard-card p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Pendências por Dia</h3>
+                        <h3 class="text-left" class="text-lg font-semibold text-left">Pendências por Dia</h3>
                         <a href="/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Detalhes</a>
                     </div>
                     <div class="overflow-x-auto">

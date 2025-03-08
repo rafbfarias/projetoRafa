@@ -20,8 +20,8 @@
         <main class="flex-1 p-8 overflow-y-auto">
             <!-- Cabeçalho -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                <div>
-                    <h1 class="text-2xl font-bold">Relatório Consolidado de Caixa</h1>
+                <div class="text-left">
+                    <h1 class="text-left text-2xl font-bold">Relatório Consolidado de Caixa</h1>
                     <p class="text-muted">Análise completa de saídas de caixa e pendências</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -54,7 +54,7 @@
                             <i class="fas fa-chart-line text-xl" style="color: var(--icon-revenue-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Total Faturado</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Total Faturado</h3>
                             <p class="text-2xl font-bold">€ 36.425,75</p>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <i class="fas fa-exchange-alt text-xl" style="color: var(--icon-clients-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Total Processado</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Total Processado</h3>
                             <p class="text-2xl font-bold">€ 30.555,05</p>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                             <i class="fas fa-clock text-xl" style="color: var(--icon-contracts-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Total Pendente</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Total Pendente</h3>
                             <p class="text-2xl font-bold">€ 5.870,70</p>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                             <i class="fas fa-file-invoice-dollar text-xl" style="color: var(--icon-employees-text);"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-muted text-sm">Transações</h3>
+                            <h3 class="text-left" class="text-muted text-sm text-left">Transações</h3>
                             <p class="text-2xl font-bold">42</p>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Gráfico de Faturação vs. Processamento -->
                 <div class="dashboard-card p-6 lg:col-span-2">
-                    <h3 class="text-lg font-semibold mb-4">Faturação vs. Processamento</h3>
+                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Faturação vs. Processamento</h3>
                     <div class="h-80">
                         <canvas id="billingProcessingChart"></canvas>
                     </div>
@@ -128,7 +128,7 @@
 
                 <!-- Gráfico de Distribuição por Tipo -->
                 <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Distribuição por Tipo</h3>
+                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Distribuição por Tipo</h3>
                     <div class="h-80">
                         <canvas id="transactionTypeChart"></canvas>
                     </div>
@@ -139,7 +139,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <!-- Progresso por Categoria -->
                 <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Progresso por Categoria</h3>
+                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Progresso por Categoria</h3>
                     
                     <div class="space-y-6">
                         <div>
@@ -195,7 +195,7 @@
                 <!-- Transações Recentes -->
                 <div class="dashboard-card p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Transações Recentes</h3>
+                        <h3 class="text-left" class="text-lg font-semibold text-left">Transações Recentes</h3>
                         <a href="/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
                     </div>
                     
@@ -272,7 +272,7 @@
             <!-- Pendências Detalhadas -->
             <div class="dashboard-card p-6 mb-8">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold">Pendências Detalhadas</h3>
+                    <h3 class="text-left" class="text-lg font-semibold text-left">Pendências Detalhadas</h3>
                     <div class="flex items-center space-x-2">
                         <label for="pendingFilter" class="text-sm text-gray-600">Filtrar por:</label>
                         <select id="pendingFilter" class="form-select">
@@ -377,7 +377,7 @@
 
             <!-- Resumo por Unidade -->
             <div class="dashboard-card p-6">
-                <h3 class="text-lg font-semibold mb-4">Resumo por Unidade</h3>
+                <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Resumo por Unidade</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Matosinhos -->

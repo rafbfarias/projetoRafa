@@ -1,0 +1,231 @@
+/* Estilos complementares para o Reminder Board */
+
+/* Background grid para o board */
+.bg-grid {
+    background-image: 
+        linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Estilos para as notas */
+.note {
+    cursor: move;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+    min-height: 120px;
+    background-color: var(--component-bg);
+    color: var(--text-primary);
+    border-radius: 0.5rem;
+    box-shadow: var(--component-shadow);
+}
+
+.note:hover {
+    box-shadow: var(--component-hover-shadow);
+    transform: translateY(-2px);
+}
+
+.note.dragging {
+    opacity: 0.8;
+    transform: scale(1.05);
+    z-index: 100;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores de fundo para as notas */
+.note-color-yellow {
+    border-top: 3px solid var(--status-pending);
+}
+
+.note-color-blue {
+    border-top: 3px solid var(--brand-500);
+}
+
+.note-color-green {
+    border-top: 3px solid var(--status-paid);
+}
+
+.note-color-red {
+    border-top: 3px solid var(--status-canceled);
+}
+
+.note-color-purple {
+    border-top: 3px solid #8b5cf6;
+}
+
+.note-color-pink {
+    border-top: 3px solid #ec4899;
+}
+
+.note-color-gray {
+    border-top: 3px solid var(--text-muted);
+}
+
+/* Seleção de cores no modal */
+.color-option input[type="radio"]:checked + span {
+    border-color: var(--brand-600);
+}
+
+.color-option.selected {
+    border-color: var(--brand-600);
+    box-shadow: 0 0 0 2px var(--brand-600);
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.note-appear {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Estilos para o tooltip de referência */
+.reference-tooltip {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+}
+
+.note:hover .reference-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Estilos para as badges de status */
+.note-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem 0.375rem;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Ícone de link para referências */
+.reference-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background-color: var(--bg-secondary);
+    color: var(--brand-600);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.reference-link:hover {
+    transform: scale(1.1);
+    background-color: var(--bg-primary);
+}
+
+/* Estilos para o indicador de arrasto */
+.drag-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    cursor: move;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+/* Estilos específicos para o board */
+.board-container {
+    background-color: var(--bg-secondary);
+    border-radius: 0.5rem;
+    box-shadow: var(--component-shadow);
+}
+
+.board-column {
+    background-color: var(--bg-primary);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.board-column-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Sobrescrever estilos apenas dentro do board */
+.reminder-board .sidebar,
+.reminder-board .app-sidebar {
+    /* Não modificar o sidebar */
+    background-color: var(--sidebar-bg) !important;
+    color: var(--sidebar-text) !important;
+}
+
+.reminder-board .menu-item {
+    color: var(--sidebar-text) !important;
+}
+
+.reminder-board .menu-item:hover {
+    background-color: var(--sidebar-hover) !important;
+}
+
+/* Cores específicas para as notas */
+.note-priority-high {
+    border-left: 4px solid var(--status-canceled);
+}
+
+.note-priority-medium {
+    border-left: 4px solid var(--status-pending);
+}
+
+.note-priority-low {
+    border-left: 4px solid var(--status-paid);
+}
+
+/* Estilos para o modal */
+.reminder-modal {
+    background-color: var(--component-bg);
+    color: var(--text-primary);
+    border-radius: 0.5rem;
+    box-shadow: var(--component-shadow);
+}
+
+.reminder-modal-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.reminder-modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Estilos para os filtros */
+.filter-dropdown {
+    background-color: var(--component-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 0.5rem;
+    box-shadow: var(--component-shadow);
+}
+
+/* Estilos para os botões de ação nas notas */
+.note-actions button {
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.note-actions button:hover {
+    color: var(--text-primary);
+}
+
+.note-actions .edit-note:hover {
+    color: var(--brand-500);
+}
+
+.note-actions .delete-note:hover {
+    color: var(--status-canceled);
+}

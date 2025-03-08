@@ -1,13 +1,13 @@
 <div class="space-y-6">
     <!-- Cabeçalho da página -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-            <h1 class="text-2xl font-bold">Relatórios de Ponto</h1>
+        <div class="text-left">
+            <h1 class="text-left" class="text-2xl font-bold text-left">Relatórios de Ponto</h1>
             <p class="text-slate-500 mt-1">Visualize e exporte os registros de ponto dos usuários</p>
         </div>
         <div class="mt-4 md:mt-0">
             <button id="exportButton" class="bg-brand-600 hover:bg-brand-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center">
-                <i class="fas fa-download mr-2"></i>
+                <i class="fas fa-download mr-2 text-xl" style="color: var(--icon-clients-text);""></i>
                 Exportar Relatório
             </button>
         </div>
@@ -15,7 +15,7 @@
 
     <!-- Filtros -->
     <div class="card-bg rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Filtros</h2>
+        <h2 class="text-left" class="text-lg font-semibold mb-4 text-left">Filtros</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Filtro de usuário -->
             <div>
@@ -75,7 +75,7 @@
             <!-- Botão de aplicar filtros -->
             <div class="flex items-end">
                 <button id="applyFilters" class="w-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center">
-                    <i class="fas fa-filter mr-2"></i>
+                    <i class="fas fa-filter mr-2 text-xl" style="color: var(--icon-clients-text);""></i>
                     Aplicar Filtros
                 </button>
             </div>
@@ -87,9 +87,9 @@
         <!-- Total de horas -->
         <div class="card-bg rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold">Total de Horas</h3>
+                <h3 class="text-left" class="font-semibold text-left">Total de Horas</h3>
                 <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
-                    <i class="fas fa-clock"></i>
+                    <i class="fas fa-clock text-xl" style="color: var(--icon-clients-text);""></i>
                 </div>
             </div>
             <p class="text-2xl font-bold" id="totalHours">0h</p>
@@ -101,9 +101,9 @@
         <!-- Média diária -->
         <div class="card-bg rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold">Média Diária</h3>
+                <h3 class="text-left" class="font-semibold text-left">Média Diária</h3>
                 <div class="bg-green-100 text-green-600 p-2 rounded-lg">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-chart-line text-xl" style="color: var(--icon-clients-text);""></i>
                 </div>
             </div>
             <p class="text-2xl font-bold" id="dailyAverage">0h</p>
@@ -115,9 +115,9 @@
         <!-- Horas extras -->
         <div class="card-bg rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold">Horas Extras</h3>
+                <h3 class="text-left" class="font-semibold text-left">Horas Extras</h3>
                 <div class="bg-amber-100 text-amber-600 p-2 rounded-lg">
-                    <i class="fas fa-plus-circle"></i>
+                    <i class="fas fa-plus-circle text-xl" style="color: var(--icon-clients-text);""></i>
                 </div>
             </div>
             <p class="text-2xl font-bold" id="overtimeHours">0h</p>
@@ -129,9 +129,9 @@
         <!-- Registros incompletos -->
         <div class="card-bg rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold">Registros Incompletos</h3>
+                <h3 class="text-left" class="font-semibold text-left">Registros Incompletos</h3>
                 <div class="bg-red-100 text-red-600 p-2 rounded-lg">
-                    <i class="fas fa-exclamation-triangle"></i>
+                    <i class="fas fa-exclamation-triangle text-xl" style="color: var(--icon-clients-text);""></i>
                 </div>
             </div>
             <p class="text-2xl font-bold" id="incompleteRecords">0</p>
@@ -145,7 +145,7 @@
     <div class="card-bg rounded-lg shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-200 dark:border-slate-700">
             <div class="flex items-center justify-between">
-                <h3 class="font-semibold">Registros de Ponto</h3>
+                <h3 class="text-left" class="font-semibold text-left">Registros de Ponto</h3>
                 <div class="flex items-center space-x-2">
                     <span class="text-sm text-slate-500" id="resultCount">0 registros encontrados</span>
                     <select id="pageSize" class="text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -191,13 +191,13 @@
             </div>
             <div class="flex space-x-2">
                 <button id="prevPage" class="px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-chevron-left"></i>
+                    <i class="fas fa-chevron-left text-xl" style="color: var(--icon-clients-text);""></i>
                 </button>
                 <div id="pageNumbers" class="flex space-x-1">
                     <!-- Números de página serão preenchidos via JavaScript -->
                 </div>
                 <button id="nextPage" class="px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-chevron-right text-xl" style="color: var(--icon-clients-text);""></i>
                 </button>
             </div>
         </div>
@@ -208,24 +208,24 @@
 <div id="recordDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-700">
-            <h2 class="text-xl font-semibold flex items-center">
-                <i class="fas fa-clipboard-list mr-2 text-brand-600"></i>
+            <h2 class="text-left" class="text-xl font-semibold flex items-center text-left">
+                <i class="fas fa-clipboard-list mr-2 text-brand-600 text-xl" style="color: var(--icon-clients-text);""></i>
                 Detalhes do Registro
             </h2>
             <button id="closeDetailsModal" class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-                <i class="fas fa-times h-6 w-6"></i>
+                <i class="fas fa-times h-6 w-6 text-xl" style="color: var(--icon-clients-text);""></i>
             </button>
         </div>
         
         <div class="overflow-y-auto flex-1 p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Informações do usuário -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4">Informações do Usuário</h3>
+                <div class="text-left">
+                    <h3 class="text-left" class="text-lg font-medium mb-4 text-left">Informações do Usuário</h3>
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center">
-                                <i class="fas fa-user text-xl"></i>
+                                <i class="fas fa-user text-xl "" style="color: var(--icon-clients-text);"></i>
                             </div>
                             <div>
                                 <p class="font-medium text-lg" id="modalUserName">Nome do Usuário</p>
@@ -247,8 +247,8 @@
                 </div>
                 
                 <!-- Detalhes do registro -->
-                <div>
-                    <h3 class="text-lg font-medium mb-4">Detalhes do Registro</h3>
+                <div class="text-left">
+                    <h3 class="text-left" class="text-lg font-medium mb-4 text-left">Detalhes do Registro</h3>
                     <div class="space-y-3">
                         <div>
                             <p class="text-sm text-slate-500">Data do Registro</p>
@@ -294,7 +294,7 @@
             
             <!-- Observações -->
             <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-medium mb-3">Observações</h3>
+                <h3 class="text-left" class="text-lg font-medium mb-3 text-left">Observações</h3>
                 <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-4" id="modalNotes">
                     <p class="text-slate-500 dark:text-slate-400">Sem observações registradas.</p>
                 </div>
@@ -302,11 +302,11 @@
             
             <!-- Histórico de edições -->
             <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-medium mb-3">Histórico de Edições</h3>
+                <h3 class="text-left" class="text-lg font-medium mb-3 text-left">Histórico de Edições</h3>
                 <div class="space-y-3" id="modalEditHistory">
                     <div class="flex items-start space-x-3">
                         <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-pen-to-square"></i>
+                            <i class="fas fa-pen-to-square text-xl" style="color: var(--icon-clients-text);""></i>
                         </div>
                         <div>
                             <p class="font-medium">Registro criado</p>
@@ -324,11 +324,11 @@
             </button>
             <div class="flex space-x-2">
                 <button id="editRecordButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2 flex items-center">
-                    <i class="fas fa-edit mr-1"></i>
+                    <i class="fas fa-edit mr-1 text-xl" style="color: var(--icon-clients-text);""></i>
                     Editar
                 </button>
                 <button id="printRecordButton" class="bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-lg text-sm px-4 py-2 flex items-center">
-                    <i class="fas fa-print mr-1"></i>
+                    <i class="fas fa-print mr-1 text-xl" style="color: var(--icon-clients-text);""></i>
                     Imprimir
                 </button>
             </div>

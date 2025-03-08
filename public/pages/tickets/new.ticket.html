@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Chamado - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold">Novo Chamado</h1>
+                    <p class="text-muted">Preencha os campos abaixo para criar um novo chamado</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="/pages/tickets/dashboard.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Voltar</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Formulário de Novo Chamado -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna Esquerda - Detalhes do Chamado -->
+                <div class="md:col-span-2">
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Detalhes do Chamado</h3>
+                        <form id="ticketForm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="ticketType" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Tipo de Chamado <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="ticketType" name="ticketType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                        <option value="">Selecione o tipo</option>
+                                        <option value="issue">Problema</option>
+                                        <option value="request">Solicitação</option>
+                                        <option value="question">Dúvida</option>
+                                        <option value="suggestion">Sugestão</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="ticketCategory" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Categoria <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="ticketCategory" name="ticketCategory" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                        <option value="">Selecione a categoria</option>
+                                        <option value="system">Sistema</option>
+                                        <option value="infrastructure">Infraestrutura</option>
+                                        <option value="finance">Financeiro</option>
+                                        <option value="hr">RH</option>
+                                        <option value="maintenance">Manutenção</option>
+                                        <option value="inventory">Estoque</option>
+                                        <option value="supply">Suprimentos</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="ticketSubject" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Assunto <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="ticketSubject" name="ticketSubject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="ticketDescription" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Descrição <span class="text-red-500">*</span>
+                                </label>
+                                <textarea id="ticketDescription" name="ticketDescription" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required></textarea>
+                                <p class="text-xs text-gray-500 mt-1">Descreva detalhadamente o problema ou solicitação. Quanto mais informações, mais rápido poderemos ajudar.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="ticketPriority" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Prioridade <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="ticketPriority" name="ticketPriority" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                        <option value="">Selecione a prioridade</option>
+                                        <option value="low">Baixa</option>
+                                        <option value="medium">Média</option>
+                                        <option value="high">Alta</option>
+                                        <option value="critical">Crítica</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="ticketDueDate" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Data Limite (opcional)
+                                    </label>
+                                    <input type="date" id="ticketDueDate" name="ticketDueDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="ticketAssignee" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Destinatário <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="ticketAssignee" name="ticketAssignee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                        <option value="">Selecione o destinatário</option>
+                                        <optgroup label="Departamentos">
+                                            <option value="department_it">Departamento de TI</option>
+                                            <option value="department_finance">Departamento Financeiro</option>
+                                            <option value="department_hr">Recursos Humanos</option>
+                                            <option value="department_maintenance">Manutenção</option>
+                                            <option value="department_supply">Suprimentos</option>
+                                        </optgroup>
+                                        <optgroup label="Funcionários">
+                                            <option value="user_1">Ana Silva</option>
+                                            <option value="user_2">Bruno Santos</option>
+                                            <option value="user_3">Carla Oliveira</option>
+                                            <option value="user_4">Daniel Costa</option>
+                                            <option value="user_5">Elena Martins</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="ticketUnit" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Unidade <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="ticketUnit" name="ticketUnit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                        <option value="">Selecione a unidade</option>
+                                        <option value="unit_1">Matosinhos</option>
+                                        <option value="unit_2">Porto</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Anexos e Submissão -->
+                <div class="md:col-span-1">
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Anexos</h3>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Arquivos (opcional)
+                            </label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg">
+                                <div class="space-y-1 text-center">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <div class="flex text-sm">
+                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-brand-600 hover:text-brand-700">
+                                            <span>Carregar arquivos</span>
+                                            <input id="file-upload" name="file-upload" type="file" class="sr-only" multiple>
+                                        </label>
+                                        <p class="pl-1">ou arraste e solte</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, PDF até 10MB</p>
+                                </div>
+                            </div>
+                            <div id="file-list" class="mt-2 space-y-2"></div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Captura de Tela
+                            </label>
+                            <button type="button" id="captureScreenButton" class="flex items-center justify-center w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 hover:bg-gray-100">
+                                <i class="fas fa-camera mr-2"></i>
+                                Capturar Tela
+                            </button>
+                            <p class="text-xs text-gray-500 mt-1">Captura uma imagem da tela atual para anexar ao chamado</p>
+                        </div>
+
+                        <h3 class="text-lg font-semibold mb-4">Notificações</h3>
+                        <div class="mb-6">
+                            <div class="flex items-center mb-4">
+                                <input id="notification-email" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" checked>
+                                <label for="notification-email" class="ml-2 text-sm font-medium text-gray-900">Receber notificações por e-mail</label>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <input id="notification-system" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" checked>
+                                <label for="notification-system" class="ml-2 text-sm font-medium text-gray-900">Receber notificações do sistema</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="notification-copy" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                <label for="notification-copy" class="ml-2 text-sm font-medium text-gray-900">Enviar cópia para outros usuários</label>
+                            </div>
+                            <div id="copy-users-container" class="mt-3 hidden">
+                                <select id="copy-users" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" multiple>
+                                    <option value="user_1">Ana Silva</option>
+                                    <option value="user_2">Bruno Santos</option>
+                                    <option value="user_3">Carla Oliveira</option>
+                                    <option value="user_4">Daniel Costa</option>
+                                    <option value="user_5">Elena Martins</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">Segure Ctrl para selecionar múltiplos usuários</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card p-6">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-info-circle text-blue-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-blue-700">
+                                        O sistema atribuirá automaticamente um número de protocolo ao seu chamado. Guarde este número para consultas futuras.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="submitTicket" class="w-full flex justify-center items-center px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 focus:ring-4 focus:ring-brand-300">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Enviar Chamado
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div id="successModal" class="fixed hidden inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-center mb-4 text-green-500">
+                <i class="fas fa-check-circle text-5xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-center mb-4">Chamado Criado com Sucesso!</h3>
+            <p class="text-center mb-6">Seu chamado foi registrado com o número <strong id="ticketNumber" class="text-brand-600">TK-2025-0345</strong></p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm text-gray-600">Status:</span>
+                    <span class="text-sm font-medium">Aberto</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm text-gray-600">Assunto:</span>
+                    <span class="text-sm font-medium" id="modalSubject"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Prioridade:</span>
+                    <span class="text-sm font-medium" id="modalPriority"></span>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <a href="/pages/tickets/ticket-detail.html" class="flex-1 flex justify-center items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                    <i class="fas fa-eye mr-2"></i>
+                    Ver Detalhes
+                </a>
+                <a href="/pages/tickets/dashboard.html" class="flex-1 flex justify-center items-center px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">
+                    <i class="fas fa-home mr-2"></i>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="../../../js/new-ticket.js"></script>
+</body>
+</html>

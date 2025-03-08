@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Chamado - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary-500">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold">Chamado #TK-2025-0342</h1>
+                        <span class="ml-4 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Aberto</span>
+                    </div>
+                    <p class="text-muted">Aberto em 06/03/2025 às 10:15 por Ana Silva</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="/pages/tickets/dashboard.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Voltar</span>
+                    </a>
+                    <div class="relative inline-block">
+                        <button id="actionsDropdown" class="btn btn-primary flex items-center">
+                            <span>Ações</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                            <div class="py-1">
+                                <a href="#" id="respondTicket" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-reply mr-2"></i>Responder
+                                </a>
+                                <a href="#" id="changeStatus" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-exchange-alt mr-2"></i>Alterar Status
+                                </a>
+                                <a href="#" id="assignTicket" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user-plus mr-2"></i>Atribuir
+                                </a>
+                                <a href="#" id="printTicket" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-print mr-2"></i>Imprimir
+                                </a>
+                                <a href="#" id="cancelTicket" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-ban mr-2"></i>Cancelar Chamado
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo Principal -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna Esquerda - Detalhes do Chamado -->
+                <div class="md:col-span-2">
+                    <!-- Card de Detalhes -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Problema na faturação - PDV offline</h3>
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-red-700">
+                                        <span class="font-medium">Crítico:</span> Este chamado foi marcado como crítico e requer atenção imediata.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prose max-w-none mb-4">
+                            <p>O terminal principal de PDV (caixa 01) na unidade Matosinhos está fora do ar desde as 9:30 da manhã. Já tentamos reiniciar o equipamento, mas o sistema continua travando na tela de "Carregando dados". O problema está afetando o atendimento, pois estamos operando apenas com um caixa.</p>
+                            <p class="mt-2">Já verificamos as conexões de rede e de energia, tudo parece estar normal. O erro específico que aparece é "Erro de conexão com o servidor de dados - Código E343".</p>
+                            <p class="mt-2">Precisamos de uma solução com urgência, pois estamos no horário de pico do almoço e com fila se formando.</p>
+                        </div>
+                        <div class="flex flex-wrap mt-6 space-x-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                                <i class="fas fa-tag mr-1"></i>PDV
+                            </span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                                <i class="fas fa-tag mr-1"></i>Faturação
+                            </span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                                <i class="fas fa-tag mr-1"></i>Urgente
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card de Anexos -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Anexos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-image text-brand-600 text-2xl mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium">erro-pdv-screenshot.jpg</p>
+                                        <p class="text-xs text-muted">450 KB</p>
+                                    </div>
+                                    <a href="#" class="text-brand-600 hover:text-brand-700">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histórico de Atividades -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Histórico de Atividades</h3>
+                        <div class="space-y-6">
+                            <!-- Atividade: Resposta -->
+                            <div class="border-l-2 border-blue-500 pl-4 pb-6">
+                                <div class="flex justify-between mb-2">
+                                    <div class="flex items-center">
+                                        <img class="w-8 h-8 rounded-full mr-2" src="/api/placeholder/32/32" alt="Bruno Santos">
+                                        <span class="font-medium">Bruno Santos (Suporte TI)</span>
+                                    </div>
+                                    <span class="text-sm text-gray-500">06/03/2025 10:45</span>
+                                </div>
+                                <div class="bg-blue-50 rounded-lg p-4">
+                                    <p class="text-sm">Olá Ana, estou verificando o problema. Já acessei remotamente o servidor e estou analisando os logs de erro. Parece ser um problema de conexão com o banco de dados. Estou trabalhando para resolver o mais rápido possível.</p>
+                                    <p class="text-sm mt-2">Como medida temporária, vocês podem utilizar o PDV reserva que fica no escritório. Solicito que o conectem na rede e iniciem o sistema. Isso deve ajudar a reduzir a fila enquanto resolvo o problema principal.</p>
+                                </div>
+                            </div>
+
+                            <!-- Atividade: Mudança de Status -->
+                            <div class="border-l-2 border-orange-500 pl-4 pb-6">
+                                <div class="flex justify-between mb-2">
+                                    <div class="flex items-center">
+                                        <img class="w-8 h-8 rounded-full mr-2" src="/api/placeholder/32/32" alt="Bruno Santos">
+                                        <span class="font-medium">Bruno Santos (Suporte TI)</span>
+                                    </div>
+                                    <span class="text-sm text-gray-500">06/03/2025 10:46</span>
+                                </div>
+                                <div class="bg-orange-50 rounded-lg p-4">
+                                    <p class="text-sm">
+                                        <span class="font-medium">Mudança de Status:</span> 
+                                        <span class="px-2 py-0.5 bg-red-100 text-red-800 rounded-full text-xs">Aberto</span>
+                                        <i class="fas fa-arrow-right mx-1"></i>
+                                        <span class="px-2 py-0.5 bg-orange-100 text-orange-800 rounded-full text-xs">Em andamento</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Atividade: Ticket Criado -->
+                            <div class="border-l-2 border-green-500 pl-4">
+                                <div class="flex justify-between mb-2">
+                                    <div class="flex items-center">
+                                        <img class="w-8 h-8 rounded-full mr-2" src="/api/placeholder/32/32" alt="Ana Silva">
+                                        <span class="font-medium">Ana Silva</span>
+                                    </div>
+                                    <span class="text-sm text-gray-500">06/03/2025 10:15</span>
+                                </div>
+                                <div class="bg-green-50 rounded-lg p-4">
+                                    <p class="text-sm">
+                                        <span class="font-medium">Chamado criado</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Área de Resposta -->
+                    <div class="dashboard-card p-6 mb-6" id="response-area">
+                        <h3 class="text-lg font-semibold mb-4">Adicionar Resposta</h3>
+                        <form id="responseForm">
+                            <textarea id="responseText" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Digite sua resposta..."></textarea>
+                            
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Anexos (opcional)
+                                    </label>
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="response-files" class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <i class="fas fa-cloud-upload-alt text-gray-400 text-xl mb-1"></i>
+                                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Clique para anexar arquivos</span> ou arraste e solte</p>
+                                                <p class="text-xs text-gray-500">PDF, PNG, JPG (MAX. 10MB)</p>
+                                            </div>
+                                            <input id="response-files" type="file" class="hidden" multiple />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="statusChange" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Alterar Status do Chamado
+                                    </label>
+                                    <select id="statusChange" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                        <option value="">Manter status atual (Em andamento)</option>
+                                        <option value="waiting">Em espera</option>
+                                        <option value="scheduled">Agendado</option>
+                                        <option value="resolved">Resolvido</option>
+                                        <option value="closed">Fechado</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex space-x-3">
+                                    <div class="flex items-center">
+                                        <input checked id="notifyRequestor" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                        <label for="notifyRequestor" class="ml-2 text-sm font-medium text-gray-900">Notificar solicitante</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="isPrivateNote" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                        <label for="isPrivateNote" class="ml-2 text-sm font-medium text-gray-900">Nota interna (não visível para o solicitante)</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <button type="button" id="submitResponse" class="inline-flex items-center px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 focus:ring-4 focus:ring-brand-300">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Enviar Resposta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Informações Adicionais -->
+                <div class="md:col-span-1">
+                    <!-- Resumo do Chamado -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Detalhes do Chamado</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Status:</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Prioridade:</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Crítico</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Categoria:</span>
+                                <span class="text-sm">Sistema</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Tipo:</span>
+                                <span class="text-sm">Problema</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Unidade:</span>
+                                <span class="text-sm">Matosinhos</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Solicitante:</span>
+                                <span class="text-sm">Ana Silva</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Responsável:</span>
+                                <span class="text-sm">Bruno Santos</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Data de Abertura:</span>
+                                <span class="text-sm">06/03/2025 10:15</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Última Atualização:</span>
+                                <span class="text-sm">06/03/2025 10:46</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Tempo em Aberto:</span>
+                                <span class="text-sm">45 minutos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLA Information -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações de SLA</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-medium">Tempo de Resposta</span>
+                                    <span class="text-sm font-bold text-green-600">30 min</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-xs text-muted mt-1">Meta: 1 hora - Cumprida</p>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-medium">Tempo de Resolução</span>
+                                    <span class="text-sm font-bold text-yellow-600">45 min</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 15%"></div>
+                                </div>
+                                <p class="text-xs text-muted mt-1">Meta: 4 horas - Tempo restante: 3h 15min</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campos Personalizados -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Campos Personalizados</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Equipamento:</span>
+                                <span class="text-sm">PDV-MAT-001</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Versão do Software:</span>
+                                <span class="text-sm">v3.5.12</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Impacto no Negócio:</span>
+                                <span class="text-sm">Alto</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-muted">Último Manutenção:</span>
+                                <span class="text-sm">15/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chamados Relacionados -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Chamados Relacionados</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                <a href="#" class="text-sm font-medium text-brand-600 hover:text-brand-700">TK-2025-0315</a>
+                                <p class="text-sm text-gray-600 mt-1">Atualização de software dos PDVs</p>
+                                <div class="flex justify-between mt-2 text-xs">
+                                    <span class="text-muted">28/02/2025</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-800">Resolvido</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                <a href="#" class="text-sm font-medium text-brand-600 hover:text-brand-700">TK-2025-0287</a>
+                                <p class="text-sm text-gray-600 mt-1">Lentidão no sistema de PDV</p>
+                                <div class="flex justify-between mt-2 text-xs">
+                                    <span class="text-muted">15/02/2025</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-800">Resolvido</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Alteração de Status -->
+    <div id="statusModal" class="fixed hidden inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-lg font-medium mb-4">Alterar Status do Chamado</h3>
+            <form id="statusForm">
+                <div class="mb-4">
+                    <label for="newStatus" class="block text-sm font-medium text-gray-700 mb-1">Novo Status</label>
+                    <select id="newStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="open">Aberto</option>
+                        <option value="in-progress" selected>Em andamento</option>
+                        <option value="waiting">Em espera</option>
+                        <option value="scheduled">Agendado</option>
+                        <option value="resolved">Resolvido</option>
+                        <option value="closed">Fechado</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="statusNote" class="block text-sm font-medium text-gray-700 mb-1">Observação (opcional)</label>
+                    <textarea id="statusNote" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Adicione uma observação sobre a mudança de status..."></textarea>
+                </div>
+                <div class="flex items-center mb-4">
+                    <input id="notifyOnStatusChange" type="checkbox" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                    <label for="notifyOnStatusChange" class="ml-2 text-sm font-medium text-gray-900">Notificar solicitante sobre mudança de status</label>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" id="cancelStatusChange" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Cancelar</button>
+                    <button type="button" id="confirmStatusChange" class="flex-1 px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Atribuição -->
+    <div id="assignModal" class="fixed hidden inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-lg font-medium mb-4">Atribuir Chamado</h3>
+            <form id="assignForm">
+                <div class="mb-4">
+                    <label for="assignTo" class="block text-sm font-medium text-gray-700 mb-1">Atribuir para</label>
+                    <select id="assignTo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="">Selecione um técnico</option>
+                        <option value="user_1" selected>Bruno Santos</option>
+                        <option value="user_2">Carla Oliveira</option>
+                        <option value="user_3">Daniel Costa</option>
+                        <option value="user_4">Elena Martins</option>
+                        <option value="user_5">Fábio Pereira</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="assignNote" class="block text-sm font-medium text-gray-700 mb-1">Observação (opcional)</label>
+                    <textarea id="assignNote" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Adicione uma observação sobre a atribuição..."></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" id="cancelAssign" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Cancelar</button>
+                    <button type="button" id="confirmAssign" class="flex-1 px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Cancelamento -->
+    <div id="cancelTicketModal" class="fixed hidden inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-center mb-4 text-red-500">
+                <i class="fas fa-exclamation-triangle text-5xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-center mb-4">Cancelar Chamado</h3>
+            <p class="text-center mb-6">Tem certeza que deseja cancelar este chamado? Esta ação não pode ser desfeita.</p>
+            <form id="cancelForm">
+                <div class="mb-4">
+                    <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-1">Motivo do Cancelamento <span class="text-red-500">*</span></label>
+                    <select id="cancelReason" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                        <option value="">Selecione um motivo</option>
+                        <option value="duplicate">Chamado duplicado</option>
+                        <option value="resolved">Problema já resolvido</option>
+                        <option value="wrong_info">Informações incorretas</option>
+                        <option value="test">Chamado de teste</option>
+                        <option value="other">Outro motivo</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="cancelNote" class="block text-sm font-medium text-gray-700 mb-1">Observação <span class="text-red-500">*</span></label>
+                    <textarea id="cancelNote" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Descreva o motivo do cancelamento..." required></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" id="cancelCancelation" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Voltar</button>
+                    <button type="button" id="confirmCancel" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Cancelar Chamado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../../js/ticket-detail.js"></script>
+</body>
+</html> hover:text-brand-700">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-pdf text-brand-600 text-2xl mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium">log-sistema-pdv.pdf</p>
+                                        <p class="text-xs text-muted">132 KB</p>
+                                    </div>
+                                    <a href="#" class="text-brand-600
