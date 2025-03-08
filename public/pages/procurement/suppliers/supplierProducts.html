@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos do Fornecedor - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../css/suppliers.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div class="flex items-center">
+                    <a href="dash.supplier.html" class="mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-left text-2xl font-bold">Produtos de <span id="supplierName">Vinhos do Vale</span></h1>
+                        <p class="text-muted">Gerencie os produtos deste fornecedor</p>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <button id="filterButton" class="btn btn-secondary">
+                        <i class="fas fa-filter mr-2"></i>
+                        Filtros
+                    </button>
+                    <button id="addProductBtn" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        Novo Produto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros (inicialmente escondido) -->
+            <div id="filterContainer" class="hidden mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nome</label>
+                        <input type="text" id="nameFilter" class="w-full p-2 rounded form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Categoria</label>
+                        <select id="categoryFilter" class="w-full p-2 rounded form-select">
+                            <option value="">Todas as categorias</option>
+                            <option value="tinto">Vinho Tinto</option>
+                            <option value="branco">Vinho Branco</option>
+                            <option value="rose">Vinho Rosé</option>
+                            <option value="espumante">Espumante</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Status</label>
+                        <select id="statusFilter" class="w-full p-2 rounded form-select">
+                            <option value="">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button id="resetFilters" class="btn btn-secondary mr-2">Limpar Filtros</button>
+                    <button id="applyFilters" class="btn btn-primary">Aplicar Filtros</button>
+                </div>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100">
+                            <i class="fas fa-box text-xl text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Total de Produtos</h3>
+                            <p class="text-2xl font-bold">45</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted">Ativos: 42</span>
+                            <span class="text-muted">Inativos: 3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-green-100">
+                            <i class="fas fa-wine-bottle text-xl text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Vinhos Tintos</h3>
+                            <p class="text-2xl font-bold">24</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted">Mais vendido: Reserva 2019</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-yellow-100">
+                            <i class="fas fa-wine-glass-alt text-xl text-yellow-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Vinhos Brancos</h3>
+                            <p class="text-2xl font-bold">16</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted">Mais vendido: Verde 2022</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card p-6 flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-pink-100">
+                            <i class="fas fa-glass-cheers text-xl text-pink-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-muted text-sm">Outros Vinhos</h3>
+                            <p class="text-2xl font-bold">5</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted">Rosés: 3 | Espumantes: 2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Produtos -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Lista de Produtos</h3>
+                    <div class="flex">
+                        <div class="relative mr-4">
+                            <input type="text" id="searchInput" placeholder="Buscar produto..." class="form-input pl-10">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                        <select id="sortSelect" class="form-select">
+                            <option value="name-asc">Nome (A-Z)</option>
+                            <option value="name-desc">Nome (Z-A)</option>
+                            <option value="price-asc">Preço (Menor-Maior)</option>
+                            <option value="price-desc">Preço (Maior-Menor)</option>
+                            <option value="stock-asc">Estoque (Menor-Maior)</option>
+                            <option value="stock-desc">Estoque (Maior-Menor)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productsContainer">
+                    <!-- Produto 1 -->
+                    <div class="dashboard-card p-6 product-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ativo</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-800" title="Excluir produto">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mb-4">
+                            <img src="https://via.placeholder.com/150" alt="Vinho Tinto Reserva" class="mx-auto h-32 object-contain mb-3">
+                            <h4 class="text-lg font-semibold">Vinho Tinto Reserva</h4>
+                            <p class="text-sm text-muted mb-2">Douro • 2019</p>
+                            <p class="text-lg font-bold text-gray-900">€ 12,50</p>
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">SKU:</span>
+                                <span>VV-001</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">Estoque:</span>
+                                <span>245 unidades</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Última compra:</span>
+                                <span>15/06/2023</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produto 2 -->
+                    <div class="dashboard-card p-6 product-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ativo</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-800" title="Excluir produto">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mb-4">
+                            <img src="https://via.placeholder.com/150" alt="Vinho Branco Verde" class="mx-auto h-32 object-contain mb-3">
+                            <h4 class="text-lg font-semibold">Vinho Branco Verde</h4>
+                            <p class="text-sm text-muted mb-2">Minho • 2022</p>
+                            <p class="text-lg font-bold text-gray-900">€ 8,95</p>
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">SKU:</span>
+                                <span>VV-002</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">Estoque:</span>
+                                <span>320 unidades</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Última compra:</span>
+                                <span>10/06/2023</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produto 3 -->
+                    <div class="dashboard-card p-6 product-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ativo</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-800" title="Excluir produto">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mb-4">
+                            <img src="https://via.placeholder.com/150" alt="Vinho Rosé" class="mx-auto h-32 object-contain mb-3">
+                            <h4 class="text-lg font-semibold">Vinho Rosé</h4>
+                            <p class="text-sm text-muted mb-2">Alentejo • 2021</p>
+                            <p class="text-lg font-bold text-gray-900">€ 9,75</p>
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">SKU:</span>
+                                <span>VV-003</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">Estoque:</span>
+                                <span>180 unidades</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Última compra:</span>
+                                <span>05/06/2023</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produto 4 -->
+                    <div class="dashboard-card p-6 product-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Inativo</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-800" title="Excluir produto">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mb-4">
+                            <img src="https://via.placeholder.com/150" alt="Espumante Bruto" class="mx-auto h-32 object-contain mb-3">
+                            <h4 class="text-lg font-semibold">Espumante Bruto</h4>
+                            <p class="text-sm text-muted mb-2">Bairrada • 2020</p>
+                            <p class="text-lg font-bold text-gray-900">€ 14,50</p>
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">SKU:</span>
+                                <span>VV-004</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-muted">Estoque:</span>
+                                <span>0 unidades</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Última compra:</span>
+                                <span>20/05/2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paginação -->
+                <div class="mt-6 flex items-center justify-between">
+                    <div class="text-sm text-muted">
+                        Mostrando <span class="font-medium">1</span> a <span class="font-medium">4</span> de <span class="font-medium">45</span> produtos
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="btn btn-secondary px-3 py-1 text-sm" disabled>
+                            <i class="fas fa-chevron-left mr-1"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary px-3 py-1 text-sm">
+                            Próxima <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Produto -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" id="modalTitle">Adicionar Produto</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="productForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="productName" class="block text-sm font-medium mb-1 required">Nome do Produto</label>
+                        <input type="text" id="productName" name="productName" class="form-input w-full" required>
+                    </div>
+                    <div>
+                        <label for="productCategory" class="block text-sm font-medium mb-1 required">Categoria</label>
+                        <select id="productCategory" name="productCategory" class="form-select w-full" required>
+                            <option value="">Selecione a categoria</option>
+                            <option value="tinto">Vinho Tinto</option>
+                            <option value="branco">Vinho Branco</option>
+                            <option value="rose">Vinho Rosé</option>
+                            <option value="espumante">Espumante</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="productRegion" class="block text-sm font-medium mb-1">Região</label>
+                        <select id="productRegion" name="productRegion" class="form-select w-full">
+                            <option value="">Selecione a região</option>
+                            <option value="douro">Douro</option>
+                            <option value="alentejo">Alentejo</option>
+                            <option value="minho">Minho</option>
+                            <option value="dao">Dão</option>
+                            <option value="bairrada">Bairrada</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="productYear" class="block text-sm font-medium mb-1">Ano</label>
+                        <input type="text" id="productYear" name="productYear" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="productPrice" class="block text-sm font-medium mb-1 required">Preço (€)</label>
+                        <input type="number" id="productPrice" name="productPrice" step="0.01" min="0" class="form-input w-full" required>
+                    </div>
+                    <div>
+                        <label for="productSku" class="block text-sm font-medium mb-1">SKU</label>
+                        <input type="text" id="productSku" name="productSku" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="productStock" class="block text-sm font-medium mb-1">Estoque</label>
+                        <input type="number" id="productStock" name="productStock" min="0" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="productStatus" class="block text-sm font-medium mb-1 required">Status</label>
+                        <select id="productStatus" name="productStatus" class="form-select w-full" required>
+                            <option value="active">Ativo</option>
+                            <option value="inactive">Inativo</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="productDescription" class="block text-sm font-medium mb-1">Descrição</label>
+                        <textarea id="productDescription" name="productDescription" rows="4" class="form-textarea w-full"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium mb-1">Imagem do Produto</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="productImage" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 hover:bg-gray-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Clique para enviar</span> ou arraste e solte</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (máx. 2MB)</p>
+                                </div>
+                                <input id="productImage" name="productImage" type="file" class="hidden" accept="image/*" />
+                            </label>
+                        </div>
+                        <div id="imagePreview" class="mt-3 hidden">
+                            <div class="relative w-32 h-32 mx-auto">
+                                <img src="" alt="Preview" class="w-full h-full object-contain border rounded">
+                                <button type="button" id="removeImage" class="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelButton" class="btn btn-secondary">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-xs w-full transform transition-transform duration-300 translate-y-20 opacity-0">
+        <div class="flex items-center">
+            <div id="toastIcon" class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                <i id="toastIconInner" class="fas"></i>
+            </div>
+            <div class="flex-1">
+                <h4 id="toastTitle" class="text-sm font-medium"></h4>
+                <p id="toastMessage" class="text-xs text-muted mt-1"></p>
+            </div>
+            <button id="closeToast" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="../../../js/procurement/supplier/productSupplierManagement.js"></script>
+</body>
+</html>

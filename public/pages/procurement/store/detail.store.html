@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/Sidebar.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <div class="flex items-center">
+                        <a href="dash.store.html" class="text-gray-600 hover:text-gray-900 mr-2">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h1 class="text-2xl font-bold">Detalhes do Produto</h1>
+                    </div>
+                    <p class="text-muted">Informações completas e histórico de compras</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="chart.store.html" class="btn btn-primary position-relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        <span>Carrinho</span>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Conteúdo do Produto -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Informações do Produto -->
+                <div class="lg:col-span-2">
+                    <div class="dashboard-card p-6 mb-6">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                                <img src="/api/placeholder/300/300" alt="Queijo Parmesão" class="object-contain max-h-60">
+                            </div>
+                            <div class="md:w-2/3 md:pl-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h2 class="text-2xl font-bold text-gray-900" id="product-name">Queijo Parmesão</h2>
+                                        <p class="text-lg text-gray-600" id="product-supplier">Laticínios Ramos</p>
+                                    </div>
+                                    <button class="favorite-toggle text-yellow-400 hover:text-yellow-500">
+                                        <i class="fas fa-star text-xl"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex flex-wrap items-center gap-2 mb-4">
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Laticínios</span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Queijos</span>
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Em Estoque</span>
+                                </div>
+                                
+                                <div class="flex items-baseline mb-4">
+                                    <span class="text-3xl font-bold text-gray-900 mr-2" id="product-price">€ 32,90</span>
+                                    <span class="text-lg text-gray-600" id="product-unit">/ kg</span>
+                                </div>
+                                
+                                <p class="text-gray-700 mb-6" id="product-description">
+                                    Queijo Parmesão importado da Itália, curado por 24 meses. Ideal para massas, risotos e saladas. Vendido em peças ou porções.
+                                </p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-100 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500 mb-1">Código do Produto</p>
+                                        <p class="font-medium" id="product-code">PAR100254</p>
+                                    </div>
+                                    <div class="bg-gray-100 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500 mb-1">Origem</p>
+                                        <p class="font-medium" id="product-origin">Itália</p>
+                                    </div>
+                                    <div class="bg-gray-100 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500 mb-1">Unidade de Medida</p>
+                                        <p class="font-medium" id="product-measure">Quilograma (kg)</p>
+                                    </div>
+                                    <div class="bg-gray-100 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500 mb-1">Validade Mínima</p>
+                                        <p class="font-medium" id="product-expiry">60 dias</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col md:flex-row md:items-center gap-4">
+                                    <div class="flex items-center">
+                                        <button class="decrement-btn h-10 w-10 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                            <i class="fas fa-minus text-gray-600"></i>
+                                        </button>
+                                        <input type="number" value="1" min="0" class="h-10 w-16 border-t border-b border-gray-300 text-center text-lg" id="product-quantity">
+                                        <button class="increment-btn h-10 w-10 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                            <i class="fas fa-plus text-gray-600"></i>
+                                        </button>
+                                    </div>
+                                    <button id="add-to-cart-btn" class="bg-blue-600 text-white rounded-lg py-2 px-4 font-medium hover:bg-blue-700 transition-colors flex items-center justify-center">
+                                        <i class="fas fa-cart-plus mr-2"></i>
+                                        Adicionar ao Carrinho
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Abas de Informações Adicionais -->
+                    <div class="dashboard-card mb-6">
+                        <div class="border-b border-gray-200">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="productTabs" role="tablist">
+                                <li class="mr-2" role="presentation">
+                                    <button class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" id="description-tab" data-tabs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">
+                                        <i class="fas fa-info-circle w-4 h-4 mr-2"></i>Descrição Detalhada
+                                    </button>
+                                </li>
+                                <li class="mr-2" role="presentation">
+                                    <button class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" id="suppliers-tab" data-tabs-target="#suppliers" type="button" role="tab" aria-controls="suppliers" aria-selected="false">
+                                        <i class="fas fa-building w-4 h-4 mr-2"></i>Fornecedores
+                                    </button>
+                                </li>
+                                <li class="mr-2" role="presentation">
+                                    <button class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" id="history-tab" data-tabs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                                        <i class="fas fa-history w-4 h-4 mr-2"></i>Histórico de Compras
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="productTabContent">
+                            <div class="p-6 bg-white rounded-lg" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                <h3 class="text-lg font-semibold mb-4">Descrição Completa</h3>
+                                <p class="mb-4">
+                                    O queijo Parmesão importado da Itália é considerado um dos melhores queijos duros do mundo. Produzido na região de Parma, seguindo métodos tradicionais e rigorosos controles de qualidade.
+                                </p>
+                                <p class="mb-4">
+                                    Curado por 24 meses, este queijo apresenta um sabor intenso e cristais de aminoácidos que são indicativos da sua alta qualidade e maturação adequada.
+                                </p>
+                                <h4 class="font-medium mb-2">Características do produto:</h4>
+                                <ul class="list-disc pl-6 mb-4">
+                                    <li>Textura dura e granulada</li>
+                                    <li>Coloração amarelo palha</li>
+                                    <li>Sabor intenso e levemente picante</li>
+                                    <li>Rico em proteínas e cálcio</li>
+                                    <li>Não contém glúten</li>
+                                </ul>
+                                
+                                <h4 class="font-medium mb-2">Recomendações de armazenamento:</h4>
+                                <p>
+                                    Conservar em refrigeração entre 4°C e 8°C. Após aberto, manter embalado em papel manteiga ou filme plástico para preservar a umidade.
+                                </p>
+                            </div>
+                            <div class="hidden p-6 bg-white rounded-lg" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">
+                                <h3 class="text-lg font-semibold mb-4">Fornecedores Disponíveis</h3>
+                                <p class="text-sm text-gray-500 mb-4">Compare os preços e condições de diferentes fornecedores para este produto</p>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Fornecedor
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Preço
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Quantidade Mínima
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Prazo de Entrega
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Ações
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="flex items-center">
+                                                        <div class="flex-shrink-0 h-10 w-10">
+                                                            <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="Logo do fornecedor">
+                                                        </div>
+                                                        <div class="ml-4">
+                                                            <div class="text-sm font-medium text-gray-900">
+                                                                Laticínios Ramos
+                                                            </div>
+                                                            <div class="text-sm text-gray-500">
+                                                                <i class="fas fa-star text-yellow-400"></i> 4.8/5 (32 avaliações)
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm font-medium text-gray-900">€32,90 / kg</div>
+                                                    <div class="text-xs text-green-600">Melhor preço</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">250g</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">2-3 dias úteis</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <button class="bg-gray-200 text-gray-800 py-1 px-3 rounded-lg hover:bg-gray-300 transition-colors">
+                                                        Escolher
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="hidden p-6 bg-white rounded-lg" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                <h3 class="text-lg font-semibold mb-4">Histórico de Compras</h3>
+                                <div class="mb-6">
+                                    <h4 class="font-medium mb-2">Estatísticas de Compra</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="bg-blue-50 p-4 rounded-lg">
+                                            <p class="text-sm text-blue-700 mb-1">Média Mensal</p>
+                                            <p class="text-xl font-bold text-blue-900">2,75 kg</p>
+                                        </div>
+                                        <div class="bg-green-50 p-4 rounded-lg">
+                                            <p class="text-sm text-green-700 mb-1">Última Compra</p>
+                                            <p class="text-xl font-bold text-green-900">250g (7 dias atrás)</p>
+                                        </div>
+                                        <div class="bg-purple-50 p-4 rounded-lg">
+                                            <p class="text-sm text-purple-700 mb-1">Preço Anterior</p>
+                                            <p class="text-xl font-bold text-purple-900">€32,50/kg (+1,2%)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h4 class="font-medium mb-2">Últimas Transações</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Data
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Quantidade
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Preço Unitário
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Total
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Fornecedor
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    01/03/2025
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    250g
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €32,50/kg
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €8,13
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    Laticínios Ramos
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    15/02/2025
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    500g
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €32,00/kg
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €16,00
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    Queijos & Cia
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    01/02/2025
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    1kg
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €31,90/kg
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €31,90
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    Laticínios Ramos
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    15/01/2025
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    750g
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €31,50/kg
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    €23,63
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    Delícias da Montanha
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Lateral -->
+                <div>
+                    <!-- Bloco de Alertas -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações Importantes</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start p-4 bg-blue-50 rounded-lg">
+                                <i class="fas fa-info-circle text-blue-500 mt-1 mr-3 text-lg"></i>
+                                <div>
+                                    <h4 class="font-medium text-blue-700">Comparação de Medidas</h4>
+                                    <p class="text-sm text-blue-600">
+                                        Este produto é vendido por kg, mas sua unidade preferencial é por porção (100g).
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-start p-4 bg-yellow-50 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-3 text-lg"></i>
+                                <div>
+                                    <h4 class="font-medium text-yellow-700">Alteração de Preço</h4>
+                                    <p class="text-sm text-yellow-600">
+                                        O preço deste produto aumentou 1,2% em relação à última compra.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-start p-4 bg-green-50 rounded-lg">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3 text-lg"></i>
+                                <div>
+                                    <h4 class="font-medium text-green-700">Prazo de Entrega</h4>
+                                    <p class="text-sm text-green-600">
+                                        Este fornecedor costuma entregar no prazo de 2-3 dias úteis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produtos Relacionados -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Produtos Relacionados</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <img src="/api/placeholder/60/60" alt="Queijo Gorgonzola" class="w-12 h-12 object-cover rounded-md mr-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900">Queijo Gorgonzola</h4>
+                                    <p class="text-sm text-gray-500">€28,50/kg</p>
+                                </div>
+                                <button class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <img src="/api/placeholder/60/60" alt="Queijo Brie" class="w-12 h-12 object-cover rounded-md mr-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900">Queijo Brie</h4>
+                                    <p class="text-sm text-gray-500">€24,90/kg</p>
+                                </div>
+                                <button class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <img src="/api/placeholder/60/60" alt="Queijo Provolone" class="w-12 h-12 object-cover rounded-md mr-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900">Queijo Provolone</h4>
+                                    <p class="text-sm text-gray-500">€22,80/kg</p>
+                                </div>
+                                <button class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <img src="/api/placeholder/60/60" alt="Molho Pesto" class="w-12 h-12 object-cover rounded-md mr-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900">Molho Pesto</h4>
+                                    <p class="text-sm text-gray-500">€8,90/200g</p>
+                                </div>
+                                <button class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Formulário de Observações do Produto - Escondido inicialmente -->
+            <div id="notes-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+                    <div class="p-6 border-b">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-semibold text-gray-900">Adicionar Observações ao Produto</h3>
+                            <button id="close-notes-modal" class="text-gray-400 hover:text-gray-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label for="notes-text" class="block text-sm font-medium text-gray-700 mb-2">Observações:</label>
+                            <textarea id="notes-text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Adicione suas observações específicas para este produto..."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preferências:</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-1" class="mr-2">
+                                    <label for="preference-1" class="text-sm text-gray-700">Solicitar peça inteira</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-2" class="mr-2">
+                                    <label for="preference-2" class="text-sm text-gray-700">Entrega com refrigeração especial</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-3" class="mr-2">
+                                    <label for="preference-3" class="text-sm text-gray-700">Verificar data de validade (min. 30 dias)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t flex justify-end space-x-3">
+                        <button id="cancel-notes" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                            Cancelar
+                        </button>
+                        <button id="save-notes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Salvar Observações
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/public/js/store.js"></script>
+    <script src="/public/js/products.js"></script>
+    <script src="/public/js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detectar o produto com base no ID passado na URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            // Mudar visibilidade das abas
+            const tabButtons = document.querySelectorAll('[role="tab"]');
+            const tabContents = document.querySelectorAll('[role="tabpanel"]');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Desativar todas as abas
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('tab-inactive');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+                    
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Ativar a aba clicada
+                    button.classList.remove('tab-inactive');
+                    button.classList.add('tab-active');
+                    button.setAttribute('aria-selected', 'true');
+                    
+                    const targetId = button.getAttribute('data-tabs-target').substring(1);
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+            
+            // Controles de incremento/decremento
+            const quantityInput = document.getElementById('product-quantity');
+            const decrementBtn = document.querySelector('.decrement-btn');
+            const incrementBtn = document.querySelector('.increment-btn');
+            
+            decrementBtn.addEventListener('click', () => {
+                const currentValue = parseInt(quantityInput.value);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
+            
+            incrementBtn.addEventListener('click', () => {
+                const currentValue = parseInt(quantityInput.value);
+                quantityInput.value = currentValue + 1;
+            });
+            
+            // Botão de adicionar ao carrinho
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            addToCartBtn.addEventListener('click', () => {
+                // Aqui seria a lógica para adicionar ao carrinho
+                // Abre o modal de observações
+                document.getElementById('notes-modal').classList.remove('hidden');
+            });
+            
+            // Controles do modal de observações
+            const notesModal = document.getElementById('notes-modal');
+            const closeNotesModalBtn = document.getElementById('close-notes-modal');
+            const cancelNotesBtn = document.getElementById('cancel-notes');
+            const saveNotesBtn = document.getElementById('save-notes');
+            
+            closeNotesModalBtn.addEventListener('click', () => {
+                notesModal.classList.add('hidden');
+            });
+            
+            cancelNotesBtn.addEventListener('click', () => {
+                notesModal.classList.add('hidden');
+            });
+            
+            saveNotesBtn.addEventListener('click', () => {
+                // Aqui seria a lógica para salvar as observações
+                const notes = document.getElementById('notes-text').value;
+                
+                // Exemplo simples: mostrar mensagem
+                alert('Produto adicionado ao carrinho com observações');
+                
+                // Fechar o modal
+                notesModal.classList.add('hidden');
+                
+                // Atualizar o contador de itens no carrinho
+                const cartCount = document.getElementById('cart-count');
+                cartCount.textContent = parseInt(cartCount.textContent) + 1;
+            });
+            
+            // Favoritar produto
+            const favoriteToggle = document.querySelector('.favorite-toggle');
+            favoriteToggle.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.classList.add('text-yellow-400');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.classList.remove('text-yellow-400');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

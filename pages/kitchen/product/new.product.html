@@ -5,21 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Produto - Sistema de Gerenciamento de Cozinha</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../css/styles.css">
-    <link rel="stylesheet" href="../../../css/kitchen/product/new.product.css">
-    <!-- Font Awesome para os ícones do sidebar -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/kitchen/product/new.product.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Feather Icons -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <!-- Importar o script do Sidebar que define o componente app-sidebar -->
-    <script src="../../../js/Sidebar.js"></script>
+    <!-- Sidebar JS -->
+    <script src="/js/Sidebar.js"></script>
 </head>
 <body class="bg-gray-50">
-    <div class="flex min-h-screen">
-        <!-- Sidebar - usando o mesmo componente que dashboard.html -->
-        <app-sidebar></app-sidebar>
+    <!-- Sidebar do sistema -->
+    <div id="sidebar-container"></div>
 
-        <!-- Conteúdo Principal -->
-        <main class="flex-1 p-4 overflow-y-auto">
+    <!-- Botão do menu lateral para dispositivos móveis -->
+    <button data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Abrir sidebar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+        </svg>
+    </button>
+
+    <!-- Conteúdo principal -->
+    <div class="p-4 sm:ml-64">
+        <div class="bg-gray-50 min-h-screen">
             <!-- Header -->
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Novo Produto</h1>
@@ -440,7 +449,7 @@
                     </div>
                 </div>
             </form>
-        </main>
+        </div>
     </div>
 
     <!-- Toast de notificação -->
@@ -460,11 +469,27 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
-    <script src="../../../js/kitchen/product/new.product.js"></script>
+    <script src="/js/kitchen/product/new.product.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            feather.replace();
+        // Carregar o sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar o sidebar usando o elemento correto
+            fetch('/components/sidebar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar-container').innerHTML = html;
+                    
+                    // Inicializar eventuais scripts específicos do sidebar
+                    if (typeof initSidebar === 'function') {
+                        initSidebar();
+                    }
+                    
+                    // Inicializar ícones
+                    if (typeof feather !== 'undefined') {
+                        feather.replace();
+                    }
+                });
         });
     </script>
 </body>
-</html>
+</html> 

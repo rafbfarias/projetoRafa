@@ -29,6 +29,14 @@
                         <p class="text-muted">Preencha os dados da faturação conforme o talão fiscal</p>
                     </div>
                     <div class="flex items-center gap-4">
+                        <div class="flex items-center mr-4">
+                            <span class="mr-2 text-sm font-medium">Visualização:</span>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" id="viewToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                <label for="viewToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                            <span class="text-sm" id="viewModeText">Por abas</span>
+                        </div>
                         <button type="button" class="btn btn-secondary" onclick="history.back()">
                             <i class="fas fa-arrow-left mr-2"></i>
                             <span>Voltar</span>
@@ -41,7 +49,7 @@
                 </div>
 
                 <!-- Tabs Navigation -->
-                <div class="border-b border-gray-200 mb-6">
+                <div class="border-b border-gray-200 mb-6" id="tabsNavContainer">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
                         <li class="me-2">
                             <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="info-geral">
@@ -54,28 +62,18 @@
                             </a>
                         </li>
                         <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="delivery">
-                                <i class="fas fa-motorcycle w-4 h-4 me-2"></i>Serviços de Entrega
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="movimentos">
+                                <i class="fas fa-ban w-4 h-4 me-2"></i>Movimentos Anulados
                             </a>
                         </li>
                         <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="cancelamentos">
-                                <i class="fas fa-ban w-4 h-4 me-2"></i>Cancelamentos
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="operacoes">
-                                <i class="fas fa-store w-4 h-4 me-2"></i>Operações Internas
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="consumo">
+                                <i class="fas fa-store w-4 h-4 me-2"></i>Consumo Interno
                             </a>
                         </li>
                         <li class="me-2">
                             <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="metricas">
                                 <i class="fas fa-chart-line w-4 h-4 me-2"></i>Métricas
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="fotos">
-                                <i class="fas fa-images w-4 h-4 me-2"></i>Fotos
                             </a>
                         </li>
                     </ul>
@@ -92,69 +90,22 @@
                             <input type="file" id="photoFactTotal" name="photoFactTotal" accept="image/*" class="hidden">
                         </div>
 
-                        <!-- Business Information -->
-                        <div class="bg-primary rounded-lg shadow-sm p-6 mb-6">
-                            <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Informações do Negócio</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
-                                    <select id="companySelect" class="w-full p-2 rounded input-highlight text-sm" required>
-                                        <option value="">Selecione a empresa</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Unidade</label>
-                                    <select id="unitSelect" class="w-full p-2 rounded input-highlight text-sm" required disabled>
-                                        <option value="">Selecione a unidade</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Responsável</label>
-                                    <select id="factResp" class="w-full p-2 rounded input-highlight text-sm" required disabled>
-                                        <option value="">Selecione o responsável</option>
-                                    </select>
-                                </div>
+                        <!-- Weather Widget -->
+                        <div class="bg-primary rounded-lg shadow-sm p-4 mb-6 flex items-center">
+                            <div class="mr-4 bg-blue-100 p-2 rounded-full">
+                                <i class="fas fa-sun text-yellow-500 text-2xl"></i>
                             </div>
-                        </div>
-
-                        <!-- Weather Banner -->
-                        <div class="weather-banner mb-6">
-                            <div class="weather-section sunny">
-                                <div class="sun"></div>
-                                <div class="weather-content">
-                                    <h2 class="text-left">Temperatura</h2>
-                                    <div class="temp" id="weatherTemp">--°C</div>
-                                    <p id="weatherDesc">Carregando...</p>
-                                </div>
-                            </div>
-                            
-                            <div class="weather-section rainy">
-                                <div class="cloud"></div>
-                                <div class="raindrop" style="left: 20%; animation-duration: 1s;"></div>
-                                <div class="raindrop" style="left: 30%; animation-duration: 1.2s;"></div>
-                                <div class="weather-content">
-                                    <h2 class="text-left">Precipitação</h2>
-                                    <div class="temp" id="weatherPrecip">--%</div>
-                                    <p>Probabilidade</p>
-                                </div>
-                            </div>
-                            
-                            <div class="weather-section windy">
-                                <div class="wind" style="top: 30%; animation-duration: 2s;"></div>
-                                <div class="wind" style="top: 60%; animation-duration: 1.8s;"></div>
-                                <div class="weather-content">
-                                    <h2 class="text-left">Vento</h2>
-                                    <div class="temp" id="weatherWind">-- km/h</div>
-                                    <p>Velocidade</p>
-                                </div>
+                            <div>
+                                <div class="text-lg font-semibold" id="weatherTemp">22°C</div>
+                                <div class="text-sm text-gray-600" id="weatherDesc">Céu limpo</div>
                             </div>
                         </div>
 
                         <!-- Day Evaluation -->
                         <div class="bg-secondary rounded-lg shadow-sm p-6">
-                            <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Avaliação do Dia</h3>
+                            <h3 class="text-lg font-semibold mb-4 text-left">Avaliação do Dia</h3>
                             <div class="space-y-4">
-                                <div class="flex items-center justify-right mb-4">
+                                <div class="flex items-center justify-center mb-4">
                                     <div class="flex space-x-1" id="starRating">
                                         <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">★</button>
                                         <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">★</button>
@@ -194,146 +145,494 @@
                             <input type="hidden" id="factRespId" name="factRespId">
 
                             <!-- Receipt Header -->
-                            <div class="receipt-section receipt-header">
+                            <div class="receipt-section receipt-header bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
                                 <div class="text-center mb-4" id="businessInfo">
-                                    <h3 class="text-left" class="text-2xl font-bold mb-1 text-left">Plateiapositiva, Lda</h3>
-                                    <p class="text-sm" id="selectedUnit">Selecione uma unidade</p>
+                                    <h3 class="text-2xl font-bold mb-1">Plateiapositiva, Lda</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+                                            <input type="text" id="companyInput" class="w-full p-2 rounded input-highlight text-sm" list="companyList" placeholder="Selecione a empresa">
+                                            <datalist id="companyList">
+                                                <option value="Plateiapositiva, Lda">
+                                            </datalist>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Unidade</label>
+                                            <input type="text" id="unitInput" class="w-full p-2 rounded input-highlight text-sm" list="unitList" placeholder="Selecione a unidade">
+                                            <datalist id="unitList">
+                                                <option value="Matosinhos">
+                                                <option value="Porto">
+                                            </datalist>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Responsável</label>
+                                            <input type="text" id="respInput" class="w-full p-2 rounded input-highlight text-sm" list="respList" placeholder="Selecione o responsável">
+                                            <datalist id="respList">
+                                                <option value="João Silva">
+                                                <option value="Maria Santos">
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm mt-3" id="selectedUnit">Rua Sousa Aroso n° 544, Bloco A0.1 Fração K, 4450-286 Matosinhos</p>
                                     <p class="text-sm">Nr. Contribuinte: 510885411</p>
-                                    <div class="font-bold mb-2">Fecho do dia por: <span id="selectedResp" class="text-blue-600">Selecione um responsável</span></div>
                                 </div>
 
-                                <div class="receipt-divider"></div>
+                                <div class="receipt-divider my-4"></div>
 
-                                <div class="mb-6">
-                                    <div class="grid grid-cols-5 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Data/Hora</label>
-                                            <input type="datetime-local" id="dateTime" name="dateTime" class="w-full p-2 rounded input-highlight text-sm" required>
+                                <div class="mb-4">
+                                    <div class="flex justify-center mb-4">
+                                        <div class="w-1/2">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1 text-center">Data/Hora</label>
+                                            <input type="datetime-local" id="dateTime" name="dateTime" class="w-full p-2 rounded input-highlight text-sm text-center" required>
                                         </div>
-                                        <div class="grid grid-cols-1 gap-1">
-                                            <p class="text-sm"><span class="font-medium">WeekDay:</span> <span id="weekDayDisplay">--</span></p>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mt-2">
+                                        <div class="text-center">
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Dia da Semana</label>
+                                            <p class="text-sm font-medium" id="weekDayDisplay">--</p>
                                         </div>
-                                        <div class="grid grid-cols-1 gap-1">
-                                            <p class="text-sm"><span class="font-medium">WeekNum:</span> <span id="weekNumDisplay">--</span></p>
+                                        <div class="text-center">
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Semana</label>
+                                            <p class="text-sm font-medium" id="weekNumDisplay">--</p>
                                         </div>
-                                        <div class="grid grid-cols-1 gap-1">
-                                            <p class="text-sm"><span class="font-medium">Mês:</span> <span id="monthDisplay">--</span></p>
+                                        <div class="text-center">
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Mês</label>
+                                            <p class="text-sm font-medium" id="monthDisplay">--</p>
                                         </div>
-                                        <div class="grid grid-cols-1 gap-1">
-                                            <p class="text-sm"><span class="font-medium">Ano:</span> <span id="yearDisplay">--</span></p>
+                                        <div class="text-center">
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Ano</label>
+                                            <p class="text-sm font-medium" id="yearDisplay">--</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Total por Modos de Pagamento -->
-                            <div class="receipt-section">
-                                <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Total por Modos de Pagamento</h3>
-                                <table class="receipt-table">
-                                    <tr>
-                                        <td>Numerário Euro</td>
-                                        <td>
-                                            <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Transferência Bancária</td>
-                                        <td>
-                                            <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Multibanco 1</td>
-                                        <td>
-                                            <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Multibanco 2</td>
-                                        <td>
-                                            <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Uber Eats MB</td>
-                                        <td>
-                                            <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr class="receipt-total">
-                                        <td>Total da Faturação:</td>
-                                        <td>
-                                            <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00">
-                                        </td>
-                                    </tr>
-                                    <tr id="factDiffRow" class="hidden">
-                                        <td colspan="2" class="text-right text-red-500 text-sm pt-2">
-                                            Diferença na faturação: <span id="factDiff">0.00</span>€
-                                        </td>
-                                    </tr>
-                                </table>
+                            <!-- Tab Content Container -->
+                            <div id="tabContentContainer">
+                                <!-- Tab: Informações Gerais -->
+                                <div class="tab-content" data-tab="info-geral">
+                                    <!-- Total por Modos de Pagamento -->
+                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Total por Modos de Pagamento</h3>
+                                        <div class="receipt-divider my-4"></div>
+                                        <table class="receipt-table w-full">
+                                            <tr>
+                                                <td class="py-2">Numerário Euro</td>
+                                                <td class="w-1/3">
+                                                    <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2">Transferência Bancária</td>
+                                                <td>
+                                                    <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2">Multibanco 1</td>
+                                                <td>
+                                                    <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2">Multibanco 2</td>
+                                                <td>
+                                                    <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2">Uber Eats MB</td>
+                                                <td>
+                                                    <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="receipt-divider my-4"></div>
+                                        <table class="receipt-table w-full">
+                                            <tr class="receipt-total">
+                                                <td class="py-2 font-bold">Total da Faturação:</td>
+                                                <td class="w-1/3">
+                                                    <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00" step="0.01">
+                                                </td>
+                                            </tr>
+                                            <tr id="factDiffRow" class="hidden">
+                                                <td colspan="2" class="text-right text-red-500 text-sm pt-2">
+                                                    Diferença na faturação: <span id="factDiffDisplay">0.00</span>€
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Métodos de Pagamento -->
+                                <div class="tab-content hidden" data-tab="pagamentos">
+                                    <!-- Detalhes de Pagamentos -->
+                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Detalhes de Pagamentos</h3>
+                                        <div class="receipt-divider my-4"></div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <h4 class="font-medium mb-3">Multibanco 1</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Valor Bruto:</label>
+                                                        <input type="number" id="posMb1GrossDetail" name="posMb1GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Taxa (%):</label>
+                                                        <input type="number" id="posMb1Fee" name="posMb1Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Valor Líquido:</label>
+                                                        <input type="number" id="posMb1Net" name="posMb1Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium mb-3">Multibanco 2</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Valor Bruto:</label>
+                                                        <input type="number" id="posMb2GrossDetail" name="posMb2GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Taxa (%):</label>
+                                                        <input type="number" id="posMb2Fee" name="posMb2Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Valor Líquido:</label>
+                                                        <input type="number" id="posMb2Net" name="posMb2Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Movimentos Anulados -->
+                                <div class="tab-content hidden" data-tab="movimentos">
+                                    <!-- Movimentos Anulados e Descontos -->
+                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Movimentos Anulados</h3>
+                                        <div class="receipt-divider my-4"></div>
+                                        <div class="grid grid-cols-1 gap-6">
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <h4 class="font-medium mb-3">Movimentos Anulados</h4>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                            <label class="text-sm">Total Transações:</label>
+                                                            <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Total Documentos:</label>
+                                                            <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Justificativa:</label>
+                                                            <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 class="font-medium mb-3">Descontos</h4>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                            <label class="text-sm">Total:</label>
+                                                            <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Justificativa:</label>
+                                                            <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Consumo Interno -->
+                                <div class="tab-content hidden" data-tab="consumo">
+                                    <!-- Consumo Interno e Gift Cards -->
+                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Consumo Interno e Gift Cards</h3>
+                                        <div class="receipt-divider my-4"></div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <h4 class="font-medium mb-3">Consumo Interno</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Total:</label>
+                                                        <input type="number" id="internalConsumption" name="internalConsumption" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Descrição:</label>
+                                                        <textarea id="internalConsumptionDesc" name="internalConsumptionDesc" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="font-medium mb-3">Gift Cards</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Vendidos:</label>
+                                                        <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Utilizados:</label>
+                                                        <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Métricas -->
+                                <div class="tab-content hidden" data-tab="metricas">
+                                    <!-- Métricas do Dia -->
+                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Métricas do Dia</h3>
+                                        <div class="receipt-divider my-4"></div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <h4 class="font-medium mb-3">Estatísticas</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Ticket Médio:</label>
+                                                        <input type="number" id="averageTicket" name="averageTicket" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Número de Transações:</label>
+                                                        <input type="number" id="transactionCount" name="transactionCount" class="w-full p-2 text-right input-highlight" value="0" step="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="font-medium mb-3">Comparativo</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Faturação Dia Anterior:</label>
+                                                        <input type="number" id="previousDayFact" name="previousDayFact" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Variação (%):</label>
+                                                        <input type="number" id="dayVariation" name="dayVariation" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Movimentos Anulados e Descontos -->
-                            <div class="receipt-section">
-                                <div class="grid grid-cols-1 gap-6">
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div class="text-left">
-                                            <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Movimentos Anulados</h3>
-                                            <div class="space-y-4">
+                            <!-- Full Receipt View (initially hidden) -->
+                            <div id="fullReceiptView" class="hidden">
+                                <!-- Total por Modos de Pagamento -->
+                                <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Total por Modos de Pagamento</h3>
+                                    <div class="receipt-divider my-4"></div>
+                                    <table class="receipt-table w-full">
+                                        <tr>
+                                            <td class="py-2">Numerário Euro</td>
+                                            <td class="w-1/3">
+                                                <input type="number" id="totalCash_full" name="totalCash_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="                                            <td class="py-2">Numerário Euro</td>
+                                            <td class="w-1/3">
+                                                <input type="number" id="totalCash_full" name="totalCash_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2">Transferência Bancária</td>
+                                            <td>
+                                                <input type="number" id="wireTransfer_full" name="wireTransfer_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2">Multibanco 1</td>
+                                            <td>
+                                                <input type="number" id="posMb1Gross_full" name="posMb1Gross_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2">Multibanco 2</td>
+                                            <td>
+                                                <input type="number" id="posMb2Gross_full" name="posMb2Gross_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2">Uber Eats MB</td>
+                                            <td>
+                                                <input type="number" id="uberEatsMb_full" name="uberEatsMb_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="receipt-divider my-4"></div>
+                                    <table class="receipt-table w-full">
+                                        <tr class="receipt-total">
+                                            <td class="py-2 font-bold">Total da Faturação:</td>
+                                            <td class="w-1/3">
+                                                <input type="number" id="totalFact_full" name="totalFact_full" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- Detalhes de Pagamentos -->
+                                <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Detalhes de Pagamentos</h3>
+                                    <div class="receipt-divider my-4"></div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 class="font-medium mb-3">Multibanco 1</h4>
+                                            <div class="space-y-3">
                                                 <div>
-                                                    <label class="text-sm">Total Transações:</label>
-                                                    <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    <label class="text-sm">Valor Bruto:</label>
+                                                    <input type="number" id="posMb1GrossDetail_full" name="posMb1GrossDetail_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                                 <div>
-                                                    <label class="text-sm">Total Documentos:</label>
-                                                    <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    <label class="text-sm">Taxa (%):</label>
+                                                    <input type="number" id="posMb1Fee_full" name="posMb1Fee_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                                 <div>
-                                                    <label class="text-sm">Justificativa:</label>
-                                                    <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    <label class="text-sm">Valor Líquido:</label>
+                                                    <input type="number" id="posMb1Net_full" name="posMb1Net_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-3">Multibanco 2</h4>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <label class="text-sm">Valor Bruto:</label>
+                                                    <input type="number" id="posMb2GrossDetail_full" name="posMb2GrossDetail_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Taxa (%):</label>
+                                                    <input type="number" id="posMb2Fee_full" name="posMb2Fee_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Valor Líquido:</label>
+                                                    <input type="number" id="posMb2Net_full" name="posMb2Net_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Movimentos Anulados e Descontos -->
+                                <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Movimentos Anulados</h3>
+                                    <div class="receipt-divider my-4"></div>
+                                    <div class="grid grid-cols-1 gap-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <h4 class="font-medium mb-3">Movimentos Anulados</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Total Transações:</label>
+                                                        <input type="number" id="canceledTransactions_full" name="canceledTransactions_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Total Documentos:</label>
+                                                        <input type="number" id="canceledDocuments_full" name="canceledDocuments_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Justificativa:</label>
+                                                        <textarea id="canceledDocumentsJustification_full" name="canceledDocumentsJustification_full" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="font-medium mb-3">Descontos</h4>
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Total:</label>
+                                                        <input type="number" id="discounts_full" name="discounts_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Justificativa:</label>
+                                                        <textarea id="discountsJustification_full" name="discountsJustification_full" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Consumo Interno e Gift Cards -->
+                                <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Consumo Interno e Gift Cards</h3>
+                                    <div class="receipt-divider my-4"></div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 class="font-medium mb-3">Consumo Interno</h4>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <label class="text-sm">Total:</label>
+                                                    <input type="number" id="internalConsumption_full" name="internalConsumption_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Descrição:</label>
+                                                    <textarea id="internalConsumptionDesc_full" name="internalConsumptionDesc_full" class="w-full p-2 input-highlight" rows="2"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <div class="text-left">
-                                            <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Descontos</h3>
-                                            <div class="space-y-4">
+                                        <div>
+                                            <h4 class="font-medium mb-3">Gift Cards</h4>
+                                            <div class="space-y-3">
                                                 <div>
-                                                    <label class="text-sm">Total:</label>
-                                                    <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    <label class="text-sm">Vendidos:</label>
+                                                    <input type="number" id="giftCardSold_full" name="giftCardSold_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                                 <div>
-                                                    <label class="text-sm">Justificativa:</label>
-                                                    <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    <label class="text-sm">Utilizados:</label>
+                                                    <input type="number" id="giftCardUsed_full" name="giftCardUsed_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Consumo Interno e Gift Cards -->
-                            <div class="receipt-section">
-                                <div class="grid grid-cols-2 gap-6">
-                                    <div class="text-left">
-                                        <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Consumo Interno</h3>
-                                        <div class="flex items-center gap-4">
-                                            <label class="text-sm">Total:</label>
-                                            <input type="number" id="internalConsumption" name="internalConsumption" class="w-48 p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="text-left">
-                                        <h3 class="text-left" class="font-bold text-gray-800 mb-3 text-left">Gift Cards</h3>
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <label class="text-sm">Vendidos:</label>
-                                                <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                <!-- Métricas do Dia -->
+                                <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Métricas do Dia</h3>
+                                    <div class="receipt-divider my-4"></div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 class="font-medium mb-3">Estatísticas</h4>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <label class="text-sm">Ticket Médio:</label>
+                                                    <input type="number" id="averageTicket_full" name="averageTicket_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Número de Transações:</label>
+                                                    <input type="number" id="transactionCount_full" name="transactionCount_full" class="w-full p-2 text-right input-highlight" value="0" step="1">
+                                                </div>
                                             </div>
-                                            <div>
-                                                <label class="text-sm">Utilizados:</label>
-                                                <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </div>
+                                        
+                                        <div>
+                                            <h4 class="font-medium mb-3">Comparativo</h4>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <label class="text-sm">Faturação Dia Anterior:</label>
+                                                    <input type="number" id="previousDayFact_full" name="previousDayFact_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Variação (%):</label>
+                                                    <input type="number" id="dayVariation_full" name="dayVariation_full" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -346,218 +645,181 @@
         </main>
     </div>
 
+    <style>
+        /* Estilos para o toggle de visualização */
+        .toggle-checkbox {
+            transition: .4s;
+        }
+        .toggle-checkbox:checked {
+            right: 0;
+            transform: translateX(100%);
+            border-color: #3b82f6;
+        }
+        .toggle-label {
+            transition: .4s;
+            background-color: #e5e7eb;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #93c5fd;
+        }
+
+        /* Estilos para o talão fiscal */
+        .receipt-container {
+            font-family: 'Courier New', monospace;
+        }
+        .receipt-section {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .receipt-divider {
+            height: 1px;
+            background: repeating-linear-gradient(90deg, #000, #000 5px, transparent 5px, transparent 10px);
+            margin: 0.5rem 0;
+        }
+        .receipt-header {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .receipt-table {
+            width: 100%;
+        }
+        .receipt-table td {
+            padding: 0.25rem 0;
+        }
+        .receipt-total {
+            font-weight: bold;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 0.5rem;
+        }
+        .input-highlight {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out;
+        }
+        .input-highlight:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+        
+        /* Estilos para as abas */
+        .tab-active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+        .tab-inactive {
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-inactive:hover {
+            color: #4b5563;
+            border-bottom: 2px solid #e5e7eb;
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Cascading Selects Logic
-            const companySelect = document.getElementById('companySelect');
-            const unitSelect = document.getElementById('unitSelect');
-            const factRespSelect = document.getElementById('factResp');
-            const businessInfo = document.getElementById('businessInfo');
-            const selectedUnit = document.getElementById('selectedUnit');
-            const selectedResp = document.getElementById('selectedResp');
+            // Toggle de visualização
+            const viewToggle = document.getElementById('viewToggle');
+            const viewModeText = document.getElementById('viewModeText');
+            const tabsNavContainer = document.getElementById('tabsNavContainer');
+            const tabContentContainer = document.getElementById('tabContentContainer');
+            const fullReceiptView = document.getElementById('fullReceiptView');
 
-            // Simulated data (replace with API calls)
-            const companies = [
-                { id: 1, name: 'Plateiapositiva, Lda' }
-            ];
-
-            const units = [
-                { id: 1, companyId: 1, name: 'Matosinhos', address: 'Rua Sousa Aroso n° 544, Bloco A0.1 Fração K, 4450-286 Matosinhos' },
-                { id: 2, companyId: 1, name: 'Porto', address: 'Rua do Porto, 123' }
-            ];
-
-            const users = [
-                { id: 1, unitId: 1, name: 'João Silva' },
-                { id: 2, unitId: 1, name: 'Maria Santos' },
-                { id: 3, unitId: 2, name: 'Pedro Costa' }
-            ];
-
-            // Populate Companies
-            companies.forEach(company => {
-                const option = new Option(company.name, company.id);
-                companySelect.add(option);
-            });
-
-            // Company Change Handler
-            companySelect.addEventListener('change', function() {
-                const companyId = this.value;
-                document.getElementById('companyId').value = companyId;
-                
-                // Clear and disable subsequent selects
-                unitSelect.innerHTML = '<option value="">Selecione a unidade</option>';
-                factRespSelect.innerHTML = '<option value="">Selecione o responsável</option>';
-                unitSelect.disabled = !companyId;
-                factRespSelect.disabled = true;
-
-                if (companyId) {
-                    // Filter units by company
-                    const companyUnits = units.filter(unit => unit.companyId == companyId);
-                    companyUnits.forEach(unit => {
-                        const option = new Option(unit.name, unit.id);
-                        unitSelect.add(option);
-                    });
+            viewToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Modo talão completo
+                    viewModeText.textContent = 'Talão completo';
+                    tabsNavContainer.classList.add('hidden');
+                    tabContentContainer.classList.add('hidden');
+                    fullReceiptView.classList.remove('hidden');
+                    syncFormValues(true); // Sincronizar valores para o modo completo
+                } else {
+                    // Modo por abas
+                    viewModeText.textContent = 'Por abas';
+                    tabsNavContainer.classList.remove('hidden');
+                    tabContentContainer.classList.remove('hidden');
+                    fullReceiptView.classList.add('hidden');
+                    syncFormValues(false); // Sincronizar valores para o modo abas
                 }
             });
 
-            // Unit Change Handler
-            unitSelect.addEventListener('change', function() {
-                const unitId = this.value;
-                document.getElementById('unitId').value = unitId;
-                
-                // Clear and disable user select
-                factRespSelect.innerHTML = '<option value="">Selecione o responsável</option>';
-                factRespSelect.disabled = !unitId;
+            // Navegação por abas
+            const tabLinks = document.querySelectorAll('#tabsNav a');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-                if (unitId) {
-                    // Update unit info in receipt header
-                    const selectedUnitData = units.find(u => u.id == unitId);
-                    if (selectedUnitData) {
-                        selectedUnit.innerHTML = selectedUnitData.address;
-                    }
-
-                    // Filter users by unit
-                    const unitUsers = users.filter(user => user.unitId == unitId);
-                    unitUsers.forEach(user => {
-                        const option = new Option(user.name, user.id);
-                        factRespSelect.add(option);
-                    });
-                }
-            });
-
-            // Responsible Change Handler
-            factRespSelect.addEventListener('change', function() {
-                const userId = this.value;
-                document.getElementById('factRespId').value = userId;
-                
-                if (userId) {
-                    const selectedUser = users.find(u => u.id == userId);
-                    if (selectedUser) {
-                        selectedResp.textContent = selectedUser.name;
-                    }
-                }
-            });
-
-            // Exemplo de unidades (será substituído pelos dados da API)
-            const unitsExample = [
-                { id: 1, code: 'MAT', name: 'Matosinhos', color: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' },
-                { id: 2, code: 'POR', name: 'Porto', color: 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200' },
-                { id: 3, code: 'LIS', name: 'Lisboa', color: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' },
-                { id: 4, code: 'BRA', name: 'Braga', color: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' }
-            ];
-
-            // Renderizar avatares das unidades
-            function renderUnitAvatars() {
-                const unitSelector = document.getElementById('unitSelector');
-                if (unitsExample.length > 0) {
-                    unitSelector.innerHTML = unitsExample.map(unit => `
-                        <div class="unit-avatar ${unit.color} group" data-unit-id="${unit.id}" data-unit-code="${unit.code}">
-                            <span class="unit-code">${unit.code}</span>
-                            <span class="unit-name">${unit.name}</span>
-                            <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                ${unit.name}
-                            </div>
-                        </div>
-                    `).join('');
-
-                    // Adicionar eventos de clique
-                    document.querySelectorAll('.unit-avatar').forEach(avatar => {
-                        avatar.addEventListener('click', function() {
-                            document.querySelectorAll('.unit-avatar').forEach(a => {
-                                a.classList.remove('selected');
-                                a.classList.remove('scale-105');
-                            });
-                            this.classList.add('selected');
-                            this.classList.add('scale-105');
-                            updateFactId(this.dataset.unitCode);
-                        });
-                    });
-                }
-            }
-
-            // Função para gerar o ID da faturação
-            function generateFactId(unitCode = 'MAT') {
-                const year = document.querySelector('input[name="year"]').value;
-                const month = new Date(document.querySelector('input[name="dateTime"]').value).getMonth() + 1;
-                const day = new Date(document.querySelector('input[name="dateTime"]').value).getDate();
-                const total = parseFloat(document.getElementById('totalFact').value.replace(',', '.'));
-                
-                if (year && month && day && total) {
-                    const formattedMonth = month.toString().padStart(2, '0');
-                    const formattedDay = day.toString().padStart(2, '0');
-                    const formattedTotal = total.toFixed(2).replace('.', '');
-                    return `${year}.${formattedMonth}.${formattedDay}.${unitCode}.${formattedTotal}`;
-                }
-                return '-';
-            }
-
-            // Atualizar ID da faturação
-            function updateFactId(unitCode) {
-                const idDisplay = document.getElementById('factIdDisplay');
-                const newId = generateFactId(unitCode);
-                
-                idDisplay.style.opacity = '0';
-                setTimeout(() => {
-                    idDisplay.textContent = newId;
-                    idDisplay.style.opacity = '1';
-                }, 200);
-            }
-
-            // Inicializar
-            renderUnitAvatars();
-
-            // Manipulação de abas
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remover classe active de todas as abas
-                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     
-                    // Adicionar classe active na aba clicada
-                    this.classList.add('active');
-                    const content = document.querySelector(`.tab-content[data-tab="${this.dataset.tab}"]`);
-                    if (content) {
-                        content.classList.remove('hidden');
+                    // Remover classes ativas de todas as abas
+                    tabLinks.forEach(l => {
+                        l.classList.remove('tab-active');
+                        l.classList.add('tab-inactive');
+                    });
+                    
+                    // Esconder todos os conteúdos
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Ativar a aba clicada
+                    this.classList.remove('tab-inactive');
+                    this.classList.add('tab-active');
+                    
+                    // Mostrar o conteúdo correspondente
+                    const tabId = this.getAttribute('data-tab');
+                    const activeContent = document.querySelector(`.tab-content[data-tab="${tabId}"]`);
+                    if (activeContent) {
+                        activeContent.classList.remove('hidden');
                     }
                 });
             });
 
-            // Upload de imagem
-            const uploadArea = document.getElementById('uploadArea');
-            const photoInput = document.getElementById('photoInput');
-            const photoPreview = document.getElementById('photoPreview');
-            const uploadPrompt = document.getElementById('uploadPrompt');
+            // Sincronizar valores entre os modos de visualização
+            function syncFormValues(toFullView) {
+                const fieldPairs = [
+                    ['totalCash', 'totalCash_full'],
+                    ['wireTransfer', 'wireTransfer_full'],
+                    ['posMb1Gross', 'posMb1Gross_full'],
+                    ['posMb2Gross', 'posMb2Gross_full'],
+                    ['uberEatsMb', 'uberEatsMb_full'],
+                    ['totalFact', 'totalFact_full'],
+                    ['posMb1GrossDetail', 'posMb1GrossDetail_full'],
+                    ['posMb1Fee', 'posMb1Fee_full'],
+                    ['posMb1Net', 'posMb1Net_full'],
+                    ['posMb2GrossDetail', 'posMb2GrossDetail_full'],
+                    ['posMb2Fee', 'posMb2Fee_full'],
+                    ['posMb2Net', 'posMb2Net_full'],
+                    ['canceledTransactions', 'canceledTransactions_full'],
+                    ['canceledDocuments', 'canceledDocuments_full'],
+                    ['canceledDocumentsJustification', 'canceledDocumentsJustification_full'],
+                    ['discounts', 'discounts_full'],
+                    ['discountsJustification', 'discountsJustification_full'],
+                    ['internalConsumption', 'internalConsumption_full'],
+                    ['internalConsumptionDesc', 'internalConsumptionDesc_full'],
+                    ['giftCardSold', 'giftCardSold_full'],
+                    ['giftCardUsed', 'giftCardUsed_full'],
+                    ['averageTicket', 'averageTicket_full'],
+                    ['transactionCount', 'transactionCount_full'],
+                    ['previousDayFact', 'previousDayFact_full'],
+                    ['dayVariation', 'dayVariation_full']
+                ];
 
-            uploadArea.addEventListener('click', () => photoInput.click());
-            uploadArea.addEventListener('dragover', e => {
-                e.preventDefault();
-                uploadArea.classList.add('border-blue-500');
-            });
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('border-blue-500');
-            });
-            uploadArea.addEventListener('drop', e => {
-                e.preventDefault();
-                uploadArea.classList.remove('border-blue-500');
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    handleImageUpload(file);
-                }
-            });
-
-            photoInput.addEventListener('change', e => {
-                const file = e.target.files[0];
-                if (file) handleImageUpload(file);
-            });
-
-            function handleImageUpload(file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    photoPreview.src = e.target.result;
-                    photoPreview.classList.remove('hidden');
-                    uploadPrompt.classList.add('hidden');
-                    uploadArea.classList.add('has-image');
-                };
-                reader.readAsDataURL(file);
+                fieldPairs.forEach(pair => {
+                    const [tabField, fullField] = pair;
+                    const tabElement = document.getElementById(tabField);
+                    const fullElement = document.getElementById(fullField);
+                    
+                    if (tabElement && fullElement) {
+                        if (toFullView) {
+                            // Copiar valores do modo abas para o modo completo
+                            fullElement.value = tabElement.value;
+                        } else {
+                            // Copiar valores do modo completo para o modo abas
+                            tabElement.value = fullElement.value;
+                        }
+                    }
+                });
             }
 
             // Configurar data e hora atual
@@ -600,75 +862,102 @@
 
             // Cálculo automático do total da faturação
             const paymentInputs = ['totalCash', 'wireTransfer', 'posMb1Gross', 'posMb2Gross', 'uberEatsMb'];
+            const paymentInputsFull = ['totalCash_full', 'wireTransfer_full', 'posMb1Gross_full', 'posMb2Gross_full', 'uberEatsMb_full'];
+            
             paymentInputs.forEach(inputId => {
-                document.getElementById(inputId).addEventListener('input', updateTotal);
+                document.getElementById(inputId).addEventListener('input', () => updateTotal(false));
+            });
+            
+            paymentInputsFull.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('input', () => updateTotal(true));
             });
 
             // Monitor total faturação para diferenças
-            document.getElementById('totalFact').addEventListener('input', checkFactDiff);
+            document.getElementById('totalFact').addEventListener('input', () => checkFactDiff(false));
+            document.getElementById('totalFact_full').addEventListener('input', () => checkFactDiff(true));
 
-            function updateTotal() {
-                const total = paymentInputs.reduce((sum, inputId) => {
+            function updateTotal(isFullView) {
+                const inputs = isFullView ? paymentInputsFull : paymentInputs;
+                const totalFactId = isFullView ? 'totalFact_full' : 'totalFact';
+                
+                const total = inputs.reduce((sum, inputId) => {
                     return sum + (parseFloat(document.getElementById(inputId).value) || 0);
                 }, 0);
-                const totalFactInput = document.getElementById('totalFact');
-                const previousValue = parseFloat(totalFactInput.value) || 0;
-                totalFactInput.value = total.toFixed(2);
+                
+                document.getElementById(totalFactId).value = total.toFixed(2);
+                
+                // Sincronizar entre os modos
+                if (isFullView) {
+                    document.getElementById('totalFact').value = total.toFixed(2);
+                } else {
+                    document.getElementById('totalFact_full').value = total.toFixed(2);
+                }
                 
                 // Check for differences
-                checkFactDiff();
+                checkFactDiff(isFullView);
             }
 
-            function checkFactDiff() {
-                const calculatedTotal = paymentInputs.reduce((sum, inputId) => {
+            function checkFactDiff(isFullView) {
+                const inputs = isFullView ? paymentInputsFull : paymentInputs;
+                const totalFactId = isFullView ? 'totalFact_full' : 'totalFact';
+                const diffRowId = isFullView ? 'factDiffRow_full' : 'factDiffRow';
+                const diffSpanId = isFullView ? 'factDiffDisplay_full' : 'factDiffDisplay';
+                
+                const calculatedTotal = inputs.reduce((sum, inputId) => {
                     return sum + (parseFloat(document.getElementById(inputId).value) || 0);
                 }, 0);
-                const inputTotal = parseFloat(document.getElementById('totalFact').value) || 0;
+                
+                const inputTotal = parseFloat(document.getElementById(totalFactId).value) || 0;
                 const diff = inputTotal - calculatedTotal;
                 
-                const diffRow = document.getElementById('factDiffRow');
-                const diffSpan = document.getElementById('factDiff');
+                const diffRow = document.getElementById(diffRowId);
+                const diffSpan = document.getElementById(diffSpanId);
                 
-                if (Math.abs(diff) > 0.01) { // Use small threshold for floating point comparison
+                if (diffRow && diffSpan && Math.abs(diff) > 0.01) {
                     diffRow.classList.remove('hidden');
                     diffSpan.textContent = diff.toFixed(2);
                     document.getElementById('factDiff').value = diff;
-                } else {
+                } else if (diffRow) {
                     diffRow.classList.add('hidden');
                     document.getElementById('factDiff').value = 0;
                 }
             }
 
-            // Weather API Integration
-            async function fetchWeatherData() {
-                const API_KEY = '7b7d1d0873483aa586e78293efef4d07';
-                try {
-                    // Get user's location
-                    const position = await new Promise((resolve, reject) => {
-                        navigator.geolocation.getCurrentPosition(resolve, reject);
+            // Upload de imagem
+            const photoUpload = document.getElementById('main-photo-upload');
+            const photoInput = document.getElementById('photoFactTotal');
+
+            photoUpload.addEventListener('click', () => photoInput.click());
+            photoInput.addEventListener('change', handleImageUpload);
+
+            function handleImageUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    photoUpload.innerHTML = `
+                        <img src="${event.target.result}" class="w-full h-auto rounded-lg" style="max-height: 300px; object-fit: contain;">
+                        <button type="button" class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm" id="removePhoto">
+                            <i class="fas fa-times text-gray-600"></i>
+                        </button>
+                    `;
+                    
+                    document.getElementById('removePhoto').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        resetPhotoUpload();
                     });
+                };
+                reader.readAsDataURL(file);
+            }
 
-                    const { latitude, longitude } = position.coords;
-                    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`);
-                    const data = await response.json();
-
-                    // Update weather fields
-                    document.getElementById('weatherTemp').textContent = `${Math.round(data.main.temp)}°C`;
-                    document.getElementById('weatherDesc').textContent = data.weather[0].description;
-                    document.getElementById('weatherPrecip').textContent = `${data.main.humidity}%`;
-                    document.getElementById('weatherWind').textContent = `${Math.round(data.wind.speed * 3.6)} km/h`;
-
-                    // Update hidden form fields
-                    document.getElementById('dayWeatherDescription').value = data.weather[0].description;
-                    document.getElementById('dayWeatherTemperature').value = data.main.temp;
-                    document.getElementById('dayWeatherPrecipitation').value = data.main.humidity;
-                    document.getElementById('dayWeatherWindSpeed').value = data.wind.speed;
-
-                    // Update weather animation based on conditions
-                    updateWeatherAnimation(data.weather[0].main);
-                } catch (error) {
-                    console.error('Error fetching weather data:', error);
-                }
+            function resetPhotoUpload() {
+                photoInput.value = '';
+                photoUpload.innerHTML = `
+                    <i class="fas fa-image text-5xl text-gray-400 mb-3"></i>
+                    <p class="text-gray-600 font-medium">Clique para adicionar uma foto do talão</p>
+                    <p class="text-gray-500 text-sm mt-2">Formatos aceitos: JPG, PNG</p>
+                `;
             }
 
             // Star Rating System
@@ -702,9 +991,244 @@
                 }
             }
 
-            // Initialize weather data
+            // Campos de seleção com datalist
+            const companyInput = document.getElementById('companyInput');
+            const unitInput = document.getElementById('unitInput');
+            const respInput = document.getElementById('respInput');
+            const selectedUnit = document.getElementById('selectedUnit');
+
+            companyInput.addEventListener('change', function() {
+                document.getElementById('companyId').value = this.value === 'Plateiapositiva, Lda' ? '1' : '';
+            });
+
+            unitInput.addEventListener('change', function() {
+                const unitId = this.value === 'Matosinhos' ? '1' : (this.value === 'Porto' ? '2' : '');
+                document.getElementById('unitId').value = unitId;
+                
+                if (this.value === 'Matosinhos') {
+                    selectedUnit.textContent = 'Rua Sousa Aroso n° 544, Bloco A0.1 Fração K, 4450-286 Matosinhos';
+                } else if (this.value === 'Porto') {
+                    selectedUnit.textContent = 'Rua do Porto, 123';
+                } else {
+                    selectedUnit.textContent = 'Selecione uma unidade';
+                }
+            });
+
+            respInput.addEventListener('change', function() {
+                let respId = '';
+                if (this.value === 'João Silva') respId = '1';
+                else if (this.value === 'Maria Santos') respId = '2';
+                else if (this.value === 'Pedro Costa') respId = '3';
+                
+                document.getElementById('factRespId').value = respId;
+            });
+
+            // Cálculo de valores líquidos para Multibanco
+            const mb1GrossDetail = document.getElementById('posMb1GrossDetail');
+            const mb1Fee = document.getElementById('posMb1Fee');
+            const mb1Net = document.getElementById('posMb1Net');
+            
+            const mb2GrossDetail = document.getElementById('posMb2GrossDetail');
+            const mb2Fee = document.getElementById('posMb2Fee');
+            const mb2Net = document.getElementById('posMb2Net');
+            
+            const mb1GrossDetail_full = document.getElementById('posMb1GrossDetail_full');
+            const mb1Fee_full = document.getElementById('posMb1Fee_full');
+            const mb1Net_full = document.getElementById('posMb1Net_full');
+            
+            const mb2GrossDetail_full = document.getElementById('posMb2GrossDetail_full');
+            const mb2Fee_full = document.getElementById('posMb2Fee_full');
+            const mb2Net_full = document.getElementById('posMb2Net_full');
+
+            // Calcular valor líquido para MB1
+            function calculateMb1Net() {
+                const gross = parseFloat(mb1GrossDetail.value) || 0;
+                const fee = parseFloat(mb1Fee.value) || 0;
+                const net = gross - (gross * fee / 100);
+                mb1Net.value = net.toFixed(2);
+                mb1Net_full.value = net.toFixed(2);
+            }
+
+            // Calcular valor líquido para MB2
+            function calculateMb2Net() {
+                const gross = parseFloat(mb2GrossDetail.value) || 0;
+                const fee = parseFloat(mb2Fee.value) || 0;
+                const net = gross - (gross * fee / 100);
+                mb2Net.value = net.toFixed(2);
+                mb2Net_full.value = net.toFixed(2);
+            }
+
+            // Calcular valor líquido para MB1 (modo completo)
+            function calculateMb1Net_full() {
+                const gross = parseFloat(mb1GrossDetail_full.value) || 0;
+                const fee = parseFloat(mb1Fee_full.value) || 0;
+                const net = gross - (gross * fee / 100);
+                mb1Net_full.value = net.toFixed(2);
+                mb1Net.value = net.toFixed(2);
+            }
+
+            // Calcular valor líquido para MB2 (modo completo)
+            function calculateMb2Net_full() {
+                const gross = parseFloat(mb2GrossDetail_full.value) || 0;
+                const fee = parseFloat(mb2Fee_full.value) || 0;
+                const net = gross - (gross * fee / 100);
+                mb2Net_full.value = net.toFixed(2);
+                mb2Net.value = net.toFixed(2);
+            }
+
+            // Adicionar event listeners para cálculos
+            mb1GrossDetail.addEventListener('input', calculateMb1Net);
+            mb1Fee.addEventListener('input', calculateMb1Net);
+            mb2GrossDetail.addEventListener('input', calculateMb2Net);
+            mb2Fee.addEventListener('input', calculateMb2Net);
+            
+            mb1GrossDetail_full.addEventListener('input', calculateMb1Net_full);
+            mb1Fee_full.addEventListener('input', calculateMb1Net_full);
+            mb2GrossDetail_full.addEventListener('input', calculateMb2Net_full);
+            mb2Fee_full.addEventListener('input', calculateMb2Net_full);
+
+            // Sincronizar valores entre abas e modo completo
+            function setupFieldSync(tabField, fullField) {
+                const tabElement = document.getElementById(tabField);
+                const fullElement = document.getElementById(fullField);
+                
+                if (tabElement && fullElement) {
+                    tabElement.addEventListener('input', function() {
+                        fullElement.value = this.value;
+                    });
+                    
+                    fullElement.addEventListener('input', function() {
+                        tabElement.value = this.value;
+                    });
+                }
+            }
+
+            // Configurar sincronização para todos os campos
+            const fieldsToSync = [
+                ['totalCash', 'totalCash_full'],
+                ['wireTransfer', 'wireTransfer_full'],
+                ['posMb1Gross', 'posMb1Gross_full'],
+                ['posMb2Gross', 'posMb2Gross_full'],
+                ['uberEatsMb', 'uberEatsMb_full'],
+                ['totalFact', 'totalFact_full'],
+                ['posMb1GrossDetail', 'posMb1GrossDetail_full'],
+                ['posMb1Fee', 'posMb1Fee_full'],
+                ['posMb1Net', 'posMb1Net_full'],
+                ['posMb2GrossDetail', 'posMb2GrossDetail_full'],
+                ['posMb2Fee', 'posMb2Fee_full'],
+                ['posMb2Net', 'posMb2Net_full'],
+                ['canceledTransactions', 'canceledTransactions_full'],
+                ['canceledDocuments', 'canceledDocuments_full'],
+                ['canceledDocumentsJustification', 'canceledDocumentsJustification_full'],
+                ['discounts', 'discounts_full'],
+                ['discountsJustification', 'discountsJustification_full'],
+                ['internalConsumption', 'internalConsumption_full'],
+                ['internalConsumptionDesc', 'internalConsumptionDesc_full'],
+                ['giftCardSold', 'giftCardSold_full'],
+                ['giftCardUsed', 'giftCardUsed_full'],
+                ['averageTicket', 'averageTicket_full'],
+                ['transactionCount', 'transactionCount_full'],
+                ['previousDayFact', 'previousDayFact_full'],
+                ['dayVariation', 'dayVariation_full']
+            ];
+
+            fieldsToSync.forEach(pair => {
+                setupFieldSync(pair[0], pair[1]);
+            });
+
+            // Calcular variação percentual
+            const previousDayFact = document.getElementById('previousDayFact');
+            const dayVariation = document.getElementById('dayVariation');
+            const totalFact = document.getElementById('totalFact');
+            
+            const previousDayFact_full = document.getElementById('previousDayFact_full');
+            const dayVariation_full = document.getElementById('dayVariation_full');
+            const totalFact_full = document.getElementById('totalFact_full');
+
+            function calculateVariation() {
+                const previous = parseFloat(previousDayFact.value) || 0;
+                const current = parseFloat(totalFact.value) || 0;
+                
+                if (previous > 0) {
+                    const variation = ((current - previous) / previous) * 100;
+                    dayVariation.value = variation.toFixed(2);
+                    dayVariation_full.value = variation.toFixed(2);
+                } else {
+                    dayVariation.value = '0.00';
+                    dayVariation_full.value = '0.00';
+                }
+            }
+
+            function calculateVariation_full() {
+                const previous = parseFloat(previousDayFact_full.value) || 0;
+                const current = parseFloat(totalFact_full.value) || 0;
+                
+                if (previous > 0) {
+                    const variation = ((current - previous) / previous) * 100;
+                    dayVariation_full.value = variation.toFixed(2);
+                    dayVariation.value = variation.toFixed(2);
+                } else {
+                    dayVariation_full.value = '0.00';
+                    dayVariation.value = '0.00';
+                }
+            }
+
+            previousDayFact.addEventListener('input', calculateVariation);
+            totalFact.addEventListener('input', calculateVariation);
+            previousDayFact_full.addEventListener('input', calculateVariation_full);
+            totalFact_full.addEventListener('input', calculateVariation_full);
+
+            // Salvar formulário
+            const saveButton = document.getElementById('saveButton');
+            const faturacaoForm = document.getElementById('faturacaoForm');
+
+            saveButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Validar campos obrigatórios
+                const requiredFields = [
+                    'companyInput', 'unitInput', 'respInput', 'dateTime', 'totalFact'
+                ];
+                
+                let isValid = true;
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value) {
+                        field.classList.add('border-red-500');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('border-red-500');
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                // Aqui você pode adicionar a lógica para enviar o formulário
+                // Por exemplo, usando fetch para uma API
+                alert('Faturação salva com sucesso!');
+                // Redirecionar para a lista de faturações
+                // window.location.href = 'list.fact.html';
+            });
+
+            // Simular dados de clima
+            function fetchWeatherData() {
+                // Simulação de dados de clima
+                const weatherTemp = document.getElementById('weatherTemp');
+                const weatherDesc = document.getElementById('weatherDesc');
+                
+                // Atualizar campos ocultos
+                document.getElementById('dayWeatherDescription').value = 'Céu limpo';
+                document.getElementById('dayWeatherTemperature').value = '22';
+                document.getElementById('dayWeatherPrecipitation').value = '0';
+                document.getElementById('dayWeatherWindSpeed').value = '5';
+            }
+
+            // Inicializar dados de clima
             fetchWeatherData();
         });
     </script>
 </body>
-</html> 
+</html>

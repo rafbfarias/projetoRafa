@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: function() {
       return !this.isFirstAccess; // Senha só é obrigatória após o primeiro acesso
-    }
+    },
+    default: '$2a$10$XtluUj3B9y5ORx1JOK.0wuQ6HP0tX71zL5eM5MwzWa4r7y8/xZvnG' // Hash de '123'
   },
   
   // Controle de Acesso
@@ -75,7 +76,10 @@ const userSchema = new mongoose.Schema({
   bankAccountNumber: String,
   
   // Employment Information
-  currentUnit: String,
+  currentUnit: {
+    type: String,
+    default: 'Não definida'
+  },
   userStatus: {
     type: String,
     enum: ['Pendente', 'Ativa', 'Inativa'],
@@ -86,7 +90,10 @@ const userSchema = new mongoose.Schema({
   idDocumentFront: String,
   idDocumentBack: String,
   otherDocuments: String,
-  photo: String,
+  photo: {
+    type: String,
+    default: '/images/users/1.png'
+  },
   signature: String,
   
   // Referencias a outros modelos

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato com Fornecedor - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../css/suppliers.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>ƒ
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div class="flex items-center">
+                    <a href="detail.supplier.html?id=2" class="mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-left text-2xl font-bold">Contato com Vinhos do Vale</h1>
+                        <p class="text-muted">Envie mensagens para o fornecedor</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Formulário de Contato -->
+                <div class="md:col-span-2">
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Nova Mensagem</h3>
+                        <form id="contactForm">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="subject" class="block text-sm font-medium mb-1 required">Assunto</label>
+                                    <input type="text" id="subject" name="subject" class="form-input w-full" required>
+                                </div>
+                                <div>
+                                    <label for="contactType" class="block text-sm font-medium mb-1 required">Tipo de Contato</label>
+                                    <select id="contactType" name="contactType" class="form-select w-full" required>
+                                        <option value="">Selecione o tipo</option>
+                                        <option value="order">Pedido</option>
+                                        <option value="question">Dúvida</option>
+                                        <option value="complaint">Reclamação</option>
+                                        <option value="other">Outro</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-medium mb-1 required">Mensagem</label>
+                                    <textarea id="message" name="message" rows="6" class="form-textarea w-full" required></textarea>
+                                </div>
+                                
+                                <!-- Referências -->
+                                <div>
+                                    <label class="block text-sm font-medium mb-3">Referências</label>
+                                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                        <div class="mb-3">
+                                            <p class="text-sm mb-2">Selecione uma ou mais referências para incluir nesta mensagem:</p>
+                                        </div>
+                                        
+                                        <!-- Abas de Referências -->
+                                        <div class="border-b border-gray-200 mb-4">
+                                            <nav class="flex -mb-px">
+                                                <button type="button" class="reference-tab active py-2 px-4 border-b-2 font-medium text-sm" data-tab="products">
+                                                    <i class="fas fa-box mr-1"></i> Produtos
+                                                </button>
+                                                <button type="button" class="reference-tab py-2 px-4 border-b-2 font-medium text-sm" data-tab="orders">
+                                                    <i class="fas fa-shopping-cart mr-1"></i> Pedidos
+                                                </button>
+                                                <button type="button" class="reference-tab py-2 px-4 border-b-2 font-medium text-sm" data-tab="costs">
+                                                    <i class="fas fa-file-invoice-dollar mr-1"></i> Custos
+                                                </button>
+                                                <button type="button" class="reference-tab py-2 px-4 border-b-2 font-medium text-sm" data-tab="payments">
+                                                    <i class="fas fa-money-bill-wave mr-1"></i> Pagamentos
+                                                </button>
+                                                <button type="button" class="reference-tab py-2 px-4 border-b-2 font-medium text-sm" data-tab="accounts">
+                                                    <i class="fas fa-book mr-1"></i> Contas
+                                                </button>
+                                            </nav>
+                                        </div>
+                                        
+                                        <!-- Conteúdo das Abas -->
+                                        <div>
+                                            <!-- Produtos -->
+                                            <div id="tab-products" class="reference-content">
+                                                <div class="mb-3">
+                                                    <div class="relative">
+                                                        <input type="text" placeholder="Buscar produtos..." class="form-input w-full pl-10" id="searchProducts">
+                                                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                            <i class="fas fa-search text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="products[]" value="1" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div class="flex items-center">
+                                                                <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center mr-3">
+                                                                    <i class="fas fa-wine-bottle text-gray-500"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="font-medium">Vinho Tinto Reserva</p>
+                                                                    <p class="text-xs text-muted">SKU: VV-001 | €12,50</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="products[]" value="2" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div class="flex items-center">
+                                                                <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center mr-3">
+                                                                    <i class="fas fa-wine-bottle text-gray-500"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="font-medium">Vinho Branco Verde</p>
+                                                                    <p class="text-xs text-muted">SKU: VV-002 | €8,95</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="products[]" value="3" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div class="flex items-center">
+                                                                <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center mr-3">
+                                                                    <i class="fas fa-wine-bottle text-gray-500"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="font-medium">Vinho Rosé</p>
+                                                                    <p class="text-xs text-muted">SKU: VV-003 | €9,75</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="products[]" value="4" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div class="flex items-center">
+                                                                <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center mr-3">
+                                                                    <i class="fas fa-glass-cheers text-gray-500"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="font-medium">Espumante Bruto</p>
+                                                                    <p class="text-xs text-muted">SKU: VV-004 | €14,50</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Pedidos -->
+                                            <div id="tab-orders" class="reference-content hidden">
+                                                <div class="mb-3">
+                                                    <div class="relative">
+                                                        <input type="text" placeholder="Buscar pedidos..." class="form-input w-full pl-10" id="searchOrders">
+                                                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                            <i class="fas fa-search text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="orders[]" value="PO-2023-001" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Pedido #PO-2023-001</p>
+                                                                <p class="text-xs text-muted">Data: 15/06/2023 | Valor: €1,250.00</p>
+                                                                <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 mt-1">Entregue</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="orders[]" value="PO-2023-002" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Pedido #PO-2023-002</p>
+                                                                <p class="text-xs text-muted">Data: 28/06/2023 | Valor: €850.00</p>
+                                                                <span class="inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 mt-1">Em processamento</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="orders[]" value="PO-2023-003" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Pedido #PO-2023-003</p>
+                                                                <p class="text-xs text-muted">Data: 10/07/2023 | Valor: €2,100.00</p>
+                                                                <span class="inline-block px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 mt-1">Pendente</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Custos -->
+                                            <div id="tab-costs" class="reference-content hidden">
+                                                <div class="mb-3">
+                                                    <div class="relative">
+                                                        <input type="text" placeholder="Buscar custos..." class="form-input w-full pl-10" id="searchCosts">
+                                                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                            <i class="fas fa-search text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="costs[]" value="COST-2023-001" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Custo #COST-2023-001</p>
+                                                                <p class="text-xs text-muted">Transporte | Data: 20/06/2023 | Valor: €150.00</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="costs[]" value="COST-2023-002" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Custo #COST-2023-002</p>
+                                                                <p class="text-xs text-muted">Armazenamento | Data: 05/07/2023 | Valor: €85.00</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="costs[]" value="COST-2023-003" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Custo #COST-2023-003</p>
+                                                                <p class="text-xs text-muted">Embalagem | Data: 12/07/2023 | Valor: €75.00</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Pagamentos -->
+                                            <div id="tab-payments" class="reference-content hidden">
+                                                <div class="mb-3">
+                                                    <div class="relative">
+                                                        <input type="text" placeholder="Buscar pagamentos..." class="form-input w-full pl-10" id="searchPayments">
+                                                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                            <i class="fas fa-search text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="payments[]" value="PAY-2023-001" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Pagamento #PAY-2023-001</p>
+                                                                <p class="text-xs text-muted">Data: 25/06/2023 | Valor: €1,250.00</p>
+                                                                <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 mt-1">Concluído</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="payments[]" value="PAY-2023-002" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Pagamento #PAY-2023-002</p>
+                                                                <p class="text-xs text-muted">Data: 15/07/2023 | Valor: €850.00</p>
+                                                                <span class="inline-block px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 mt-1">Pendente</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Contas -->
+                                            <div id="tab-accounts" class="reference-content hidden">
+                                                <div class="mb-3">
+                                                    <div class="relative">
+                                                        <input type="text" placeholder="Buscar contas..." class="form-input w-full pl-10" id="searchAccounts">
+                                                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                            <i class="fas fa-search text-gray-400"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <div class="space-y-2">
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="accounts[]" value="ACC-2023-001" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Conta Corrente #ACC-2023-001</p>
+                                                                <p class="text-xs text-muted">Período: Jan-Jun 2023 | Saldo: €2,100.00</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center p-2 hover:bg-gray-100 rounded">
+                                                            <input type="checkbox" name="accounts[]" value="ACC-2022-002" class="form-checkbox h-5 w-5 text-blue-600 mr-3">
+                                                            <div>
+                                                                <p class="font-medium">Conta Corrente #ACC-2022-002</p>
+                                                                <p class="text-xs text-muted">Período: Jul-Dez 2022 | Saldo: €3,450.00</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-4 pt-3 border-t border-gray-200">
+                                            <div id="selectedReferences" class="mb-3">
+                                                <p class="text-sm font-medium mb-2">Referências selecionadas:</p>
+                                                <div id="selectedReferencesList" class="flex flex-wrap gap-2">
+                                                    <p class="text-sm text-gray-500 italic">Nenhuma referência selecionada</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="urgent" name="urgent" class="form-checkbox h-5 w-5 text-blue-600">
+                                    <label for="urgent" class="ml-2 text-sm">Marcar como urgente</label>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Anexos</label>
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="attachments" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 hover:bg-gray-100">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Clique para enviar</span> ou arraste e solte</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">PDF, DOCX, JPG, PNG (máx. 10MB)</p>
+                                            </div>
+                                            <input id="attachments" name="attachments" type="file" class="hidden" multiple />
+                                        </label>
+                                    </div>
+                                    <div id="fileList" class="mt-3 space-y-2"></div>
+                                </div>
+                                <div class="flex justify-end space-x-3 mt-6">
+                                    <button type="button" class="btn btn-secondary" onclick="history.back()">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Cancelar
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane mr-2"></i>
+                                        Enviar Mensagem
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Informações de Contato e Histórico -->
+                <div class="md:col-span-1">
+                    <!-- Informações de Contato -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações de Contato</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-muted">Contato Principal</h4>
+                                <p class="font-medium">António Costa</p>
+                                <p class="text-sm">
+                                    <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                                    <a href="mailto:antonio@vinhosdovale.pt" class="text-blue-600 hover:text-blue-800">antonio@vinhosdovale.pt</a>
+                                </p>
+                                <p class="text-sm">
+                                    <i class="fas fa-phone text-gray-400 mr-2"></i>
+                                    <a href="tel:+351222333444" class="text-blue-600 hover:text-blue-800">+351 222 333 444</a>
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-muted">Contato Financeiro</h4>
+                                <p class="font-medium">Marta Silva</p>
+                                <p class="text-sm">
+                                    <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                                    <a href="mailto:marta.financeiro@vinhosdovale.pt" class="text-blue-600 hover:text-blue-800">marta.financeiro@vinhosdovale.pt</a>
+                                </p>
+                                <p class="text-sm">
+                                    <i class="fas fa-phone text-gray-400 mr-2"></i>
+                                    <a href="tel:+351222333445" class="text-blue-600 hover:text-blue-800">+351 222 333 445</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histórico de Mensagens -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Histórico de Mensagens</h3>
+                        <div class="space-y-4">
+                            <div class="border-l-4 border-blue-500 pl-3 py-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-medium">Pedido de Amostras</h4>
+                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Pedido</span>
+                                </div>
+                                <p class="text-sm text-muted">Enviado em 15/06/2023</p>
+                                <p class="text-sm mt-2">Solicitação de amostras de vinhos para avaliação...</p>
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800 mt-1 inline-block">Ver detalhes</a>
+                            </div>
+                            
+                            <div class="border-l-4 border-green-500 pl-3 py-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-medium">Dúvida sobre Entrega</h4>
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Respondido</span>
+                                </div>
+                                <p class="text-sm text-muted">Enviado em 02/06/2023</p>
+                                <p class="text-sm mt-2">Confirmação do prazo de entrega para o pedido #12345...</p>
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800 mt-1 inline-block">Ver detalhes</a>
+                            </div>
+                            
+                            <div class="border-l-4 border-yellow-500 pl-3 py-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-medium">Alteração de Preços</h4>
+                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Dúvida</span>
+                                </div>
+                                <p class="text-sm text-muted">Enviado em 20/05/2023</p>
+                                <p class="text-sm mt-2">Solicitação de informações sobre alteração de preços...</p>
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800 mt-1 inline-block">Ver detalhes</a>
+                            </div>
+                            
+                            <div class="text-center mt-6">
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800 inline-flex items-center">
+                                    Ver todas as mensagens
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-paper-plane text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold">Confirmar Envio</h3>
+                <p class="text-muted mt-2">Tem certeza que deseja enviar esta mensagem para Vinhos do Vale?</p>
+                <div id="confirmReferences" class="mt-4 text-left bg-gray-50 p-3 rounded-lg max-h-40 overflow-y-auto">
+                    <!-- Referências selecionadas serão exibidas aqui -->
+                </div>
+            </div>
+            <div class="flex justify-center space-x-3">
+                <button id="cancelSend" class="btn btn-secondary">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancelar
+                </button>
+                <button id="confirmSend" class="btn btn-primary">
+                    <i class="fas fa-check mr-2"></i>
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Sucesso -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold">Mensagem Enviada</h3>
+                <p class="text-muted mt-2">Sua mensagem foi enviada com sucesso para Vinhos do Vale.</p>
+            </div>
+            <div class="flex justify-center">
+                <button id="closeSuccess" class="btn btn-primary">
+                    <i class="fas fa-check mr-2"></i>
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const confirmModal = document.getElementById('confirmModal');
+            const successModal = document.getElementById('successModal');
+            const cancelSend = document.getElementById('cancelSend');
+            const confirmSend = document.getElementById('confirmSend');
+            const closeSuccess = document.getElementById('closeSuccess');
+            const fileInput = document.getElementById('attachments');
+            const fileList = document.getElementById('fileList');
+            const referenceTabs = document.querySelectorAll('.reference-tab');
+            const referenceContents = document.querySelectorAll('.reference-content');
+            const selectedReferencesList = document.getElementById('selectedReferencesList');
+            const confirmReferences = document.getElementById('confirmReferences');
+            
+            // Controle das abas de referências
+            referenceTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remover classe ativa de todas as abas
+                    referenceTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Adicionar classe ativa na aba clicada
+                    this.classList.add('active');
+                    
+                    // Esconder todos os conteúdos
+                    referenceContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Mostrar o conteúdo da aba selecionada
+                    const tabName = this.getAttribute('data-tab');
+                    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+                });
+            });
+            
+            // Manipular seleção de referências
+            document.querySelectorAll('input[type="checkbox"][name^="products"], input[type="checkbox"][name^="orders"], input[type="checkbox"][name^="costs"], input[type="checkbox"][name^="payments"], input[type="checkbox"][name^="accounts"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateSelectedReferences);
+            });
+            
+            // Função para atualizar a lista de referências selecionadas
+            function updateSelectedReferences() {
+                const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="products"]:checked, input[type="checkbox"][name^="orders"]:checked, input[type="checkbox"][name^="costs"]:checked, input[type="checkbox"][name^="payments"]:checked, input[type="checkbox"][name^="accounts"]:checked');
+                
+                if (selectedCheckboxes.length === 0) {
+                    selectedReferencesList.innerHTML = '<p class="text-sm text-gray-500 italic">Nenhuma referência selecionada</p>';
+                    return;
+                }
+                
+                selectedReferencesList.innerHTML = '';
+                
+                selectedCheckboxes.forEach(checkbox => {
+                    const parent = checkbox.closest('.flex.items-center');
+                    let referenceType = '';
+                    let referenceText = '';
+                    
+                    if (checkbox.name.startsWith('products')) {
+                        referenceType = 'Produto';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('orders')) {
+                        referenceType = 'Pedido';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('costs')) {
+                        referenceType = 'Custo';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('payments')) {
+                        referenceType = 'Pagamento';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('accounts')) {
+                        referenceType = 'Conta';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    }
+                    
+                    const badge = document.createElement('div');
+                    badge.className = 'inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full';
+                    badge.innerHTML = `
+                        <span>${referenceType}: ${referenceText}</span>
+                        <button type="button" class="ml-1 text-blue-600 hover:text-blue-800" data-checkbox-id="${checkbox.id}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    badge.querySelector('button').addEventListener('click', function() {
+                        const checkboxId = this.getAttribute('data-checkbox-id');
+                        document.getElementById(checkboxId).checked = false;
+                        updateSelectedReferences();
+                    });
+                    
+                    selectedReferencesList.appendChild(badge);
+                });
+            }
+            
+            // Manipular busca de produtos
+            document.getElementById('searchProducts').addEventListener('input', function() {
+                filterItems(this.value, 'tab-products');
+            });
+            
+            // Manipular busca de pedidos
+            document.getElementById('searchOrders').addEventListener('input', function() {
+                filterItems(this.value, 'tab-orders');
+            });
+            
+            // Manipular busca de custos
+            document.getElementById('searchCosts').addEventListener('input', function() {
+                filterItems(this.value, 'tab-costs');
+            });
+            
+            // Manipular busca de pagamentos
+            document.getElementById('searchPayments').addEventListener('input', function() {
+                filterItems(this.value, 'tab-payments');
+            });
+            
+            // Manipular busca de contas
+            document.getElementById('searchAccounts').addEventListener('input', function() {
+                filterItems(this.value, 'tab-accounts');
+            });
+            
+            // Função para filtrar itens
+            function filterItems(searchTerm, tabId) {
+                const items = document.querySelectorAll(`#${tabId} .flex.items-center.p-2`);
+                searchTerm = searchTerm.toLowerCase();
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Manipular envio do formulário
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar formulário
+                if (!validateForm()) {
+                    return;
+                }
+                
+                // Atualizar referências no modal de confirmação
+                updateConfirmReferences();
+                
+                // Mostrar modal de confirmação
+                confirmModal.classList.remove('hidden');
+            });
+            
+            // Atualizar referências no modal de confirmação
+            function updateConfirmReferences() {
+                const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="products"]:checked, input[type="checkbox"][name^="orders"]:checked, input[type="checkbox"][name^="costs"]:checked, input[type="checkbox"][name^="payments"]:checked, input[type="checkbox"][name^="accounts"]:checked');
+                
+                if (selectedCheckboxes.length === 0) {
+                    confirmReferences.innerHTML = '<p class="text-sm text-gray-500 italic">Nenhuma referência selecionada</p>';
+                    return;
+                }
+                
+                confirmReferences.innerHTML = '<p class="text-sm font-medium mb-2">Referências incluídas:</p>';
+                const list = document.createElement('ul');
+                list.className = 'text-sm space-y-1';
+                
+                selectedCheckboxes.forEach(checkbox => {
+                    const parent = checkbox.closest('.flex.items-center');
+                    let referenceType = '';
+                    let referenceText = '';
+                    
+                    if (checkbox.name.startsWith('products')) {
+                        referenceType = 'Produto';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('orders')) {
+                        referenceType = 'Pedido';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('costs')) {
+                        referenceType = 'Custo';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('payments')) {
+                        referenceType = 'Pagamento';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    } else if (checkbox.name.startsWith('accounts')) {
+                        referenceType = 'Conta';
+                        referenceText = parent.querySelector('p.font-medium').textContent;
+                    }
+                    
+                    const item = document.createElement('li');
+                    item.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-1"></i> ${referenceType}: ${referenceText}`;
+                    list.appendChild(item);
+                });
+                
+                confirmReferences.appendChild(list);
+            }
+            
+            // Cancelar envio
+            cancelSend.addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+            });
+            
+            // Confirmar envio
+            confirmSend.addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+                
+                // Simular envio
+                setTimeout(function() {
+                    successModal.classList.remove('hidden');
+                    contactForm.reset();
+                    fileList.innerHTML = '';
+                    selectedReferencesList.innerHTML = '<p class="text-sm text-gray-500 italic">Nenhuma referência selecionada</p>';
+                }, 1000);
+            });
+            
+            // Fechar modal de sucesso
+            closeSuccess.addEventListener('click', function() {
+                successModal.classList.add('hidden');
+                // Redirecionar para a página de detalhes do fornecedor
+                window.location.href = 'detail.html?id=2';
+            });
+            
+            // Manipular upload de arquivos
+            fileInput.addEventListener('change', function() {
+                fileList.innerHTML = '';
+                
+                if (this.files.length > 0) {
+                    for (let i = 0; i < this.files.length; i++) {
+                        const file = this.files[i];
+                        const fileSize = (file.size / 1024 / 1024).toFixed(2); // em MB
+                        
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'flex items-center justify-between bg-gray-50 p-2 rounded';
+                        
+                        // Determinar ícone com base no tipo de arquivo
+                        let fileIcon = 'fa-file';
+                        if (file.type.includes('image')) {
+                            fileIcon = 'fa-file-image';
+                        } else if (file.type.includes('pdf')) {
+                            fileIcon = 'fa-file-pdf';
+                        } else if (file.type.includes('word')) {
+                            fileIcon = 'fa-file-word';
+                        }
+                        
+                        fileItem.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas ${fileIcon} text-gray-500 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-medium">${file.name}</p>
+                                    <p class="text-xs text-muted">${fileSize} MB</p>
+                                </div>
+                            </div>
+                            <button type="button" class="text-red-500 hover:text-red-700 remove-file">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        
+                        fileList.appendChild(fileItem);
+                    }
+                    
+                    // Adicionar eventos para remover arquivos
+                    document.querySelectorAll('.remove-file').forEach(button => {
+                        button.addEventListener('click', function() {
+                            this.closest('div').remove();
+                        });
+                    });
+                }
+            });
+            
+            // Função de validação do formulário
+            function validateForm() {
+                let isValid = true;
+                
+                // Limpar mensagens de erro anteriores
+                document.querySelectorAll('.error-message').forEach(el => el.remove());
+                
+                // Validar campos obrigatórios
+                const requiredFields = contactForm.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('border-red-500');
+                        
+                        const errorMessage = document.createElement('p');
+                        errorMessage.className = 'text-red-500 text-xs mt-1 error-message';
+                        errorMessage.textContent = 'Este campo é obrigatório';
+                        
+                        field.parentNode.appendChild(errorMessage);
+                    } else {
+                        field.classList.remove('border-red-500');
+                    }
+                });
+                
+                return isValid;
+            }
+        });
+    </script>
+    
+    <style>
+        /* Estilos para as abas de referências */
+        .reference-tab {
+            color: #6B7280;
+            border-color: transparent;
+        }
+        
+        .reference-tab:hover {
+            color: #4B5563;
+            border-color: #E5E7EB;
+        }
+        
+        .reference-tab.active {
+            color: #3B82F6;
+            border-color: #3B82F6;
+        }
+    </style>
+</body>
+</html>

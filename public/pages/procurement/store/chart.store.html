@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/Sidebar.js"></script>
+    <style>
+        /* Remover setas dos inputs numéricos */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
+        /* Estilos adicionais para os cards */
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Animações para os botões */
+        .btn-action {
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Estilos para o container de produtos */
+        .products-container {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Cabeçalho -->
+            <div class="dashboard-card p-6 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold">Carrinho de Compras</h1>
+                        <p class="text-gray-600">Revise seus itens e finalize o pedido</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex space-x-3">
+                        <button id="clear-cart-btn" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors btn-action">
+                            <i class="fas fa-trash mr-2"></i>
+                            Limpar Carrinho
+                        </button>
+                        <a href="dash.store.html" id="continue-shopping-btn" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors btn-action">
+                            <i class="fas fa-shopping-basket mr-2"></i>
+                            Continuar Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Container de Produtos (2/3 da largura) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Container do Fornecedor 1 -->
+                    <div class="dashboard-card" id="supplier-cart-1">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="/api/placeholder/40/40" alt="Logo Laticínios Ramos" class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Laticínios Ramos</h3>
+                                        <p class="text-sm text-gray-500">3 itens no carrinho</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        Entrega: 2-3 dias úteis
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cards de Produtos -->
+                        <div class="p-6 space-y-4">
+                            <!-- Card Produto 1 -->
+                            <div class="dashboard-card p-4 product-card">
+                                <div class="flex flex-col sm:flex-row items-start">
+                                    <img class="h-16 w-16 rounded-md object-cover mb-4 sm:mb-0 sm:mr-4" src="/api/placeholder/60/60" alt="Queijo Parmesão">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900">Queijo Parmesão</h4>
+                                        <p class="text-sm text-gray-500 mb-2">500g</p>
+                                        <button class="text-xs text-blue-600 hover:text-blue-800 mb-2" data-notes-btn>
+                                            <i class="fas fa-sticky-note mr-1"></i> Adicionar observações
+                                        </button>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <div class="flex items-center">
+                                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-minus text-gray-600"></i>
+                                                </button>
+                                                <input type="number" value="1" min="1" class="h-8 w-12 border-t border-b border-gray-300 text-center">
+                                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-sm font-medium text-gray-900">€ 32,90/kg</p>
+                                                <p class="text-sm font-bold text-gray-900 mt-1">€ 32,90</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-700 ml-4">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Produto 2 -->
+                            <div class="dashboard-card p-4 product-card">
+                                <div class="flex flex-col sm:flex-row items-start">
+                                    <img class="h-16 w-16 rounded-md object-cover mb-4 sm:mb-0 sm:mr-4" src="/api/placeholder/60/60" alt="Queijo Mussarela">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900">Queijo Mussarela</h4>
+                                        <p class="text-sm text-gray-500 mb-2">500g</p>
+                                        <button class="text-xs text-blue-600 hover:text-blue-800 mb-2" data-notes-btn>
+                                            <i class="fas fa-sticky-note mr-1"></i> Adicionar observações
+                                        </button>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <div class="flex items-center">
+                                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-minus text-gray-600"></i>
+                                                </button>
+                                                <input type="number" value="1" min="1" class="h-8 w-12 border-t border-b border-gray-300 text-center">
+                                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-sm font-medium text-gray-900">€ 28,90/kg</p>
+                                                <p class="text-sm font-bold text-gray-900 mt-1">€ 14,45</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-700 ml-4">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Produto 3 -->
+                            <div class="dashboard-card p-4 product-card">
+                                <div class="flex flex-col sm:flex-row items-start">
+                                    <img class="h-16 w-16 rounded-md object-cover mb-4 sm:mb-0 sm:mr-4" src="/api/placeholder/60/60" alt="Manteiga Com Sal">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900">Manteiga Com Sal</h4>
+                                        <p class="text-sm text-gray-500 mb-2">200g</p>
+                                        <button class="text-xs text-blue-600 hover:text-blue-800 mb-2" data-notes-btn>
+                                            <i class="fas fa-sticky-note mr-1"></i> Adicionar observações
+                                        </button>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <div class="flex items-center">
+                                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-minus text-gray-600"></i>
+                                                </button>
+                                                <input type="number" value="2" min="1" class="h-8 w-12 border-t border-b border-gray-300 text-center">
+                                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-sm font-medium text-gray-900">€ 4,50/unid</p>
+                                                <p class="text-sm font-bold text-gray-900 mt-1">€ 9,00</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-700 ml-4">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Subtotal e Ações -->
+                        <div class="p-4 border-t bg-gray-50">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-lg font-semibold">
+                                    Subtotal: <span class="text-blue-600">€ 56,35</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                                <div class="mb-4 sm:mb-0">
+                                    <div class="flex items-center mb-2">
+                                        <i class="fas fa-truck text-gray-500 mr-2"></i>
+                                        <span class="text-sm text-gray-700">Data de Entrega:</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="date" class="border border-gray-300 rounded-lg text-sm p-2" value="2025-03-10">
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors py-2 px-4 rounded-lg text-sm btn-action">
+                                        <i class="fas fa-pen mr-1"></i> Editar Pedido
+                                    </button>
+                                    <button class="bg-green-600 text-white hover:bg-green-700 transition-colors py-2 px-4 rounded-lg text-sm btn-action">
+                                        <i class="fas fa-check mr-1"></i> Confirmar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Container do Fornecedor 2 -->
+                    <div class="dashboard-card" id="supplier-cart-2">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="/api/placeholder/40/40" alt="Logo Horta Natural" class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Horta Natural</h3>
+                                        <p class="text-sm text-gray-500">2 itens no carrinho</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        Entrega: 1-2 dias úteis
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cards de Produtos -->
+                        <div class="p-6 space-y-4">
+                            <!-- Card Produto 1 -->
+                            <div class="dashboard-card p-4 product-card">
+                                <div class="flex flex-col sm:flex-row items-start">
+                                    <img class="h-16 w-16 rounded-md object-cover mb-4 sm:mb-0 sm:mr-4" src="/api/placeholder/60/60" alt="Tomate Cereja">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900">Tomate Cereja</h4>
+                                        <p class="text-sm text-gray-500 mb-2">250g</p>
+                                        <button class="text-xs text-blue-600 hover:text-blue-800 mb-2" data-notes-btn>
+                                            <i class="fas fa-sticky-note mr-1"></i> Adicionar observações
+                                        </button>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <div class="flex items-center">
+                                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-minus text-gray-600"></i>
+                                                </button>
+                                                <input type="number" value="4" min="1" class="h-8 w-12 border-t border-b border-gray-300 text-center">
+                                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-sm font-medium text-gray-900">€ 4,50/unid</p>
+                                                <p class="text-sm font-bold text-gray-900 mt-1">€ 18,00</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-700 ml-4">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Produto 2 -->
+                            <div class="dashboard-card p-4 product-card">
+                                <div class="flex flex-col sm:flex-row items-start">
+                                    <img class="h-16 w-16 rounded-md object-cover mb-4 sm:mb-0 sm:mr-4" src="/api/placeholder/60/60" alt="Alface Crespa">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900">Alface Crespa</h4>
+                                        <p class="text-sm text-gray-500 mb-2">Unidade</p>
+                                        <div class="text-xs text-gray-500 mb-2">
+                                            <i class="fas fa-sticky-note mr-1"></i> Escolher as mais frescas
+                                        </div>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <div class="flex items-center">
+                                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-minus text-gray-600"></i>
+                                                </button>
+                                                <input type="number" value="3" min="1" class="h-8 w-12 border-t border-b border-gray-300 text-center">
+                                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-sm font-medium text-gray-900">€ 2,75/unid</p>
+                                                <p class="text-sm font-bold text-gray-900 mt-1">€ 8,25</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-700 ml-4">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Subtotal e Ações -->
+                        <div class="p-4 border-t bg-gray-50">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-lg font-semibold">
+                                    Subtotal: <span class="text-blue-600">€ 26,25</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                                <div class="mb-4 sm:mb-0">
+                                    <div class="flex items-center mb-2">
+                                        <i class="fas fa-truck text-gray-500 mr-2"></i>
+                                        <span class="text-sm text-gray-700">Data de Entrega:</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="date" class="border border-gray-300 rounded-lg text-sm p-2" value="2025-03-09">
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors py-2 px-4 rounded-lg text-sm btn-action">
+                                        <i class="fas fa-pen mr-1"></i> Editar Pedido
+                                    </button>
+                                    <button class="bg-green-600 text-white hover:bg-green-700 transition-colors py-2 px-4 rounded-lg text-sm btn-action">
+                                        <i class="fas fa-check mr-1"></i> Confirmar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Lateral de Resumo e Detalhes do Pedido -->
+                <div>
+                    <!-- Resumo do Pedido -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Resumo do Pedido</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Laticínios Ramos</span>
+                                <span class="font-medium">€ 56,35</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Horta Natural</span>
+                                <span class="font-medium">€ 26,25</span>
+                            </div>
+                            <div class="border-t pt-3 mt-3">
+                                <div class="flex justify-between font-semibold">
+                                    <span>Total:</span>
+                                    <span>€ 82,60</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Validação de Responsável -->
+                    <div class="dashboard-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Validação de Responsável</h3>
+                        <p class="text-sm text-gray-600 mb-4">
+                            Para finalizar o pedido, é necessária a validação de um responsável autorizado.
+                        </p>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="manager-id" class="block text-sm font-medium text-gray-700 mb-1">ID do Responsável:</label>
+                                <input type="text" id="manager-id" class="border border-gray-300 rounded-lg w-full p-2 text-sm" placeholder="Digite o ID do responsável...">
+                            </div>
+                            <div>
+                                <label for="manager-password" class="block text-sm font-medium text-gray-700 mb-1">Senha:</label>
+                                <input type="password" id="manager-password" class="border border-gray-300 rounded-lg w-full p-2 text-sm" placeholder="Digite a senha...">
+                            </div>
+                            <button id="validate-btn" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors btn-action">
+                                Validar e Processar Pedidos
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Observações Gerais -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Observações Gerais</h3>
+                        <div class="mb-4">
+                            <textarea id="general-notes" class="border border-gray-300 rounded-lg w-full p-3 text-sm" rows="4" placeholder="Adicione observações gerais para todos os pedidos..."></textarea>
+                        </div>
+                        <div class="bg-yellow-50 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-yellow-500 mt-0.5 mr-3"></i>
+                                <div>
+                                    <p class="text-sm text-yellow-700">
+                                        Ao finalizar, você enviará os pedidos para todos os fornecedores listados acima. Certifique-se de que todas as informações estão corretas.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de Observações do Produto - Escondido inicialmente -->
+            <div id="notes-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+                    <div class="p-6 border-b">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-semibold text-gray-900">Adicionar Observações ao Item</h3>
+                            <button id="close-notes-modal" class="text-gray-400 hover:text-gray-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label for="product-notes" class="block text-sm font-medium text-gray-700 mb-2">Observações:</label>
+                            <textarea id="product-notes" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="Adicione suas observações específicas para este item..."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preferências de Entrega:</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-1" class="mr-2">
+                                    <label for="preference-1" class="text-sm text-gray-700">Verificar data de validade</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-2" class="mr-2">
+                                    <label for="preference-2" class="text-sm text-gray-700">Embalar separadamente</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="preference-3" class="mr-2">
+                                    <label for="preference-3" class="text-sm text-gray-700">Priorizar na entrega</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t flex justify-end space-x-3">
+                        <button id="cancel-notes" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                            Cancelar
+                        </button>
+                        <button id="save-product-notes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Salvar Observações
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Processamento de Pedido -->
+            <div id="process-order-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+                    <div class="p-6 border-b">
+                        <h3 class="text-xl font-semibold text-gray-900">Processamento de Pedidos</h3>
+                    </div>
+                    <div class="p-6">
+                        <div id="processing-spinner" class="flex items-center justify-center mb-6">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                        </div>
+                        <div id="processing-steps" class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Validando credenciais...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center opacity-50">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Enviando pedido para Laticínios Ramos...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center opacity-50">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Enviando pedido para Horta Natural...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center opacity-50">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Registrando pedidos no sistema...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="processing-success" class="hidden">
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                                    <i class="fas fa-check text-3xl text-green-600"></i>
+                                </div>
+                            </div>
+                            <h4 class="text-lg font-medium text-center text-gray-900 mb-2">Pedidos Enviados com Sucesso!</h4>
+                            <p class="text-sm text-center text-gray-600 mb-6">
+                                Seus pedidos foram processados e enviados para os fornecedores. Você receberá confirmações por e-mail.
+                            </p>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium">Laticínios Ramos</span>
+                                    <span class="text-sm">Pedido #ORD-25478</span>
+                                </div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium">Horta Natural</span>
+                                    <span class="text-sm">Pedido #ORD-25479</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-center">
+                                <button id="continue-shopping" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                                    Continuar Comprando
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmação -->
+            <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4" id="modal-title">Confirmação</h3>
+                    <p class="text-gray-500 mb-5" id="modal-message">Tem certeza que deseja realizar esta ação?</p>
+                    <div class="flex justify-end space-x-3">
+                        <button id="modal-cancel" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancelar</button>
+                        <button id="modal-confirm" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Pedido Finalizado -->
+            <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
+                            <i class="fas fa-check-circle text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-900 mb-2">Pedido Realizado com Sucesso!</h3>
+                        <p class="text-gray-500 mb-6">Seu pedido foi enviado e será processado em breve.</p>
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                            <p class="font-medium mb-1">Número do Pedido:</p>
+                            <p id="order-number" class="text-blue-600 font-bold">#ORD-12345</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <a href="../orders/dash.orders.html" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center">
+                                <i class="fas fa-clipboard-list mr-2"></i>
+                                Ver Pedidos
+                            </a>
+                            <a href="dash.store.html" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 flex items-center justify-center">
+                                <i class="fas fa-shopping-basket mr-2"></i>
+                                Continuar Comprando
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast de Notificação -->
+            <div id="toast-container" class="fixed bottom-5 right-5 z-50"></div>
+        </main>
+    </div>
+
+    <script src="/js/store.js"></script>
+    <script src="/js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remover as setas dos inputs numéricos
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.style.MozAppearance = 'textfield';
+                input.style.webkitAppearance = 'none';
+                input.style.appearance = 'textfield';
+            });
+            
+            // Controles de incremento/decremento
+            document.querySelectorAll('.increment-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    input.value = parseInt(input.value) + 1;
+                    updateCartTotals();
+                });
+            });
+
+            document.querySelectorAll('.decrement-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    if (parseInt(input.value) > 1) {
+                        input.value = parseInt(input.value) - 1;
+                        updateCartTotals();
+                    }
+                });
+            });
+
+            // Botões de observações
+            const notesButtons = document.querySelectorAll('[data-notes-btn]');
+            const notesModal = document.getElementById('notes-modal');
+            const closeNotesModalBtn = document.getElementById('close-notes-modal');
+            const cancelNotesBtn = document.getElementById('cancel-notes');
+            const saveProductNotesBtn = document.getElementById('save-product-notes');
+
+            notesButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    notesModal.classList.remove('hidden');
+                    // Aqui poderia carregar observações existentes, se houver
+                });
+            });
+
+            closeNotesModalBtn.addEventListener('click', () => {
+                notesModal.classList.add('hidden');
+            });
+
+            cancelNotesBtn.addEventListener('click', () => {
+                notesModal.classList.add('hidden');
+            });
+
+            saveProductNotesBtn.addEventListener('click', () => {
+                const notes = document.getElementById('product-notes').value;
+                // Aqui seria a lógica para salvar as observações
+
+                // Mostrar toast de confirmação
+                showToast('Observações adicionadas ao item', 'success');
+
+                // Fechar o modal
+                notesModal.classList.add('hidden');
+            });
+
+            // Processar pedido
+            const validateBtn = document.getElementById('validate-btn');
+            const processOrderModal = document.getElementById('process-order-modal');
+            const continueShoppingBtn = document.getElementById('continue-shopping');
+
+            validateBtn.addEventListener('click', function() {
+                const managerId = document.getElementById('manager-id').value;
+                const managerPassword = document.getElementById('manager-password').value;
+
+                if (!managerId || !managerPassword) {
+                    showToast('Por favor, preencha o ID e senha do responsável.', 'error');
+                    return;
+                }
+
+                // Mostrar modal de processamento
+                processOrderModal.classList.remove('hidden');
+
+                // Simular processamento
+                simulateProcessing();
+            });
+
+            function simulateProcessing() {
+                const steps = document.querySelectorAll('#processing-steps > div');
+                const spinner = document.getElementById('processing-spinner');
+                const success = document.getElementById('processing-success');
+
+                let currentStep = 0;
+
+                const interval = setInterval(() => {
+                    if (currentStep < steps.length) {
+                        steps[currentStep].classList.remove('opacity-50');
+                        steps[currentStep].querySelector('div:first-child').classList.add('bg-green-500');
+                        currentStep++;
+                    } else {
+                        clearInterval(interval);
+
+                        // Mostrar mensagem de sucesso
+                        setTimeout(() => {
+                            spinner.classList.add('hidden');
+                            document.getElementById('processing-steps').classList.add('hidden');
+                            success.classList.remove('hidden');
+                        }, 500);
+                    }
+                }, 800);
+            }
+
+            continueShoppingBtn.addEventListener('click', function() {
+                processOrderModal.classList.add('hidden');
+                window.location.href = 'dash.store.html';
+            });
+
+            // Botões de ação
+            document.getElementById('clear-cart-btn').addEventListener('click', function() {
+                showConfirmModal(
+                    'Limpar Carrinho', 
+                    'Tem certeza que deseja limpar o carrinho? Esta ação não pode ser desfeita.',
+                    function() {
+                        // Lógica para limpar o carrinho
+                        showToast('Carrinho limpo com sucesso', 'success');
+                        // Redirecionar para a página principal
+                        setTimeout(() => {
+                            window.location.href = 'dash.store.html';
+                        }, 1500);
+                    }
+                );
+            });
+
+            // Função para mostrar o modal de confirmação
+            function showConfirmModal(title, message, confirmCallback) {
+                const modal = document.getElementById('confirm-modal');
+                document.getElementById('modal-title').textContent = title;
+                document.getElementById('modal-message').textContent = message;
+                
+                modal.classList.remove('hidden');
+                
+                document.getElementById('modal-cancel').onclick = function() {
+                    modal.classList.add('hidden');
+                };
+                
+                document.getElementById('modal-confirm').onclick = function() {
+                    modal.classList.add('hidden');
+                    if (typeof confirmCallback === 'function') {
+                        confirmCallback();
+                    }
+                };
+            }
+
+            // Função para mostrar toast
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                
+                let bgColor, textColor, icon;
+                
+                switch(type) {
+                    case 'success':
+                        bgColor = 'bg-green-500';
+                        textColor = 'text-white';
+                        icon = '<i class="fas fa-check-circle mr-2"></i>';
+                        break;
+                    case 'error':
+                        bgColor = 'bg-red-500';
+                        textColor = 'text-white';
+                        icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
+                        break;
+                    case 'warning':
+                        bgColor = 'bg-yellow-500';
+                        textColor = 'text-white';
+                        icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
+                        break;
+                    default:
+                        bgColor = 'bg-blue-500';
+                        textColor = 'text-white';
+                        icon = '<i class="fas fa-info-circle mr-2"></i>';
+                }
+                
+                toast.className = `${bgColor} ${textColor} p-4 rounded-lg shadow-lg flex items-center mb-3 transform transition-all duration-300 ease-in-out translate-x-full`;
+                toast.innerHTML = `
+                    ${icon}
+                    <span>${message}</span>
+                    <button class="ml-auto text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Animar entrada
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full');
+                }, 10);
+                
+                // Configurar botão de fechar
+                toast.querySelector('button').addEventListener('click', () => {
+                    toast.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        toastContainer.removeChild(toast);
+                    }, 300);
+                });
+                
+                // Auto-remover após 5 segundos
+                setTimeout(() => {
+                    if (toastContainer.contains(toast)) {
+                        toast.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            if (toastContainer.contains(toast)) {
+                                toastContainer.removeChild(toast);
+                            }
+                        }, 300);
+                    }
+                }, 5000);
+            }
+
+            // Atualizar totais do carrinho quando a quantidade é alterada
+            function updateCartTotals() {
+                // Em uma aplicação real, isso seria mais complexo e integrado ao backend
+                // Este é apenas um exemplo simples para demonstração
+
+                // Atualizar o total do Laticínios Ramos
+                const cart1Items = document.querySelectorAll('#supplier-cart-1 .product-card');
+                let cart1Total = 0;
+
+                cart1Items.forEach((item) => {
+                    const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                    const priceText = item.querySelector('.text-right p:last-child').textContent;
+                    const price = parseFloat(priceText.replace('€ ', '').replace(',', '.'));
+                    
+                    // Atualizar o preço total do item
+                    const unitPriceText = item.querySelector('.text-right p:first-child').textContent;
+                    const unitPrice = parseFloat(unitPriceText.match(/€ ([\d,]+)/)[1].replace(',', '.'));
+                    
+                    item.querySelector('.text-right p:last-child').textContent = '€ ' + (unitPrice * quantity).toFixed(2).replace('.', ',');
+                    
+                    cart1Total += unitPrice * quantity;
+                });
+
+                // Atualizar o total do Horta Natural
+                const cart2Items = document.querySelectorAll('#supplier-cart-2 .product-card');
+                let cart2Total = 0;
+
+                cart2Items.forEach((item) => {
+                    const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                    const priceText = item.querySelector('.text-right p:last-child').textContent;
+                    const price = parseFloat(priceText.replace('€ ', '').replace(',', '.'));
+                    
+                    // Atualizar o preço total do item
+                    const unitPriceText = item.querySelector('.text-right p:first-child').textContent;
+                    const unitPrice = parseFloat(unitPriceText.match(/€ ([\d,]+)/)[1].replace(',', '.'));
+                    
+                    item.querySelector('.text-right p:last-child').textContent = '€ ' + (unitPrice * quantity).toFixed(2).replace('.', ',');
+                    
+                    cart2Total += unitPrice * quantity;
+                });
+
+                // Atualizar os subtotais na UI
+                document.querySelector('#supplier-cart-1 .text-lg span').textContent = '€ ' + cart1Total.toFixed(2).replace('.', ',');
+                document.querySelector('#supplier-cart-2 .text-lg span').textContent = '€ ' + cart2Total.toFixed(2).replace('.', ',');
+
+                // Atualizar o resumo no painel lateral
+                const summaryItems = document.querySelectorAll('.dashboard-card:first-of-type .space-y-3 > div');
+                summaryItems[0].querySelector('span:last-child').textContent = '€ ' + cart1Total.toFixed(2).replace('.', ',');
+                summaryItems[1].querySelector('span:last-child').textContent = '€ ' + cart2Total.toFixed(2).replace('.', ',');
+
+                // Atualizar o total geral
+                const totalElement = document.querySelector('.dashboard-card:first-of-type .border-t .flex span:last-child');
+                totalElement.textContent = '€ ' + (cart1Total + cart2Total).toFixed(2).replace('.', ',');
+            }
+        });
+    </script>
+</body>
+</html>
