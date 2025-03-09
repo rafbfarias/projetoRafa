@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Despesa | Sistema Financeiro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="/public/css/styles.css" rel="stylesheet">
+    <script src="/public/js/Sidebar.js"></script>
+</head>
+<body class="bg-gray-100 flex h-screen">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
+    
+    <!-- Conteúdo Principal -->
+    <div class="flex-1 flex flex-col overflow-hidden ml-0 lg:ml-64">
+        <!-- Cabeçalho -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">Nova Despesa</h1>
+                <div class="flex space-x-4">
+                    <button id="saveAsDraftBtn" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-save mr-2"></i>Salvar como Rascunho
+                    </button>
+                    <button id="saveBtn" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-check mr-2"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Conteúdo -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto">
+                <form id="expenseForm" class="space-y-8">
+                    <!-- Informações Básicas -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 bg-gray-50">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Informações Básicas
+                            </h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                Detalhes principais da despesa
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                <div class="sm:col-span-3">
+                                    <label for="description" class="block text-sm font-medium text-gray-700">
+                                        Descrição <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="text" id="description" name="description" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="amount" class="block text-sm font-medium text-gray-700">
+                                        Valor <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">€</span>
+                                        </div>
+                                        <input type="number" id="amount" name="amount" required step="0.01" min="0"
+                                            class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="expenseDate" class="block text-sm font-medium text-gray-700">
+                                        Data da Despesa <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="date" id="expenseDate" name="expenseDate" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="dueDate" class="block text-sm font-medium text-gray-700">
+                                        Data de Vencimento
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="date" id="dueDate" name="dueDate"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="paymentDate" class="block text-sm font-medium text-gray-700">
+                                        Data de Pagamento
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="date" id="paymentDate" name="paymentDate"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="status" class="block text-sm font-medium text-gray-700">
+                                        Status <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="status" name="status" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione um status</option>
+                                            <option value="pending">Pendente</option>
+                                            <option value="paid">Pago</option>
+                                            <option value="overdue">Vencido</option>
+                                            <option value="cancelled">Cancelado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Classificação -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 bg-gray-50">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Classificação
+                            </h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                Categorize a despesa para melhor organização
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                <div class="sm:col-span-2">
+                                    <label for="modality" class="block text-sm font-medium text-gray-700">
+                                        Modalidade <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="modality" name="modality" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione uma modalidade</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-2">
+                                    <label for="category" class="block text-sm font-medium text-gray-700">
+                                        Categoria <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="category" name="category" required disabled
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione uma categoria</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-2">
+                                    <label for="subcategory" class="block text-sm font-medium text-gray-700">
+                                        Subcategoria
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="subcategory" name="subcategory" disabled
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione uma subcategoria</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="supplier" class="block text-sm font-medium text-gray-700">
+                                        Fornecedor
+                                    </label>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <select id="supplier" name="supplier"
+                                            class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300">
+                                            <option value="">Selecione um fornecedor</option>
+                                        </select>
+                                        <button type="button" id="newSupplierBtn"
+                                            class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 sm:text-sm hover:bg-gray-100">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="costCenter" class="block text-sm font-medium text-gray-700">
+                                        Centro de Custo
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="costCenter" name="costCenter"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione um centro de custo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagamento -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 bg-gray-50">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Detalhes de Pagamento
+                            </h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                Informações sobre o método de pagamento
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                <div class="sm:col-span-3">
+                                    <label for="paymentMethod" class="block text-sm font-medium text-gray-700">
+                                        Método de Pagamento
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="paymentMethod" name="paymentMethod"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione um método</option>
+                                            <option value="cash">Dinheiro</option>
+                                            <option value="bank_transfer">Transferência Bancária</option>
+                                            <option value="credit_card">Cartão de Crédito</option>
+                                            <option value="debit_card">Cartão de Débito</option>
+                                            <option value="check">Cheque</option>
+                                            <option value="other">Outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="bankAccount" class="block text-sm font-medium text-gray-700">
+                                        Conta Bancária
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="bankAccount" name="bankAccount"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="">Selecione uma conta</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="installments" class="block text-sm font-medium text-gray-700">
+                                        Parcelas
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="number" id="installments" name="installments" min="1" value="1"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="sm:col-span-3">
+                                    <label for="recurrence" class="block text-sm font-medium text-gray-700">
+                                        Recorrência
+                                    </label>
+                                    <div class="mt-1">
+                                        <select id="recurrence" name="recurrence"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            <option value="none">Não recorrente</option>
+                                            <option value="monthly">Mensal</option>
+                                            <option value="bimonthly">Bimestral</option>
+                                            <option value="quarterly">Trimestral</option>
+                                            <option value="semiannual">Semestral</option>
+                                            <option value="annual">Anual</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div id="recurrenceOptionsContainer" class="sm:col-span-6 hidden">
+                                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                        <div class="sm:col-span-3">
+                                            <label for="recurrenceCount" class="block text-sm font-medium text-gray-700">
+                                                Número de Ocorrências
+                                            </label>
+                                            <div class="mt-1">
+                                                <input type="number" id="recurrenceCount" name="recurrenceCount" min="2" value="2"
+                                                    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="sm:col-span-3">
+                                            <label for="recurrenceEndDate" class="block text-sm font-medium text-gray-700">
+                                                Data Final
+                                            </label>
+                                            <div class="mt-1">
+                                                <input type="date" id="recurrenceEndDate" name="recurrenceEndDate"
+                                                    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Anex

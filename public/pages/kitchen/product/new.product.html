@@ -7,19 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../css/styles.css">
     <link rel="stylesheet" href="../../../css/kitchen/product/new.product.css">
-    <!-- Font Awesome para os ícones do sidebar -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <!-- Importar o script do Sidebar que define o componente app-sidebar -->
-    <script src="../../../js/Sidebar.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Script do Sidebar -->
+    <script src="/js/Sidebar.js"></script>
 </head>
-<body class="bg-gray-50">
-    <div class="flex min-h-screen">
-        <!-- Sidebar - usando o mesmo componente que dashboard.html -->
-        <app-sidebar></app-sidebar>
+<body class="bg-gray-50 flex">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
 
-        <!-- Conteúdo Principal -->
-        <main class="flex-1 p-4 overflow-y-auto">
+    <!-- Conteúdo principal -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        <div class="bg-gray-50 min-h-screen">
             <!-- Header -->
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Novo Produto</h1>
@@ -440,8 +439,8 @@
                     </div>
                 </div>
             </form>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <!-- Toast de notificação -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50"></div>
@@ -462,6 +461,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
     <script src="../../../js/kitchen/product/new.product.js"></script>
     <script>
+        // Inicializar ícones
         document.addEventListener('DOMContentLoaded', () => {
             feather.replace();
         });

@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Compras Online - ERP</title>
+    
+    <!-- Estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
-    <script src="/js/Sidebar.js"></script>
+    <link href="/css/layout.css" rel="stylesheet">
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+    <div class="main-layout">
+        <!-- Sidebar com scroll independente -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
-        <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <!-- Conteúdo Principal com scroll independente -->
+        <main class="p-8 content-container">
             <!-- Cabeçalho -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                 <div>
-                    <h1 class="text-left text-2xl font-bold">Compras Online</h1>
+                    <h1 class="text-left text-2xl font-bold">Online Store</h1>
                     <p class="text-muted">Sistema de compras para fornecedores</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -30,10 +34,10 @@
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
                     </div>
-                    <a href="chart.store.html" class="btn btn-primary position-relative">
+                    <a href="chart.store.html" class="btn btn-primary relative inline-flex items-center">
                         <i class="fas fa-shopping-cart mr-2"></i>
                         <span>Carrinho</span>
-                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">0</span>
                     </a>
                 </div>
             </div>
@@ -107,137 +111,6 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-container">
                     <!-- Produtos favoritos serão inseridos aqui via JavaScript -->
-                    <div class="dashboard-card p-6 product-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Favorito</span>
-                            <button class="favorite-toggle text-yellow-400 hover:text-yellow-500">
-                                <i class="fas fa-star"></i>
-                            </button>
-                        </div>
-                        <div class="text-center mb-4">
-                            <img src="/api/placeholder/150/150" alt="Produto" class="mx-auto h-28 object-contain mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Queijo Parmesão</h3>
-                            <p class="text-sm text-gray-500 mb-2">Laticínios Ramos</p>
-                            <p class="text-lg font-bold text-gray-900 mb-2">€ 32,90 <span class="text-sm font-normal text-gray-500">/ kg</span></p>
-                            <p class="text-xs text-gray-500 mb-4">Última compra: 250g há 7 dias</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <a href="detail.store.html?id=1" class="text-blue-600 hover:text-blue-800 text-sm">
-                                <i class="fas fa-info-circle mr-1"></i> Detalhes
-                            </a>
-                            <div class="flex items-center">
-                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </button>
-                                <input type="number" value="0" min="0" class="h-8 w-12 border-t border-b border-gray-300 text-center text-sm">
-                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-plus text-gray-600"></i>
-                                </button>
-                                <button class="ml-2 h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="dashboard-card p-6 product-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Favorito</span>
-                            <button class="favorite-toggle text-yellow-400 hover:text-yellow-500">
-                                <i class="fas fa-star"></i>
-                            </button>
-                        </div>
-                        <div class="text-center mb-4">
-                            <img src="/api/placeholder/150/150" alt="Produto" class="mx-auto h-28 object-contain mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Tomate Cereja</h3>
-                            <p class="text-sm text-gray-500 mb-2">Horta Natural</p>
-                            <p class="text-lg font-bold text-gray-900 mb-2">€ 4,50 <span class="text-sm font-normal text-gray-500">/ 250g</span></p>
-                            <p class="text-xs text-gray-500 mb-4">Última compra: 1kg há 3 dias</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <a href="detail.store.html?id=2" class="text-blue-600 hover:text-blue-800 text-sm">
-                                <i class="fas fa-info-circle mr-1"></i> Detalhes
-                            </a>
-                            <div class="flex items-center">
-                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </button>
-                                <input type="number" value="0" min="0" class="h-8 w-12 border-t border-b border-gray-300 text-center text-sm">
-                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-plus text-gray-600"></i>
-                                </button>
-                                <button class="ml-2 h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="dashboard-card p-6 product-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Favorito</span>
-                            <button class="favorite-toggle text-yellow-400 hover:text-yellow-500">
-                                <i class="fas fa-star"></i>
-                            </button>
-                        </div>
-                        <div class="text-center mb-4">
-                            <img src="/api/placeholder/150/150" alt="Produto" class="mx-auto h-28 object-contain mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Azeite Extra Virgem</h3>
-                            <p class="text-sm text-gray-500 mb-2">Olivais do Douro</p>
-                            <p class="text-lg font-bold text-gray-900 mb-2">€ 8,90 <span class="text-sm font-normal text-gray-500">/ 500ml</span></p>
-                            <p class="text-xs text-gray-500 mb-4">Última compra: 2 unidades há 15 dias</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <a href="detail.store.html?id=3" class="text-blue-600 hover:text-blue-800 text-sm">
-                                <i class="fas fa-info-circle mr-1"></i> Detalhes
-                            </a>
-                            <div class="flex items-center">
-                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </button>
-                                <input type="number" value="0" min="0" class="h-8 w-12 border-t border-b border-gray-300 text-center text-sm">
-                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-plus text-gray-600"></i>
-                                </button>
-                                <button class="ml-2 h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="dashboard-card p-6 product-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Favorito</span>
-                            <button class="favorite-toggle text-yellow-400 hover:text-yellow-500">
-                                <i class="fas fa-star"></i>
-                            </button>
-                        </div>
-                        <div class="text-center mb-4">
-                            <img src="/api/placeholder/150/150" alt="Produto" class="mx-auto h-28 object-contain mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Pão de Centeio</h3>
-                            <p class="text-sm text-gray-500 mb-2">Padaria Tradicional</p>
-                            <p class="text-lg font-bold text-gray-900 mb-2">€ 3,20 <span class="text-sm font-normal text-gray-500">/ unidade</span></p>
-                            <p class="text-xs text-gray-500 mb-4">Última compra: 5 unidades há 2 dias</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <a href="detail.store.html?id=4" class="text-blue-600 hover:text-blue-800 text-sm">
-                                <i class="fas fa-info-circle mr-1"></i> Detalhes
-                            </a>
-                            <div class="flex items-center">
-                                <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-minus text-gray-600"></i>
-                                </button>
-                                <input type="number" value="0" min="0" class="h-8 w-12 border-t border-b border-gray-300 text-center text-sm">
-                                <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                    <i class="fas fa-plus text-gray-600"></i>
-                                </button>
-                                <button class="ml-2 h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -247,129 +120,10 @@
                 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Sidebar de Categorias -->
-                    <div class="dashboard-card p-6">
+                    <div class="dashboard-card p-6 scrollable-block scrollable-md">
                         <h3 class="text-lg font-medium mb-4">Categorias</h3>
                         <ul class="space-y-2" id="categories-list">
-                            <li>
-                                <button class="category-button flex items-center justify-between w-full p-2 rounded hover:bg-gray-100 text-left" data-category="laticínios">
-                                    <span>Laticínios</span>
-                                    <i class="fas fa-chevron-right transform transition-transform"></i>
-                                </button>
-                                <ul class="subcategory-list pl-4 mt-2 space-y-2 hidden">
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="queijos">
-                                            <span>Queijos</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="iogurtes">
-                                            <span>Iogurtes</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="leites">
-                                            <span>Leites</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <button class="category-button flex items-center justify-between w-full p-2 rounded hover:bg-gray-100 text-left" data-category="frutas-e-vegetais">
-                                    <span>Frutas e Vegetais</span>
-                                    <i class="fas fa-chevron-right transform transition-transform"></i>
-                                </button>
-                                <ul class="subcategory-list pl-4 mt-2 space-y-2 hidden">
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="frutas">
-                                            <span>Frutas</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="vegetais">
-                                            <span>Vegetais</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="saladas">
-                                            <span>Saladas</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <button class="category-button flex items-center justify-between w-full p-2 rounded hover:bg-gray-100 text-left" data-category="carnes">
-                                    <span>Carnes</span>
-                                    <i class="fas fa-chevron-right transform transition-transform"></i>
-                                </button>
-                                <ul class="subcategory-list pl-4 mt-2 space-y-2 hidden">
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="bovinas">
-                                            <span>Bovinas</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="aves">
-                                            <span>Aves</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="suínas">
-                                            <span>Suínas</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <button class="category-button flex items-center justify-between w-full p-2 rounded hover:bg-gray-100 text-left" data-category="padaria-e-confeitaria">
-                                    <span>Padaria e Confeitaria</span>
-                                    <i class="fas fa-chevron-right transform transition-transform"></i>
-                                </button>
-                                <ul class="subcategory-list pl-4 mt-2 space-y-2 hidden">
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="pães">
-                                            <span>Pães</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="bolos">
-                                            <span>Bolos</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="doces">
-                                            <span>Doces</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <button class="category-button flex items-center justify-between w-full p-2 rounded hover:bg-gray-100 text-left" data-category="bebidas">
-                                    <span>Bebidas</span>
-                                    <i class="fas fa-chevron-right transform transition-transform"></i>
-                                </button>
-                                <ul class="subcategory-list pl-4 mt-2 space-y-2 hidden">
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="águas">
-                                            <span>Águas</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="sucos">
-                                            <span>Sucos</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="refrigerantes">
-                                            <span>Refrigerantes</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="subcategory-button flex items-center w-full p-2 rounded hover:bg-gray-100 text-left" data-subcategory="vinhos">
-                                            <span>Vinhos</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
+                            <!-- Categorias serão inseridas aqui via JavaScript -->
                         </ul>
                     </div>
 
@@ -397,40 +151,6 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="products-grid">
                                 <!-- Os produtos serão inseridos aqui dinamicamente via JavaScript -->
-                                <div class="dashboard-card p-6 product-card">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Novo Preço</span>
-                                        <button class="favorite-toggle text-gray-400 hover:text-yellow-500">
-                                            <i class="far fa-star"></i>
-                                        </button>
-                                    </div>
-                                    <div class="text-center mb-4">
-                                        <img src="/api/placeholder/150/150" alt="Produto" class="mx-auto h-28 object-contain mb-4">
-                                        <h3 class="text-lg font-medium text-gray-900 mb-1">Queijo Mussarela</h3>
-                                        <p class="text-sm text-gray-500 mb-2">Laticínios Ramos</p>
-                                        <p class="text-lg font-bold text-gray-900 mb-2">€ 28,90 <span class="text-sm font-normal text-gray-500">/ kg</span></p>
-                                        <p class="text-xs text-gray-500 mb-4">Última compra: 500g há 5 dias</p>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <a href="detail.store.html?id=5" class="text-blue-600 hover:text-blue-800 text-sm">
-                                            <i class="fas fa-info-circle mr-1"></i> Detalhes
-                                        </a>
-                                        <div class="flex items-center">
-                                            <button class="decrement-btn h-8 w-8 rounded-l-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                                <i class="fas fa-minus text-gray-600"></i>
-                                            </button>
-                                            <input type="number" value="0" min="0" class="h-8 w-12 border-t border-b border-gray-300 text-center text-sm">
-                                            <button class="increment-btn h-8 w-8 rounded-r-lg border border-gray-300 bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                                                <i class="fas fa-plus text-gray-600"></i>
-                                            </button>
-                                            <button class="ml-2 h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors text-white">
-                                                <i class="fas fa-cart-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Mais produtos poderiam ser adicionados aqui -->
                             </div>
                         </div>
                     </div>
@@ -445,25 +165,15 @@
                 </div>
                 <div id="cart-summary" class="max-h-40 overflow-y-auto mb-3">
                     <!-- Itens do carrinho serão inseridos aqui via JavaScript -->
-                    <div class="flex items-center justify-between mb-2 pb-2 border-b">
-                        <div class="flex items-center">
-                            <img src="/api/placeholder/40/40" alt="Produto" class="w-8 h-8 object-cover mr-2">
-                            <div>
-                                <p class="text-sm font-medium">Queijo Parmesão</p>
-                                <p class="text-xs text-gray-500">1 x €32,90</p>
-                            </div>
-                        </div>
-                        <span class="text-sm font-semibold">€32,90</span>
-                    </div>
                 </div>
                 <div class="border-t pt-3 mb-3">
                     <div class="flex justify-between mb-1">
                         <span class="text-sm">Subtotal:</span>
-                        <span class="text-sm font-semibold" id="cart-subtotal">€32,90</span>
+                        <span class="text-sm font-semibold" id="cart-subtotal">€0,00</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-sm">Fornecedores:</span>
-                        <span class="text-sm" id="cart-suppliers">1</span>
+                        <span class="text-sm" id="cart-suppliers">0</span>
                     </div>
                 </div>
                 <div class="flex space-x-2">
@@ -478,142 +188,10 @@
         </main>
     </div>
 
-    <script src="/public/js/store.js"></script>
-    <script src="/public/js/products.js"></script>
-    <script src="/public/js/cart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar os carrosséis
-            const carousel = document.querySelector('[data-carousel="static"]');
-            if (carousel) {
-                let currentSlide = 0;
-                const items = carousel.querySelectorAll('[data-carousel-item]');
-                const prevButton = carousel.querySelector('[data-carousel-prev]');
-                const nextButton = carousel.querySelector('[data-carousel-next]');
-                
-                const showSlide = (index) => {
-                    items.forEach(item => item.classList.add('hidden'));
-                    items[index].classList.remove('hidden');
-                };
-                
-                const nextSlide = () => {
-                    currentSlide = (currentSlide + 1) % items.length;
-                    showSlide(currentSlide);
-                };
-                
-                const prevSlide = () => {
-                    currentSlide = (currentSlide - 1 + items.length) % items.length;
-                    showSlide(currentSlide);
-                };
-                
-                prevButton.addEventListener('click', prevSlide);
-                nextButton.addEventListener('click', nextSlide);
-                
-                // Auto-play do carrossel
-                setInterval(nextSlide, 5000);
-            }
-            
-            // Implementar a funcionalidade de alternar categorias
-            const categoryButtons = document.querySelectorAll('.category-button');
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const chevron = this.querySelector('.fa-chevron-right');
-                    const subcategoryList = this.nextElementSibling;
-                    
-                    // Toggle da subcategoria
-                    subcategoryList.classList.toggle('hidden');
-                    chevron.classList.toggle('rotate-90');
-                });
-            });
-            
-            // Botões de visualização
-            const gridViewBtn = document.getElementById('grid-view-btn');
-            const listViewBtn = document.getElementById('list-view-btn');
-            const productsGrid = document.getElementById('products-grid');
-            
-            gridViewBtn.addEventListener('click', function() {
-                productsGrid.classList.remove('grid-cols-1');
-                productsGrid.classList.add('md:grid-cols-2', 'xl:grid-cols-3');
-                
-                gridViewBtn.classList.remove('bg-gray-200', 'text-gray-700');
-                gridViewBtn.classList.add('bg-blue-600', 'text-white');
-                
-                listViewBtn.classList.remove('bg-blue-600', 'text-white');
-                listViewBtn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-            
-            listViewBtn.addEventListener('click', function() {
-                productsGrid.classList.remove('md:grid-cols-2', 'xl:grid-cols-3');
-                productsGrid.classList.add('grid-cols-1');
-                
-                listViewBtn.classList.remove('bg-gray-200', 'text-gray-700');
-                listViewBtn.classList.add('bg-blue-600', 'text-white');
-                
-                gridViewBtn.classList.remove('bg-blue-600', 'text-white');
-                gridViewBtn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-            
-            // Manipular o carrinho flutuante
-            const floatingCart = document.getElementById('floating-cart');
-            const closeFloatingCartBtn = document.getElementById('close-floating-cart');
-            
-            // Mostrar carrinho quando um item é adicionado
-            document.querySelectorAll('.fa-cart-plus').forEach(btn => {
-                btn.parentElement.addEventListener('click', function() {
-                    floatingCart.classList.remove('hidden');
-                    // Atualizar contador do carrinho
-                    updateCartCount();
-                });
-            });
-            
-            closeFloatingCartBtn.addEventListener('click', function() {
-                floatingCart.classList.add('hidden');
-            });
-            
-            // Atualizar contador do carrinho
-            function updateCartCount() {
-                const cartCount = document.getElementById('cart-count');
-                const cartItemCount = document.getElementById('cart-item-count');
-                
-                // Simulando a contagem (isso será substituído pelo código real)
-                const count = parseInt(cartCount.textContent) + 1;
-                cartCount.textContent = count;
-                cartItemCount.textContent = count;
-            }
-            
-            // Controles de incremento/decremento
-            document.querySelectorAll('.increment-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('input');
-                    input.value = parseInt(input.value) + 1;
-                });
-            });
-            
-            document.querySelectorAll('.decrement-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('input');
-                    if (parseInt(input.value) > 0) {
-                        input.value = parseInt(input.value) - 1;
-                    }
-                });
-            });
-            
-            // Favoritar produto
-            document.querySelectorAll('.favorite-toggle').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const icon = this.querySelector('i');
-                    if (icon.classList.contains('far')) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        this.classList.add('text-yellow-400');
-                    } else {
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        this.classList.remove('text-yellow-400');
-                    }
-                });
-            });
-        });
-    </script>
+    <!-- Scripts do sistema (no final do body) -->
+    <script src="/js/Sidebar.js"></script>
+    <script src="/js/procurement/store/storeAppManager.js"></script>
+    <script src="/js/procurement/store/chart.store.js"></script>
+    <script src="/js/procurement/store/store.init.js"></script>
 </body>
 </html>

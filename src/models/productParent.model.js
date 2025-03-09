@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 // Schema for ProductParent - Parent product categories and reference information
 const ProductParentSchema = new mongoose.Schema({
     parentId: {
@@ -13,6 +15,10 @@ const ProductParentSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    description: {
+      type: String,
+      default: ''
+    },
     unitMeasure: {
       type: String,
       required: true
@@ -27,12 +33,22 @@ const ProductParentSchema = new mongoose.Schema({
     allergens: [{
       type: String
     }],
+    // Indica se o produto possui fornecedores disponíveis
+    hasSuppliers: {
+      type: Boolean,
+      default: false
+    },
+    // Indica se o produto está visível na loja online
+    isVisible: {
+      type: Boolean,
+      default: true
+    },
     lastUpdate: {
       type: Date,
       default: Date.now
     },
     preparations: [{
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Preparation'
     }]
   }, {

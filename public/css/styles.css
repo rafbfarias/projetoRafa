@@ -1072,164 +1072,1073 @@ select {
 
 /* Estilos específicos para o talão */
 .receipt-container {
-    font-family: 'Courier New', monospace;
-    background-color: #fff;
+    background-color: var(--component-bg);
+    border: 1px solid var(--border-color);
     border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .receipt-section {
-    position: relative;
-    margin-bottom: 1rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding: 1rem;
 }
 
-.receipt-divider {
-    height: 1px;
-    background: repeating-linear-gradient(90deg, #ccc, #ccc 5px, transparent 5px, transparent 10px);
-    margin: 0.5rem 0;
+.receipt-section:last-child {
+    border-bottom: none;
 }
 
 .receipt-header {
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.receipt-divider {
+    border-top: 1px dashed var(--border-color);
+    margin: 1rem 0;
 }
 
 .receipt-table {
     width: 100%;
+    border-collapse: collapse;
 }
 
+.receipt-table th,
 .receipt-table td {
-    padding: 0.25rem 0;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.receipt-table td:last-child {
+    text-align: right;
 }
 
 .receipt-total {
     font-weight: bold;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px dashed var(--border-color);
     margin-top: 0.5rem;
     padding-top: 0.5rem;
 }
 
 .input-highlight {
-    border: 1px solid #e5e7eb;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out;
+    background-color: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    transition: all 0.3s;
 }
 
 .input-highlight:focus {
-    border-color: #3b82f6;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--btn-primary-bg);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
-/* Estilos para as abas */
+/* Estilos para tabs */
 .tab-active {
-    color: #3b82f6;
-    border-bottom: 2px solid #3b82f6;
+    color: var(--btn-primary-bg);
+    border-bottom: 2px solid var(--btn-primary-bg);
 }
 
 .tab-inactive {
-    color: #6b7280;
+    color: var(--text-muted);
     border-bottom: 2px solid transparent;
 }
 
 .tab-inactive:hover {
-    color: #4b5563;
-    border-bottom: 2px solid #e5e7eb;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
 }
 
-/* Estilos para o toggle de visualização */
-.toggle-checkbox {
-    transition: .4s;
+/* Weather Banner Styles */
+.weather-banner {
+    display: flex;
+    width: 100%;
+    height: 120px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.toggle-checkbox:checked {
-    right: 0;
-    transform: translateX(100%);
-    border-color: #3b82f6;
-}
-
-.toggle-label {
-    transition: .4s;
-    background-color: #e5e7eb;
-}
-
-.toggle-checkbox:checked + .toggle-label {
-    background-color: #93c5fd;
-}
-
-/* Estilos para o widget de clima */
-.weather-widget {
+.weather-section {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    background-color: #f0f9ff;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, flex 0.3s ease;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.weather-icon {
-    margin-right: 1rem;
-    background-color: #e0f2fe;
-    padding: 0.75rem;
+.weather-section:last-child {
+    border-right: none;
+}
+
+.weather-section:hover {
+    flex: 1.5;
+    transform: translateY(-5px);
+}
+
+.weather-content {
+    text-align: center;
+    z-index: 2;
+    color: white;
+    padding: 0 10px;
+}
+
+.weather-section h2 {
+    margin: 0;
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.weather-section .temp {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.weather-section p {
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Sunny Section */
+.sunny {
+    background: linear-gradient(to right, #FF9900, #FFCC00);
+}
+
+.sun {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #FFFF00, #FFA500);
+    border-radius: 50%;
+    box-shadow: 0 0 25px #FFFF00;
+    animation: sunRotate 15s linear infinite, pulse 3s infinite;
+}
+
+@keyframes sunRotate {
+    0% { box-shadow: 0 0 20px 5px #FFFF00; }
+    25% { box-shadow: 0 0 30px 8px #FFFF00; }
+    50% { box-shadow: 0 0 40px 10px #FFFF00; }
+    75% { box-shadow: 0 0 30px 8px #FFFF00; }
+    100% { box-shadow: 0 0 20px 5px #FFFF00; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Rainy Section */
+.rainy {
+    background: linear-gradient(to right, #4682B4, #5F9EA0);
+}
+
+.cloud {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 25px;
+    background: #F0F0F0;
+    border-radius: 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cloud:before, .cloud:after {
+    content: '';
+    position: absolute;
+    background: #F0F0F0;
     border-radius: 50%;
 }
 
-.weather-temp {
-    font-size: 1.25rem;
-    font-weight: 600;
+.cloud:before {
+    width: 30px;
+    height: 30px;
+    top: -10px;
+    left: 8px;
 }
 
-.weather-desc {
-    font-size: 0.875rem;
-    color: #64748b;
+.cloud:after {
+    width: 20px;
+    height: 20px;
+    top: -5px;
+    right: 10px;
 }
 
-/* Estilos para o upload de foto */
-.photo-upload {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f9fafb;
-    border: 2px dashed #d1d5db;
-    border-radius: 0.5rem;
-    padding: 2rem;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    position: relative;
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: #A4D3EE;
+    border-radius: 5px;
+    animation-name: rain;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
-.photo-upload:hover {
-    border-color: #3b82f6;
-    background-color: #f0f9ff;
+@keyframes rain {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(120px);
+        opacity: 0;
+    }
 }
 
-.photo-upload img {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 0.25rem;
+/* Windy Section */
+.windy {
+    background: linear-gradient(to right, #7CB9E8, #B0C4DE);
 }
 
-/* Estilos para avaliação por estrelas */
+.wind {
+    position: absolute;
+    width: 60px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+    animation-name: wind;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes wind {
+    0% {
+        transform: translateX(-60px) scaleX(0.5);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(180px) scaleX(1);
+        opacity: 0;
+    }
+}
+
+/* Star Rating */
 .star-rating {
     display: flex;
+    align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
 }
 
 .star-rating button {
+    font-size: 2rem;
+    color: var(--text-muted);
+    transition: color 0.3s;
     background: none;
     border: none;
-    font-size: 2rem;
     cursor: pointer;
-    transition: color 0.2s ease-in-out;
-    padding: 0;
-    margin: 0 0.25rem;
+    padding: 0 0.25rem;
 }
 
 .star-rating button:hover,
 .star-rating button.active {
-    color: #f59e0b;
+    color: #F59E0B;
+}
+
+/* Ajustes de layout */
+main {
+    padding: 2rem !important;
+}
+
+.sidebar-collapsed main {
+    margin-left: 5rem !important;
+}
+
+.sidebar-expanded main {
+    margin-left: 16rem !important;
+}
+
+/* Estilos para o dropdown do usuário */
+#userDropdown {
+    z-index: 1000;
+    min-width: 200px;
+    transition: all 0.2s ease-in-out;
+}
+
+#avatarButton {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#avatarButton:hover {
+    opacity: 0.9;
+}
+
+/* Animação do ícone de chevron */
+#avatarButton i {
+    transition: transform 0.2s ease-in-out;
+}
+
+#avatarButton:focus i,
+#avatarButton[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+/* Adicionar os estilos do dropdown */
+#userDropdown {
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  box-shadow: var(--dropdown-shadow);
+  color: var(--dropdown-text);
+  z-index: 1000;
+  min-width: 200px;
+  transition: all 0.2s ease-in-out;
+}
+
+#userDropdown .px-4.py-3 {
+  border-bottom: 1px solid var(--dropdown-border);
+}
+
+#userDropdown .text-sm {
+  color: var(--dropdown-text);
+}
+
+#userDropdown .font-medium.truncate {
+  color: var(--dropdown-text-secondary);
+}
+
+#userDropdown a {
+  color: var(--dropdown-text);
+  transition: all 0.2s ease-in-out;
+}
+
+#userDropdown a:hover {
+  background-color: var(--dropdown-hover);
+}
+
+#userDropdown .text-red-600 {
+  color: var(--button-danger);
+}
+
+#userDropdown .text-red-600:hover {
+  color: var(--button-danger-hover);
+}
+
+/* Ajustes para o botão do avatar */
+#avatarButton {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#avatarButton i {
+  transition: transform 0.2s ease-in-out;
+  color: var(--text-secondary);
+}
+
+#avatarButton[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+/* Início dos estilos do account.css */
+/* Cards */
+.dashboard-card {
+    @apply bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden;
+}
+
+/* Texto */
+.text-muted {
+    @apply text-gray-500 dark:text-gray-400;
+}
+
+/* Tabelas */
+.component-table {
+    @apply min-w-full divide-y divide-gray-200 dark:divide-gray-700;
+}
+.component-table thead {
+    @apply bg-gray-50 dark:bg-gray-700;
+}
+.component-table th {
+    @apply px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700;
+}
+.component-table tbody {
+    @apply bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700;
+}
+.component-table td {
+    @apply px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100;
+}
+.component-table tr {
+    @apply bg-white dark:bg-gray-800;
+}
+.component-table tr:nth-child(even) {
+    @apply bg-gray-50 dark:bg-gray-700;
+}
+
+/* Botões */
+.btn {
+    @apply inline-flex items-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+.btn-sm {
+    @apply px-3 py-1.5 text-xs;
+}
+.btn-primary {
+    @apply border-transparent text-white bg-brand-600 hover:bg-brand-700 focus:ring-brand-500;
+}
+.btn-secondary {
+    @apply border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-brand-500;
+}
+.btn-danger {
+    @apply text-white bg-red-600 hover:bg-red-700 focus:ring-red-500;
+}
+
+/* Formulários */
+.form-input, .form-select, .form-textarea {
+    @apply block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-700 dark:text-white sm:text-sm;
+}
+
+.form-checkbox {
+    @apply rounded border-gray-300 dark:border-gray-600 text-brand-600 shadow-sm focus:border-brand-500 focus:ring-brand-500;
+}
+
+/* Tabs */
+.tab-button {
+    @apply px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600;
+}
+.tab-button.active {
+    @apply text-brand-600 dark:text-brand-500 border-brand-600 dark:border-brand-500;
+}
+
+/* Status badges */
+.status-badge {
+    @apply px-2 py-1 rounded-full text-xs font-medium;
+}
+.status-badge-success {
+    @apply bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200;
+}
+.status-badge-warning {
+    @apply bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200;
+}
+.status-badge-danger {
+    @apply bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200;
+}
+.status-badge-info {
+    @apply bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200;
+}
+
+/* Notificações */
+.notification {
+    @apply fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-opacity duration-300;
+}
+.notification-success {
+    @apply bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200;
+}
+.notification-error {
+    @apply bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200;
+}
+.notification-warning {
+    @apply bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200;
+}
+.notification-info {
+    @apply bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dashboard-card {
+        @apply p-4;
+    }
+    .btn {
+        @apply px-3 py-1.5;
+    }
+}
+
+/* Badges */
+.badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+.badge-blue {
+    @apply bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200;
+}
+.badge-green {
+    @apply bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200;
+}
+.badge-red {
+    @apply bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200;
+}
+.badge-yellow {
+    @apply bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200;
+}
+.badge-purple {
+    @apply bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200;
+}
+.badge-gray {
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200;
+}
+
+/* File Upload */
+.file-upload {
+    @apply flex items-center justify-center w-full h-32 px-4 transition bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none;
+}
+
+/* Progress Steps */
+.progress-steps {
+    @apply relative;
+}
+
+.progress-step {
+    @apply flex items-center;
+}
+
+.progress-step-number {
+    @apply flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium;
+}
+
+.progress-step-active .progress-step-number {
+    @apply border-brand-600 text-brand-600;
+}
+
+.progress-step-completed .progress-step-number {
+    @apply border-green-600 bg-green-600 text-white;
+}
+
+/* Transitions */
+.fade-enter {
+    @apply opacity-0;
+}
+
+.fade-enter-active {
+    @apply opacity-100 transition-opacity duration-300;
+}
+
+.fade-exit {
+    @apply opacity-100;
+}
+
+.fade-exit-active {
+    @apply opacity-0 transition-opacity duration-300;
+}
+
+/* Estilos da barra de rolagem */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Aplicação das variáveis */
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary);
+}
+
+.dashboard-card {
+  background-color: var(--component-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+}
+
+/* Formulários */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  background-color: var(--component-bg);
+  color: var(--text-primary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--btn-primary-bg);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar-divider {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.111);
+  margin: 0.5rem 0;
+}
+
+.menu-item {
+  color: #e5e7eb;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+
+.submenu.open {
+  max-height: 500px;
+}
+
+.sidebar-text {
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.3s;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo-text {
+  opacity: 0;
+  width: 0;
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+/* Background grid para o board */
+.bg-grid {
+  background-image: 
+      linear-gradient(to right, var(--bg-black) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--bg-black) 1px, transparent 1px);
+  background-size: 20px 20px;
+  
+}
+
+/* Estilos para board extensível */
+#board {
+  min-width: 100%;
+  min-height: 100%;
+  width: max-content;
+  height: max-content;
+  background-color: var(--bg-secondary);
+  
+}
+
+/* Tamanho mínimo para garantir que ele cubra a área visível */
+#board-container {
+  overflow: auto !important;
+  position: relative;
+}
+
+/* Controles de zoom */
+.zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: white;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.zoom-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--bg-secondary);
+}
+
+/* Minimap do board */
+.board-minimap {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 150px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.board-minimap-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.board-minimap-viewport {
+  position: absolute;
+  border: 2px solid var(--brand-600);
+  background-color: rgba(59, 130, 246, 0.1);
+  cursor: move;
+}
+
+.minimap-note {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background-color: var(--brand-600);
+}
+
+/* Estilos para as notas */
+.note {
+  cursor: move;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  min-height: 120px;
+}
+
+.note:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.note.dragging {
+  opacity: 0.8;
+  transform: scale(1.05);
+  z-index: 100;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores de fundo para as notas */
+.note-color-yellow {
+  background-color: var(--brand-100);
+  border-top: 3px solid var(--brand-500);
+}
+
+.note-color-blue {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-top: 3px solid rgba(59, 130, 246, 1);
+}
+
+.note-color-green {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-top: 3px solid rgba(16, 185, 129, 1);
+}
+
+.note-color-red {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-top: 3px solid rgba(239, 68, 68, 1);
+}
+
+.note-color-purple {
+  background-color: rgba(139, 92, 246, 0.1);
+  border-top: 3px solid rgba(139, 92, 246, 1);
+}
+
+.note-color-pink {
+  background-color: rgba(236, 72, 153, 0.1);
+  border-top: 3px solid rgba(236, 72, 153, 1);
+}
+
+.note-color-gray {
+  background-color: rgba(107, 114, 128, 0.1);
+  border-top: 3px solid rgba(107, 114, 128, 1);
+}
+
+/* Adaptações para modo escuro */
+.dark .note-color-yellow {
+  background-color: rgba(253, 230, 138, 0.2);
+  border-top: 3px solid rgba(253, 230, 138, 0.8);
+}
+
+.dark .note-color-blue {
+  background-color: rgba(59, 130, 246, 0.2);
+  border-top: 3px solid rgba(59, 130, 246, 0.8);
+}
+
+.dark .note-color-green {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-top: 3px solid rgba(16, 185, 129, 0.8);
+}
+
+.dark .note-color-red {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-top: 3px solid rgba(239, 68, 68, 0.8);
+}
+
+.dark .note-color-purple {
+  background-color: rgba(139, 92, 246, 0.2);
+  border-top: 3px solid rgba(139, 92, 246, 0.8);
+}
+
+.dark .note-color-pink {
+  background-color: rgba(236, 72, 153, 0.2);
+  border-top: 3px solid rgba(236, 72, 153, 0.8);
+}
+
+.dark .note-color-gray {
+  background-color: rgba(107, 114, 128, 0.2);
+  border-top: 3px solid rgba(107, 114, 128, 0.8);
+}
+
+/* Seleção de cores no modal */
+.color-option input[type="radio"]:checked + span {
+  border-color: var(--brand-600);
+}
+
+.color-option.selected {
+  border-color: var(--brand-600);
+  box-shadow: 0 0 0 2px var(--brand-600);
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.note-appear {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Botões e elementos da interface */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--brand-600);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-700);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--hover-bg);
+}
+
+.form-input, .form-select, .form-textarea {
+  height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  transition: all 0.3s;
+}
+
+.form-textarea {
+  height: auto;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  outline: none;
+}
+
+/* Estilos para o tooltip de referência */
+.reference-tooltip {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.note:hover .reference-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Estilos para as badges de status */
+.note-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+/* Ícone de link para referências */
+.reference-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--brand-600);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.reference-link:hover {
+  transform: scale(1.1);
+  background-color: white;
+}
+
+/* Estilos para o indicador de arrasto */
+.drag-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  cursor: move;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+/* Adicionar ao arquivo CSS */
+.product-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.variant-list {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.variant-list.expanded {
+  max-height: 1000px;
+  transition: max-height 0.5s ease-in;
+}
+
+.expand-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Animação para items aparecendo */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.product-card {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Estilos para o conteúdo principal */
+.main-content {
+  margin-left: 250px; /* Adiciona margem à esquerda para acomodar o sidebar */
+  padding: 20px; /* Espaçamento interno para o conteúdo */
 }
 
 

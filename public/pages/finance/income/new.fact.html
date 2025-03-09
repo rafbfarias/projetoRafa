@@ -94,8 +94,8 @@
                         <div class="bg-primary rounded-lg shadow-sm p-4 mb-6 flex items-center">
                             <div class="mr-4 bg-blue-100 p-2 rounded-full">
                                 <i class="fas fa-sun text-yellow-500 text-2xl"></i>
-                            </div>
-                            <div>
+                                </div>
+                                <div>
                                 <div class="text-lg font-semibold" id="weatherTemp">22°C</div>
                                 <div class="text-sm text-gray-600" id="weatherDesc">Céu limpo</div>
                             </div>
@@ -185,7 +185,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1 text-center">Data/Hora</label>
                                             <input type="datetime-local" id="dateTime" name="dateTime" class="w-full p-2 rounded input-highlight text-sm text-center" required>
                                         </div>
-                                    </div>
+                                        </div>
                                     <div class="grid grid-cols-4 gap-4 mt-2">
                                         <div class="text-center">
                                             <label class="block text-xs font-medium text-gray-500 mb-1">Dia da Semana</label>
@@ -211,7 +211,7 @@
                             <div id="tabContentContainer">
                                 <!-- Tab: Informações Gerais -->
                                 <div class="tab-content" data-tab="info-geral">
-                                    <!-- Total por Modos de Pagamento -->
+                            <!-- Total por Modos de Pagamento -->
                                     <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
                                         <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Total por Modos de Pagamento</h3>
                                         <div class="receipt-divider my-4"></div>
@@ -219,50 +219,50 @@
                                             <tr>
                                                 <td class="py-2">Numerário Euro</td>
                                                 <td class="w-1/3">
-                                                    <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                            <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
                                                 <td class="py-2">Transferência Bancária</td>
-                                                <td>
-                                                    <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                        <td>
+                                            <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
                                                 <td class="py-2">Multibanco 1</td>
-                                                <td>
-                                                    <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                        <td>
+                                            <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
                                                 <td class="py-2">Multibanco 2</td>
-                                                <td>
-                                                    <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                        <td>
+                                            <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
+                                    <tr>
                                                 <td class="py-2">Uber Eats MB</td>
-                                                <td>
-                                                    <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
+                                        <td>
+                                            <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                        </td>
+                                    </tr>
                                         </table>
                                         <div class="receipt-divider my-4"></div>
                                         <table class="receipt-table w-full">
-                                            <tr class="receipt-total">
+                                    <tr class="receipt-total">
                                                 <td class="py-2 font-bold">Total da Faturação:</td>
                                                 <td class="w-1/3">
                                                     <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00" step="0.01">
-                                                </td>
-                                            </tr>
-                                            <tr id="factDiffRow" class="hidden">
-                                                <td colspan="2" class="text-right text-red-500 text-sm pt-2">
+                                        </td>
+                                    </tr>
+                                    <tr id="factDiffRow" class="hidden">
+                                        <td colspan="2" class="text-right text-red-500 text-sm pt-2">
                                                     Diferença na faturação: <span id="factDiffDisplay">0.00</span>€
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        </td>
+                                    </tr>
+                                </table>
                                     </div>
-                                </div>
+                            </div>
 
                                 <!-- Tab: Métodos de Pagamento -->
                                 <div class="tab-content hidden" data-tab="pagamentos">
@@ -311,51 +311,51 @@
 
                                 <!-- Tab: Movimentos Anulados -->
                                 <div class="tab-content hidden" data-tab="movimentos">
-                                    <!-- Movimentos Anulados e Descontos -->
+                            <!-- Movimentos Anulados e Descontos -->
                                     <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
                                         <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Movimentos Anulados</h3>
                                         <div class="receipt-divider my-4"></div>
-                                        <div class="grid grid-cols-1 gap-6">
+                                <div class="grid grid-cols-1 gap-6">
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                     <h4 class="font-medium mb-3">Movimentos Anulados</h4>
                                                     <div class="space-y-3">
-                                                        <div>
-                                                            <label class="text-sm">Total Transações:</label>
-                                                            <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                        </div>
-                                                        <div>
-                                                            <label class="text-sm">Total Documentos:</label>
-                                                            <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                        </div>
-                                                        <div>
-                                                            <label class="text-sm">Justificativa:</label>
-                                                            <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
-                                                        </div>
-                                                    </div>
+                                                <div>
+                                                    <label class="text-sm">Total Transações:</label>
+                                                    <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
-                                                
+                                                <div>
+                                                    <label class="text-sm">Total Documentos:</label>
+                                                    <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Justificativa:</label>
+                                                    <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                                 <div>
                                                     <h4 class="font-medium mb-3">Descontos</h4>
                                                     <div class="space-y-3">
-                                                        <div>
-                                                            <label class="text-sm">Total:</label>
-                                                            <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                <div>
+                                                    <label class="text-sm">Total:</label>
+                                                    <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                </div>
+                                                <div>
+                                                    <label class="text-sm">Justificativa:</label>
+                                                    <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
                                                         </div>
-                                                        <div>
-                                                            <label class="text-sm">Justificativa:</label>
-                                                            <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
                                 <!-- Tab: Consumo Interno -->
                                 <div class="tab-content hidden" data-tab="consumo">
-                                    <!-- Consumo Interno e Gift Cards -->
+                            <!-- Consumo Interno e Gift Cards -->
                                     <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
                                         <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Consumo Interno e Gift Cards</h3>
                                         <div class="receipt-divider my-4"></div>
@@ -364,32 +364,32 @@
                                                 <h4 class="font-medium mb-3">Consumo Interno</h4>
                                                 <div class="space-y-3">
                                                     <div>
-                                                        <label class="text-sm">Total:</label>
+                                            <label class="text-sm">Total:</label>
                                                         <input type="number" id="internalConsumption" name="internalConsumption" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                     </div>
                                                     <div>
                                                         <label class="text-sm">Descrição:</label>
                                                         <textarea id="internalConsumptionDesc" name="internalConsumptionDesc" class="w-full p-2 input-highlight" rows="2"></textarea>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
+                                        </div>
+                                    </div>
+                                    
                                             <div>
                                                 <h4 class="font-medium mb-3">Gift Cards</h4>
                                                 <div class="space-y-3">
-                                                    <div>
-                                                        <label class="text-sm">Vendidos:</label>
-                                                        <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Utilizados:</label>
-                                                        <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                </div>
+                                            <div>
+                                                <label class="text-sm">Vendidos:</label>
+                                                <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </div>
+                                            <div>
+                                                <label class="text-sm">Utilizados:</label>
+                                                <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                    </div>
 
                                 <!-- Tab: Métricas -->
                                 <div class="tab-content hidden" data-tab="metricas">
@@ -404,14 +404,14 @@
                                                     <div>
                                                         <label class="text-sm">Ticket Médio:</label>
                                                         <input type="number" id="averageTicket" name="averageTicket" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
+                </div>
                                                     <div>
                                                         <label class="text-sm">Número de Transações:</label>
                                                         <input type="number" id="transactionCount" name="transactionCount" class="w-full p-2 text-right input-highlight" value="0" step="1">
-                                                    </div>
+            </div>
                                                 </div>
-                                            </div>
-                                            
+    </div>
+
                                             <div>
                                                 <h4 class="font-medium mb-3">Comparativo</h4>
                                                 <div class="space-y-3">
@@ -749,7 +749,7 @@
 
             tabLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
+                e.preventDefault();
                     
                     // Remover classes ativas de todas as abas
                     tabLinks.forEach(l => {
@@ -1010,225 +1010,4 @@
                 } else if (this.value === 'Porto') {
                     selectedUnit.textContent = 'Rua do Porto, 123';
                 } else {
-                    selectedUnit.textContent = 'Selecione uma unidade';
-                }
-            });
-
-            respInput.addEventListener('change', function() {
-                let respId = '';
-                if (this.value === 'João Silva') respId = '1';
-                else if (this.value === 'Maria Santos') respId = '2';
-                else if (this.value === 'Pedro Costa') respId = '3';
-                
-                document.getElementById('factRespId').value = respId;
-            });
-
-            // Cálculo de valores líquidos para Multibanco
-            const mb1GrossDetail = document.getElementById('posMb1GrossDetail');
-            const mb1Fee = document.getElementById('posMb1Fee');
-            const mb1Net = document.getElementById('posMb1Net');
-            
-            const mb2GrossDetail = document.getElementById('posMb2GrossDetail');
-            const mb2Fee = document.getElementById('posMb2Fee');
-            const mb2Net = document.getElementById('posMb2Net');
-            
-            const mb1GrossDetail_full = document.getElementById('posMb1GrossDetail_full');
-            const mb1Fee_full = document.getElementById('posMb1Fee_full');
-            const mb1Net_full = document.getElementById('posMb1Net_full');
-            
-            const mb2GrossDetail_full = document.getElementById('posMb2GrossDetail_full');
-            const mb2Fee_full = document.getElementById('posMb2Fee_full');
-            const mb2Net_full = document.getElementById('posMb2Net_full');
-
-            // Calcular valor líquido para MB1
-            function calculateMb1Net() {
-                const gross = parseFloat(mb1GrossDetail.value) || 0;
-                const fee = parseFloat(mb1Fee.value) || 0;
-                const net = gross - (gross * fee / 100);
-                mb1Net.value = net.toFixed(2);
-                mb1Net_full.value = net.toFixed(2);
-            }
-
-            // Calcular valor líquido para MB2
-            function calculateMb2Net() {
-                const gross = parseFloat(mb2GrossDetail.value) || 0;
-                const fee = parseFloat(mb2Fee.value) || 0;
-                const net = gross - (gross * fee / 100);
-                mb2Net.value = net.toFixed(2);
-                mb2Net_full.value = net.toFixed(2);
-            }
-
-            // Calcular valor líquido para MB1 (modo completo)
-            function calculateMb1Net_full() {
-                const gross = parseFloat(mb1GrossDetail_full.value) || 0;
-                const fee = parseFloat(mb1Fee_full.value) || 0;
-                const net = gross - (gross * fee / 100);
-                mb1Net_full.value = net.toFixed(2);
-                mb1Net.value = net.toFixed(2);
-            }
-
-            // Calcular valor líquido para MB2 (modo completo)
-            function calculateMb2Net_full() {
-                const gross = parseFloat(mb2GrossDetail_full.value) || 0;
-                const fee = parseFloat(mb2Fee_full.value) || 0;
-                const net = gross - (gross * fee / 100);
-                mb2Net_full.value = net.toFixed(2);
-                mb2Net.value = net.toFixed(2);
-            }
-
-            // Adicionar event listeners para cálculos
-            mb1GrossDetail.addEventListener('input', calculateMb1Net);
-            mb1Fee.addEventListener('input', calculateMb1Net);
-            mb2GrossDetail.addEventListener('input', calculateMb2Net);
-            mb2Fee.addEventListener('input', calculateMb2Net);
-            
-            mb1GrossDetail_full.addEventListener('input', calculateMb1Net_full);
-            mb1Fee_full.addEventListener('input', calculateMb1Net_full);
-            mb2GrossDetail_full.addEventListener('input', calculateMb2Net_full);
-            mb2Fee_full.addEventListener('input', calculateMb2Net_full);
-
-            // Sincronizar valores entre abas e modo completo
-            function setupFieldSync(tabField, fullField) {
-                const tabElement = document.getElementById(tabField);
-                const fullElement = document.getElementById(fullField);
-                
-                if (tabElement && fullElement) {
-                    tabElement.addEventListener('input', function() {
-                        fullElement.value = this.value;
-                    });
-                    
-                    fullElement.addEventListener('input', function() {
-                        tabElement.value = this.value;
-                    });
-                }
-            }
-
-            // Configurar sincronização para todos os campos
-            const fieldsToSync = [
-                ['totalCash', 'totalCash_full'],
-                ['wireTransfer', 'wireTransfer_full'],
-                ['posMb1Gross', 'posMb1Gross_full'],
-                ['posMb2Gross', 'posMb2Gross_full'],
-                ['uberEatsMb', 'uberEatsMb_full'],
-                ['totalFact', 'totalFact_full'],
-                ['posMb1GrossDetail', 'posMb1GrossDetail_full'],
-                ['posMb1Fee', 'posMb1Fee_full'],
-                ['posMb1Net', 'posMb1Net_full'],
-                ['posMb2GrossDetail', 'posMb2GrossDetail_full'],
-                ['posMb2Fee', 'posMb2Fee_full'],
-                ['posMb2Net', 'posMb2Net_full'],
-                ['canceledTransactions', 'canceledTransactions_full'],
-                ['canceledDocuments', 'canceledDocuments_full'],
-                ['canceledDocumentsJustification', 'canceledDocumentsJustification_full'],
-                ['discounts', 'discounts_full'],
-                ['discountsJustification', 'discountsJustification_full'],
-                ['internalConsumption', 'internalConsumption_full'],
-                ['internalConsumptionDesc', 'internalConsumptionDesc_full'],
-                ['giftCardSold', 'giftCardSold_full'],
-                ['giftCardUsed', 'giftCardUsed_full'],
-                ['averageTicket', 'averageTicket_full'],
-                ['transactionCount', 'transactionCount_full'],
-                ['previousDayFact', 'previousDayFact_full'],
-                ['dayVariation', 'dayVariation_full']
-            ];
-
-            fieldsToSync.forEach(pair => {
-                setupFieldSync(pair[0], pair[1]);
-            });
-
-            // Calcular variação percentual
-            const previousDayFact = document.getElementById('previousDayFact');
-            const dayVariation = document.getElementById('dayVariation');
-            const totalFact = document.getElementById('totalFact');
-            
-            const previousDayFact_full = document.getElementById('previousDayFact_full');
-            const dayVariation_full = document.getElementById('dayVariation_full');
-            const totalFact_full = document.getElementById('totalFact_full');
-
-            function calculateVariation() {
-                const previous = parseFloat(previousDayFact.value) || 0;
-                const current = parseFloat(totalFact.value) || 0;
-                
-                if (previous > 0) {
-                    const variation = ((current - previous) / previous) * 100;
-                    dayVariation.value = variation.toFixed(2);
-                    dayVariation_full.value = variation.toFixed(2);
-                } else {
-                    dayVariation.value = '0.00';
-                    dayVariation_full.value = '0.00';
-                }
-            }
-
-            function calculateVariation_full() {
-                const previous = parseFloat(previousDayFact_full.value) || 0;
-                const current = parseFloat(totalFact_full.value) || 0;
-                
-                if (previous > 0) {
-                    const variation = ((current - previous) / previous) * 100;
-                    dayVariation_full.value = variation.toFixed(2);
-                    dayVariation.value = variation.toFixed(2);
-                } else {
-                    dayVariation_full.value = '0.00';
-                    dayVariation.value = '0.00';
-                }
-            }
-
-            previousDayFact.addEventListener('input', calculateVariation);
-            totalFact.addEventListener('input', calculateVariation);
-            previousDayFact_full.addEventListener('input', calculateVariation_full);
-            totalFact_full.addEventListener('input', calculateVariation_full);
-
-            // Salvar formulário
-            const saveButton = document.getElementById('saveButton');
-            const faturacaoForm = document.getElementById('faturacaoForm');
-
-            saveButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Validar campos obrigatórios
-                const requiredFields = [
-                    'companyInput', 'unitInput', 'respInput', 'dateTime', 'totalFact'
-                ];
-                
-                let isValid = true;
-                requiredFields.forEach(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    if (!field.value) {
-                        field.classList.add('border-red-500');
-                        isValid = false;
-                    } else {
-                        field.classList.remove('border-red-500');
-                    }
-                });
-                
-                if (!isValid) {
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                    return;
-                }
-                
-                // Aqui você pode adicionar a lógica para enviar o formulário
-                // Por exemplo, usando fetch para uma API
-                alert('Faturação salva com sucesso!');
-                // Redirecionar para a lista de faturações
-                // window.location.href = 'list.fact.html';
-            });
-
-            // Simular dados de clima
-            function fetchWeatherData() {
-                // Simulação de dados de clima
-                const weatherTemp = document.getElementById('weatherTemp');
-                const weatherDesc = document.getElementById('weatherDesc');
-                
-                // Atualizar campos ocultos
-                document.getElementById('dayWeatherDescription').value = 'Céu limpo';
-                document.getElementById('dayWeatherTemperature').value = '22';
-                document.getElementById('dayWeatherPrecipitation').value = '0';
-                document.getElementById('dayWeatherWindSpeed').value = '5';
-            }
-
-            // Inicializar dados de clima
-            fetchWeatherData();
-        });
-    </script>
-</body>
-</html>
+                    selectedUnit.textContent = '

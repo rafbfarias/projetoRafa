@@ -11,7 +11,7 @@
     <link href="../css/suppliers.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
 </head>
-<body class="bg-primary">
+<body class="bg-gray-50 dark:bg-gray-900">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
@@ -25,7 +25,7 @@
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>
-                        <h1 class="text-left text-2xl font-bold">Vinhos do Vale</h1>
+                        <h1 class="text-2xl font-bold">Vinhos do Vale</h1>
                         <p class="text-muted">Detalhes do fornecedor</p>
                     </div>
                 </div>
@@ -81,11 +81,11 @@
                             <p class="text-sm text-muted">Avaliação: 5.0/5</p>
                         </div>
                         <div class="mt-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                 Ativo
-                            </span>
-                        </div>
-                    </div>
+                </span>
+            </div>
+            </div>
                     <div class="md:w-3/4 md:pl-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -150,7 +150,7 @@
                             Histórico
                         </a>
                     </nav>
-                </div>
+                    </div>
 
                 <!-- Conteúdo das Tabs -->
                 <div class="mt-6">
@@ -158,33 +158,33 @@
                     <div id="tab-info" class="tab-content">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Endereço Fiscal -->
-                            <div class="dashboard-card p-6">
+                    <div class="dashboard-card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Endereço Fiscal</h3>
-                                <div class="space-y-4">
-                                    <div>
+                        <div class="space-y-4">
+                            <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">Endereço</h4>
                                         <p>Rua do Douro, 123</p>
                                     </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">Cidade</h4>
                                         <p>Vila Nova de Gaia</p>
-                                    </div>
+                            </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">Código Postal</h4>
                                         <p>4400-123</p>
-                                    </div>
+                            </div>
                                     <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">País</h4>
                                         <p>Portugal</p>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
 
                             <!-- Informações Bancárias -->
-                            <div class="dashboard-card p-6">
+                    <div class="dashboard-card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Informações Bancárias</h3>
-                                <div class="space-y-4">
-                                    <div>
+                        <div class="space-y-4">
+                            <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">IBAN</h4>
                                         <p>PT50 0000 0000 0000 0000 0000 0</p>
                                     </div>
@@ -220,7 +220,7 @@
                                             <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                 Secundária
                                             </span>
-                                        </div>
+                                </div>
                                         <p class="text-sm">Rua da Alegria, 78</p>
                                         <p class="text-sm">Porto, 4000-456</p>
                                         <p class="text-sm">Portugal</p>
@@ -244,7 +244,7 @@
                             <div class="dashboard-card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Contato Comercial</h3>
                                 <div class="space-y-4">
-                                    <div>
+                                <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">Nome</h4>
                                         <p>António Costa</p>
                                     </div>
@@ -255,8 +255,8 @@
                                                 +351 222 333 444
                                             </a>
                                         </p>
-                                    </div>
-                                    <div>
+                                </div>
+                                <div>
                                         <h4 class="text-sm font-medium text-muted mb-1">Email</h4>
                                         <p>
                                             <a href="mailto:antonio@vinhosdovale.pt" class="text-blue-600 hover:text-blue-800">
@@ -340,14 +340,14 @@
                                         <a href="#" class="text-sm text-blue-600 hover:text-blue-800 mt-1 inline-block">Ver detalhes</a>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Tab Produtos -->
-                    <div id="tab-products" class="tab-content hidden">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-semibold">Produtos do Fornecedor</h3>
+            <!-- Tab Produtos -->
+            <div id="tab-products" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold">Produtos do Fornecedor</h3>
                             <a href="supplierProducts.html?id=2" class="btn btn-primary">
                                 <i class="fas fa-box mr-2"></i>
                                 Ver Todos os Produtos
@@ -362,8 +362,8 @@
                                     <div class="flex space-x-2">
                                         <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
+                        </button>
+                    </div>
                                 </div>
                                 <div class="text-center mb-4">
                                     <img src="https://via.placeholder.com/150" alt="Vinho Tinto Reserva" class="mx-auto h-28 object-contain mb-3">
@@ -379,11 +379,11 @@
                                     <div class="flex justify-between text-sm">
                                         <span class="text-muted">Estoque:</span>
                                         <span>245 unidades</span>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Produto 2 -->
+                    <!-- Produto 2 -->
                             <div class="dashboard-card p-6">
                                 <div class="flex justify-between items-start mb-4">
                                     <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ativo</span>
@@ -391,7 +391,7 @@
                                         <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                    </div>
+                        </div>
                                 </div>
                                 <div class="text-center mb-4">
                                     <img src="https://via.placeholder.com/150" alt="Vinho Branco Verde" class="mx-auto h-28 object-contain mb-3">
@@ -407,11 +407,11 @@
                                     <div class="flex justify-between text-sm">
                                         <span class="text-muted">Estoque:</span>
                                         <span>320 unidades</span>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Produto 3 -->
+                    <!-- Produto 3 -->
                             <div class="dashboard-card p-6">
                                 <div class="flex justify-between items-start mb-4">
                                     <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ativo</span>
@@ -419,7 +419,7 @@
                                         <button class="text-blue-600 hover:text-blue-800" title="Editar produto">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                    </div>
+                        </div>
                                 </div>
                                 <div class="text-center mb-4">
                                     <img src="https://via.placeholder.com/150" alt="Vinho Rosé" class="mx-auto h-28 object-contain mb-3">
@@ -435,464 +435,57 @@
                                     <div class="flex justify-between text-sm">
                                         <span class="text-muted">Estoque:</span>
                                         <span>180 unidades</span>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                                </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Tab Pedidos -->
-                    <div id="tab-orders" class="tab-content hidden">
-                        <div class="flex justify-between items-center mb-6">
+            <!-- Tab Pedidos -->
+            <div id="tab-orders" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
                             <h3 class="text-lg font-semibold">Pedidos Recentes</h3>
                             <button class="btn btn-primary">
                                 <i class="fas fa-plus mr-2"></i>
                                 Novo Pedido
                             </button>
-                        </div>
-                        
-                        <div class="dashboard-card p-6">
-                            <div class="overflow-x-auto">
+                </div>
+
+                <div class="dashboard-card p-6">
+                    <div class="overflow-x-auto">
                                 <table class="w-full">
-                                    <thead>
-                                        <tr class="bg-gray-50 dark:bg-gray-700">
-                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Nº Pedido</th>
-                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Data</th>
-                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Valor</th>
-                                            <th class="px-4 py-3 text-center text-sm font-medium text-muted">Status</th>
-                                            <th class="px-4 py-3 text-center text-sm font-medium text-muted">Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <thead>
+                                            <tr class="bg-gray-50 dark:bg-gray-700">
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted">Nº Pedido</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted">Data</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted">Valor</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-muted">Status</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-muted">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                                             <td class="px-4 py-3 text-sm font-medium">PO-2023-001</td>
                                             <td class="px-4 py-3 text-sm">15/06/2023</td>
                                             <td class="px-4 py-3 text-sm">€1,250.00</td>
-                                            <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Entregue
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex justify-center space-x-2">
-                                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
+                                                <td class="px-4 py-3 text-center">
+                                                    <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        Entregue
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3 text-center">
+                                                    <div class="flex justify-center space-x-2">
+                                                        <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>
                                                     <button class="text-green-600 hover:text-green-800" title="Editar">
                                                         <i class="fas fa-edit"></i>
-                                                    </button>
+                                                        </button>
                                                     <button class="text-red-600 hover:text-red-800" title="Cancelar">
                                                         <i class="fas fa-times-circle"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                            <td class="px-4 py-3 text-sm font-medium">PO-2023-002</td>
-                                            <td class="px-4 py-3 text-sm">28/06/2023</td>
-                                            <td class="px-4 py-3 text-sm">€850.00</td>
-                                            <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    Em processamento
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex justify-center space-x-2">
-                                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="text-green-600 hover:text-green-800" title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="text-red-600 hover:text-red-800" title="Cancelar">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                            <td class="px-4 py-3 text-sm font-medium">PO-2023-003</td>
-                                            <td class="px-4 py-3 text-sm">10/07/2023</td>
-                                            <td class="px-4 py-3 text-sm">€2,100.00</td>
-                                            <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Pendente
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex justify-center space-x-2">
-                                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="text-green-600 hover:text-green-800" title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="text-red-600 hover:text-red-800" title="Cancelar">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab Histórico -->
-                    <div id="tab-history" class="tab-content hidden">
-                        <div class="dashboard-card p-6">
-                            <h3 class="text-lg font-semibold mb-4">Histórico de Atividades</h3>
-                            <div class="space-y-6">
-                                <div class="relative pl-8 pb-6 border-l-2 border-gray-200">
-                                    <div class="absolute -left-2 top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                                        <i class="fas fa-shopping-cart text-white text-xs"></i>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">Novo Pedido Criado</h4>
-                                            <p class="text-sm text-muted">Pedido #PO-2023-003 no valor de €2,100.00</p>
-                                        </div>
-                                        <span class="text-xs text-muted">10/07/2023 14:30</span>
-                                    </div>
-                                    <p class="text-sm mt-2">Criado por: Maria Oliveira</p>
-                                </div>
-                                
-                                <div class="relative pl-8 pb-6 border-l-2 border-gray-200">
-                                    <div class="absolute -left-2 top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                                        <i class="fas fa-check text-white text-xs"></i>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">Pedido Entregue</h4>
-                                            <p class="text-sm text-muted">Pedido #PO-2023-001 foi entregue com sucesso</p>
-                                        </div>
-                                        <span class="text-xs text-muted">20/06/2023 09:15</span>
-                                    </div>
-                                    <p class="text-sm mt-2">Atualizado por: João Silva</p>
-                                </div>
-                                
-                                <div class="relative pl-8 pb-6 border-l-2 border-gray-200">
-                                    <div class="absolute -left-2 top-0 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
-                                        <i class="fas fa-envelope text-white text-xs"></i>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">Mensagem Enviada</h4>
-                                            <p class="text-sm text-muted">Pedido de amostras de vinhos para avaliação</p>
-                                        </div>
-                                        <span class="text-xs text-muted">15/06/2023 11:45</span>
-                                    </div>
-                                    <p class="text-sm mt-2">Enviado por: João Silva</p>
-                                </div>
-                                
-                                <div class="relative pl-8 pb-6 border-l-2 border-gray-200">
-                                    <div class="absolute -left-2 top-0 w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center">
-                                        <i class="fas fa-edit text-white text-xs"></i>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">Informações Atualizadas</h4>
-                                            <p class="text-sm text-muted">Dados de contato e endereço atualizados</p>
-                                        </div>
-                                        <span class="text-xs text-muted">10/06/2023 16:20</span>
-                                    </div>
-                                    <p class="text-sm mt-2">Atualizado por: Pedro Santos</p>
-                                </div>
-                                
-                                <div class="relative pl-8">
-                                    <div class="absolute -left-2 top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                                        <i class="fas fa-shopping-cart text-white text-xs"></i>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">Novo Pedido Criado</h4>
-                                            <p class="text-sm text-muted">Pedido #PO-2023-002 no valor de €850.00</p>
-                                        </div>
-                                        <span class="text-xs text-muted">28/05/2023 10:05</span>
-                                    </div>
-                                    <p class="text-sm mt-2">Criado por: Maria Oliveira</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <!-- Modal de Exclusão -->
-    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold">Confirmar Exclusão</h3>
-                <p class="text-muted mt-2">Tem certeza que deseja excluir o fornecedor <span class="font-medium">Vinhos do Vale</span>?</p>
-                <p class="text-red-600 text-sm mt-2">Esta ação não pode ser desfeita.</p>
-            </div>
-            <div class="flex justify-center space-x-3">
-                <button id="cancelDelete" class="btn btn-secondary">
-                    <i class="fas fa-times mr-2"></i>
-                    Cancelar
-                </button>
-                <button id="confirmDelete" class="btn btn-danger">
-                    <i class="fas fa-trash-alt mr-2"></i>
-                    Excluir
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal de Pedidos -->
-    <div id="ordersModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold">Pedidos de Vinhos do Vale</h3>
-                <button id="closeOrdersModal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="bg-gray-50 dark:bg-gray-700">
-                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Nº Pedido</th>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Data</th>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-muted">Valor</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-muted">Status</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-muted">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-3 text-sm font-medium">PO-2023-001</td>
-                            <td class="px-4 py-3 text-sm">15/06/2023</td>
-                            <td class="px-4 py-3 text-sm">€1,250.00</td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Entregue
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-800" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-800" title="Cancelar">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-3 text-sm font-medium">PO-2023-002</td>
-                            <td class="px-4 py-3 text-sm">28/06/2023</td>
-                            <td class="px-4 py-3 text-sm">€850.00</td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    Em processamento
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-800" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-800" title="Cancelar">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-3 text-sm font-medium">PO-2023-003</td>
-                            <td class="px-4 py-3 text-sm">10/07/2023</td>
-                            <td class="px-4 py-3 text-sm">€2,100.00</td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Pendente
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-800" title="Ver detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-800" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-800" title="Cancelar">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus mr-2"></i>
-                    Novo Pedido
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Toast de Notificação -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-xs w-full transform transition-transform duration-300 translate-y-20 opacity-0">
-        <div class="flex items-center">
-            <div id="toastIcon" class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                <i id="toastIconInner" class="fas"></i>
-            </div>
-            <div class="flex-1">
-                <h4 id="toastTitle" class="text-sm font-medium"></h4>
-                <p id="toastMessage" class="text-xs text-muted mt-1"></p>
-            </div>
-            <button id="closeToast" class="text-gray-400 hover:text-gray-600">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-    
-    <script src="../../../js/procurement/supplier/detail.supplier.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Controle do menu de ações
-            const actionsButton = document.getElementById('actionsButton');
-            const actionsMenu = document.getElementById('actionsMenu');
-            
-            // Toggle do menu de ações
-            actionsButton.addEventListener('click', function() {
-                actionsMenu.classList.toggle('hidden');
-            });
-            
-            // Fechar o menu quando clicar fora dele
-            document.addEventListener('click', function(event) {
-                if (!actionsButton.contains(event.target) && !actionsMenu.contains(event.target)) {
-                    actionsMenu.classList.add('hidden');
-                }
-            });
-            
-            // Controle das tabs
-            const tabButtons = document.querySelectorAll('[data-tab]');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Remover classe ativa de todas as tabs
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('tab-active');
-                        btn.classList.add('tab-inactive');
-                    });
-                    
-                    // Adicionar classe ativa na tab clicada
-                    this.classList.add('tab-active');
-                    this.classList.remove('tab-inactive');
-                    
-                    // Esconder todos os conteúdos
-                    tabContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    
-                    // Mostrar o conteúdo da tab selecionada
-                    const tabName = this.getAttribute('data-tab');
-                    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-                });
-            });
-            
-            // Botão de exclusão
-            document.getElementById('deleteSupplierBtn').addEventListener('click', function() {
-                document.getElementById('deleteModal').classList.remove('hidden');
-            });
-            
-            // Cancelar exclusão
-            document.getElementById('cancelDelete').addEventListener('click', function() {
-                document.getElementById('deleteModal').classList.add('hidden');
-            });
-            
-            // Confirmar exclusão
-            document.getElementById('confirmDelete').addEventListener('click', function() {
-                // Em uma implementação real, enviaria uma requisição para excluir o fornecedor
-                console.log('Excluindo fornecedor ID: 2');
-                
-                // Simular exclusão
-                setTimeout(() => {
-                    // Mostrar toast de sucesso
-                    showToast('success', 'Fornecedor excluído', 'O fornecedor foi excluído com sucesso.');
-                    
-                    // Fechar modal
-                    document.getElementById('deleteModal').classList.add('hidden');
-                    
-                    // Redirecionar para a lista de fornecedores após 2 segundos
-                    setTimeout(() => {
-                        window.location.href = 'dash.supplier.html';
-                    }, 2000);
-                }, 500);
-            });
-            
-            // Botão de visualizar pedidos
-            document.getElementById('viewOrdersBtn').addEventListener('click', function() {
-                document.getElementById('ordersModal').classList.remove('hidden');
-            });
-            
-            // Fechar modal de pedidos
-            document.getElementById('closeOrdersModal').addEventListener('click', function() {
-                document.getElementById('ordersModal').classList.add('hidden');
-            });
-            
-            // Função para mostrar toast
-            function showToast(type, title, message) {
-                const toast = document.getElementById('toast');
-                const toastIcon = document.getElementById('toastIcon');
-                const toastIconInner = document.getElementById('toastIconInner');
-                const toastTitle = document.getElementById('toastTitle');
-                const toastMessage = document.getElementById('toastMessage');
-                
-                // Definir tipo de toast
-                if (type === 'success') {
-                    toastIcon.className = 'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-green-100';
-                    toastIconInner.className = 'fas fa-check text-green-600';
-                } else if (type === 'error') {
-                    toastIcon.className = 'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-red-100';
-                    toastIconInner.className = 'fas fa-exclamation-triangle text-red-600';
-                } else if (type === 'warning') {
-                    toastIcon.className = 'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-yellow-100';
-                    toastIconInner.className = 'fas fa-exclamation text-yellow-600';
-                } else if (type === 'info') {
-                    toastIcon.className = 'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-blue-100';
-                    toastIconInner.className = 'fas fa-info text-blue-600';
-                }
-                
-                // Definir conteúdo
-                toastTitle.textContent = title;
-                toastMessage.textContent = message;
-                
-                // Mostrar toast
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                
-                // Esconder toast após 5 segundos
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 5000);
-            }
-            
-            // Fechar toast
-            document.getElementById('closeToast').addEventListener('click', function() {
-                document.getElementById('toast').classList.add('translate-y-20', 'opacity-0');
-            });
-        });
-    </script>
-</body>
-</html>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td class="px-4 py-3 text-sm font-medium">PO

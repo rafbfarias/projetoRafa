@@ -11,8 +11,12 @@ const timesheetRoutes = require('./routes/timesheet.routes');
 const unitRoutes = require('./routes/unit.routes');
 const authRoutes = require('./routes/auth.routes');
 const permissionTemplateRoutes = require('./routes/permissionTemplate.routes');
-
+const productParentRoutes = require('./routes/productParent.routes');
+const supplierRoutes = require('./routes/supplier.routes');
+const productListRoutes = require('./routes/productList.routes');
 const session = require('express-session');
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
 
 const app = express();
 // Modificar a porta para usar 3000
@@ -53,6 +57,21 @@ app.locals.config = {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+
+// Middleware para upload de arquivos
+app.use(fileUpload({
+    createParentPath: true,
+    limits: { 
+        fileSize: 10 * 1024 * 1024 // limite de 10MB
+    },
+    abortOnLimit: true
+}));
+
+// Verificar e criar pasta de upload se não existir
+const productsUploadDir = path.join(__dirname, '../public/images/products');
+if (!fs.existsSync(productsUploadDir)) {
+    fs.mkdirSync(productsUploadDir, { recursive: true });
+}
 
 // Configuração de sessão
 app.use(session({
@@ -143,6 +162,9 @@ app.use('/api/faturacao', faturacaoRoutes);
 app.use('/api/timesheet', timesheetRoutes);
 app.use('/api/units', unitRoutes);
 app.use('/api/permission-templates', permissionTemplateRoutes);
+app.use('/api/products/parent', productParentRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/products/list', productListRoutes);
 
 // Rota raiz
 app.get('/', (req, res) => {
