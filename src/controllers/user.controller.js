@@ -1,6 +1,8 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const path = require('path');
+const UserCompanyAssociation = require('../models/userCompanyAssociation.model');
 
 // Função centralizada para tratamento de erros
 const handleError = (error, res) => {
@@ -410,6 +412,198 @@ const userController = {
             });
     } catch (error) {
             handleError(error, res);
+        }
+    },
+
+    /**
+     * Obter usuário logado
+     */
+    async getCurrentUser(req, res) {
+        try {
+            // Buscar usuário com TODOS os campos (exceto password)
+            const user = await User.findById(req.session.user._id)
+                .select('-password')
+                .lean();
+
+            console.log('Dados completos do usuário:', user); // Debug
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Dados do usuário carregados com sucesso',
+                user: user
+            });
+        } catch (error) {
+            console.error('Erro ao buscar usuário:', {
+                error: error.message,
+                stack: error.stack
+            });
+            return res.status(500).json({
+                status: 'error',
+                message: 'Erro ao buscar dados do usuário',
+                details: error.message
+            });
+        }
+    },
+
+    // Atualizar perfil do usuário
+    async updateProfile(req, res) {
+        try {
+            console.log('Iniciando atualização de perfil:', {
+                hasSession: !!req.session,
+                hasUser: !!req.session?.user,
+                hasFiles: !!req.files,
+                body: req.body
+            });
+
+            // Verificar se existe usuário na sessão
+            if (!req.session || !req.session.user || !req.session.user._id) {
+                console.log('Usuário não autenticado');
+                return res.status(401).json({
+                    status: 'error',
+                    message: 'Usuário não autenticado'
+                });
+            }
+
+            const userId = req.session.user._id;
+            const updates = {};
+
+            // Atualizar nome preferido se fornecido
+            if (req.body.preferredName) {
+                updates.preferredName = req.body.preferredName;
+                console.log('Atualizando nome preferido:', req.body.preferredName);
+            }
+
+            // Processar foto se enviada
+            if (req.files && req.files.profilePhoto) {
+                const photo = req.files.profilePhoto;
+                console.log('Processando foto:', {
+                    name: photo.name,
+                    size: photo.size,
+                    mimetype: photo.mimetype
+                });
+
+                // Verificar tipo do arquivo
+                if (!photo.mimetype.startsWith('image/')) {
+                    return res.status(400).json({
+                        status: 'error',
+                        message: 'Por favor, envie apenas arquivos de imagem'
+                    });
+                }
+
+                // Verificar tamanho (máximo 5MB)
+                if (photo.size > 5 * 1024 * 1024) {
+                    return res.status(400).json({
+                        status: 'error',
+                        message: 'A foto deve ter no máximo 5MB'
+                    });
+                }
+
+                try {
+                    const photoPath = `uploads/users/${userId}-${Date.now()}-${photo.name}`;
+                    await photo.mv(photoPath);
+                    updates.photo = photoPath;
+                    console.log('Foto salva em:', photoPath);
+                } catch (photoError) {
+                    console.error('Erro ao salvar foto:', photoError);
+                    return res.status(500).json({
+                        status: 'error',
+                        message: 'Erro ao salvar foto',
+                        details: photoError.message
+                    });
+                }
+            }
+
+            console.log('Atualizando usuário com:', updates);
+
+            // Atualizar usuário
+            const user = await User.findByIdAndUpdate(
+                userId,
+                updates,
+                { new: true, runValidators: true }
+            ).select('-password');
+
+            if (!user) {
+                console.log('Usuário não encontrado:', userId);
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Usuário não encontrado'
+                });
+            }
+
+            // Atualizar dados da sessão
+            req.session.user = {
+                ...req.session.user,
+                preferredName: user.preferredName,
+                photo: user.photo
+            };
+
+            console.log('Perfil atualizado com sucesso:', {
+                userId: user._id,
+                preferredName: user.preferredName,
+                hasPhoto: !!user.photo
+            });
+
+            res.json({
+                status: 'success',
+                message: 'Perfil atualizado com sucesso',
+                user
+            });
+        } catch (error) {
+            console.error('Erro detalhado ao atualizar perfil:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            res.status(500).json({
+                status: 'error',
+                message: 'Erro ao atualizar perfil',
+                details: error.message
+            });
+        }
+    },
+
+    async initSession(req, res) {
+        try {
+            // Buscar usuário com todos os campos (exceto password)
+            const user = await User.findById(req.session.user._id)
+                .select('-password') // Remove apenas o campo password
+                .lean();
+
+            console.log('Inicializando sessão, dados completos do usuário:', {
+                id: user._id,
+                campos: Object.keys(user),
+                photo: user.photo // Para debug
+            });
+
+            // Atualizar a sessão com todos os dados do usuário
+            req.session.user = user;
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Sessão inicializada com sucesso',
+                user: user // Retorna o objeto completo do usuário
+            });
+        } catch (error) {
+            console.error('Erro na inicialização da sessão:', error);
+            return res.status(500).json({
+                status: 'error',
+                message: 'Erro ao inicializar sessão'
+            });
+        }
+    },
+
+    // Adicionar esta rota
+    async getCompanyAssociation(req, res) {
+        try {
+            const association = await UserCompanyAssociation.findOne({
+                userId: req.user._id,
+                status: 'active'
+            });
+
+            res.json(association);
+        } catch (error) {
+            console.error('Erro ao buscar associação:', error);
+            res.status(500).json({ message: 'Erro ao buscar associação com empresa' });
         }
     }
 };

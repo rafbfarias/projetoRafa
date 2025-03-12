@@ -149,142 +149,107 @@ const getStatusBadge = (status) => {
 // Renderização
 const renderOrderCard = (order) => {
     return `
-        <div class="p-4 cursor-pointer ${order.urgent ? 'border-l-4 border-red-500' : ''}" 
-             data-order-id="${order.id}">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    ${getStatusIcon(order.status)}
-                    <div class="ml-4">
-                        <div class="flex items-center">
-                            <h3 class="text-sm font-medium text-gray-900">${order.id}</h3>
-                            ${order.urgent ? `
-                                <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-800">
-                                    Urgente
-                                </span>
-                            ` : ''}
-                        </div>
-                        <p class="text-sm text-gray-500">${order.description}</p>
-                    </div>
-                </div>
-                                <div class="hidden md:flex items-center gap-8">
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-900">${order.supplier}</p>
-                        <p class="text-sm text-gray-500">${formatDate(order.date)}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-900">${formatCurrency(order.amount)}</p>
-                        <div>${getStatusBadge(order.status)}</div>
+        <div class="dashboard-card order-card" data-order-id="${order.id}">
+            <!-- Cabeçalho do Pedido -->
+            <div class="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between order-header">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="text-sm font-medium text-gray-600">${order.id}</span>
                     </div>
                     <div>
-                        <i class="fas fa-chevron-down expand-icon transition-transform"></i>
+                        <h3 class="text-sm font-medium">${order.supplier}</h3>
+                        <p class="text-sm text-gray-500">${order.items.length} itens - Total: ${formatCurrency(order.amount)}</p>
                     </div>
                 </div>
-                <div class="md:hidden">
-                    <i class="fas fa-chevron-down expand-icon transition-transform"></i>
+                <div class="flex items-center space-x-4">
+                    ${getStatusBadge(order.status)}
+                    <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
                 </div>
             </div>
             
-            <!-- Mobile Info -->
-            <div class="md:hidden mt-2 flex flex-col space-y-1">
-                <div class="flex justify-between">
-                    <span class="text-sm text-gray-500">Fornecedor:</span>
-                    <span class="text-sm font-medium text-gray-900">${order.supplier}</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-sm text-gray-500">Data:</span>
-                    <span class="text-sm font-medium text-gray-900">${formatDate(order.date)}</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-sm text-gray-500">Valor:</span>
-                    <span class="text-sm font-medium text-gray-900">${formatCurrency(order.amount)}</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-sm text-gray-500">Status:</span>
-                    <div>${getStatusBadge(order.status)}</div>
-                </div>
-            </div>
+            <!-- Detalhes do Pedido -->
+            <div class="order-details overflow-hidden transition-all duration-300" style="max-height: 0;">
+                <div class="border-t border-gray-100 p-4">
+                    <!-- Order Info Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-gray-500 mr-2"></i>
+                                <span class="text-xs font-medium text-gray-500">Fornecedor</span>
+                            </div>
+                            <p class="mt-1 text-sm font-medium">${order.supplier}</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar text-gray-500 mr-2"></i>
+                                <span class="text-xs font-medium text-gray-500">Data do Pedido</span>
+                            </div>
+                            <p class="mt-1 text-sm font-medium">${formatDate(order.date)}</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-dollar-sign text-gray-500 mr-2"></i>
+                                <span class="text-xs font-medium text-gray-500">Valor Total</span>
+                            </div>
+                            <p class="mt-1 text-sm font-medium">${formatCurrency(order.amount)}</p>
+                        </div>
+                    </div>
 
-            <!-- Order Details (Initially Hidden) -->
-            <div class="order-details mt-4">
-                <!-- Order Info Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="bg-white p-3 rounded border border-gray-200">
-                        <div class="flex items-center">
-                            <i class="fas fa-user text-gray-500 mr-2"></i>
-                            <span class="text-xs font-medium text-gray-500">Fornecedor</span>
-                        </div>
-                        <p class="mt-1 text-sm font-medium">${order.supplier}</p>
-                    </div>
-                    <div class="bg-white p-3 rounded border border-gray-200">
-                        <div class="flex items-center">
-                            <i class="fas fa-calendar text-gray-500 mr-2"></i>
-                            <span class="text-xs font-medium text-gray-500">Data do Pedido</span>
-                        </div>
-                        <p class="mt-1 text-sm font-medium">${formatDate(order.date)}</p>
-                    </div>
-                    <div class="bg-white p-3 rounded border border-gray-200">
-                        <div class="flex items-center">
-                            <i class="fas fa-dollar-sign text-gray-500 mr-2"></i>
-                            <span class="text-xs font-medium text-gray-500">Valor Total</span>
-                        </div>
-                        <p class="mt-1 text-sm font-medium">${formatCurrency(order.amount)}</p>
-                    </div>
-                </div>
-
-                <!-- Items Table -->
-                <div class="mt-3">
-                    <h4 class="text-sm font-medium text-gray-700 mb-2">Itens do Pedido</h4>
-                    <div class="bg-white overflow-x-auto rounded border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                                    <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
-                                    <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Preço Unitário</th>
-                                    <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                ${order.items.map(item => `
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${item.quantity} ${item.unit}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(item.price)}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium text-right">${formatCurrency(item.quantity * item.price)}</td>
+                    <!-- Items Table -->
+                    <div class="mt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Itens do Pedido</h4>
+                        <div class="bg-white overflow-x-auto rounded border border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                        <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                        <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Preço Unitário</th>
+                                        <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
                                     </tr>
-                                `).join('')}
-                            </tbody>
-                            <tfoot class="bg-gray-50">
-                                <tr>
-                                    <th scope="row" colspan="3" class="px-4 py-3 text-right text-sm font-medium text-gray-900">Total</th>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium text-right">${formatCurrency(order.amount)}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${order.items.map(item => `
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${item.quantity} ${item.unit}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(item.price)}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium text-right">${formatCurrency(item.quantity * item.price)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                                <tfoot class="bg-gray-50">
+                                    <tr>
+                                        <th scope="row" colspan="3" class="px-4 py-3 text-right text-sm font-medium text-gray-900">Total</th>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium text-right">${formatCurrency(order.amount)}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Action Buttons -->
-                <div class="mt-5 flex justify-end gap-3">
-                    <a href="view.order.html?id=${order.id}" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                        <span>Ver Detalhes</span>
-                        <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                    
-                    ${order.status === 'PENDENTE' ? `
-                        <button class="action-button btn btn-danger-outline" data-action="reject" data-order-id="${order.id}">
-                            Rejeitar
-                        </button>
-                        <button class="action-button btn btn-primary" data-action="approve" data-order-id="${order.id}">
-                            Aprovar
-                        </button>
-                    ` : ''}
-                    
-                    ${order.status === 'WAITING DELIVERY' ? `
-                        <button class="action-button btn btn-success" data-action="receive" data-order-id="${order.id}">
-                            Confirmar Recebimento
-                        </button>
-                    ` : ''}
+                    <!-- Action Buttons -->
+                    <div class="mt-5 flex justify-end gap-3">
+                        <a href="view.order.html?id=${order.id}" class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
+                            <span>Ver Detalhes</span>
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        
+                        ${order.status === 'PENDENTE' ? `
+                            <button class="action-button btn btn-danger-outline" data-action="reject" data-order-id="${order.id}">
+                                Rejeitar
+                            </button>
+                            <button class="action-button btn btn-primary" data-action="approve" data-order-id="${order.id}">
+                                Aprovar
+                            </button>
+                        ` : ''}
+                        
+                        ${order.status === 'WAITING DELIVERY' ? `
+                            <button class="action-button btn btn-success" data-action="receive" data-order-id="${order.id}">
+                                Confirmar Recebimento
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
             </div>
         </div>
@@ -393,25 +358,7 @@ const renderOrders = () => {
             }
 
             const orderId = card.getAttribute('data-order-id');
-            const details = card.querySelector('.order-details');
-            const icon = card.querySelector('.expand-icon');
-
-            if (state.expandedOrder === orderId) {
-                details.classList.remove('expanded');
-                icon.classList.remove('expanded');
-                state.expandedOrder = null;
-            } else {
-                if (state.expandedOrder) {
-                    const previousCard = document.querySelector(`[data-order-id="${state.expandedOrder}"]`);
-                    if (previousCard) {
-                        previousCard.querySelector('.order-details').classList.remove('expanded');
-                        previousCard.querySelector('.expand-icon').classList.remove('expanded');
-                    }
-                }
-                details.classList.add('expanded');
-                icon.classList.add('expanded');
-                state.expandedOrder = orderId;
-            }
+            toggleOrderDetails(orderId);
         });
     });
 
@@ -603,6 +550,22 @@ const resetFilters = () => {
     renderOrders();
 };
 
+// Atualizar a função de toggle
+const toggleOrderDetails = (orderId) => {
+    const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
+    const details = orderCard.querySelector('.order-details');
+    const chevron = orderCard.querySelector('.fa-chevron-down');
+    const isExpanded = details.style.maxHeight !== '0px';
+
+    if (isExpanded) {
+        details.style.maxHeight = '0';
+        chevron.style.transform = 'rotate(0deg)';
+    } else {
+        details.style.maxHeight = `${details.scrollHeight}px`;
+        chevron.style.transform = 'rotate(180deg)';
+    }
+};
+
 // Inicialização
 const initialize = async () => {
     try {
@@ -651,3 +614,20 @@ const initialize = async () => {
 
 // Iniciar quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', initialize);
+
+// Adicionar estilos ao head do documento
+const style = document.createElement('style');
+style.textContent = `
+    .order-card {
+        transition: all 0.3s ease;
+    }
+    
+    .order-details {
+        transition: max-height 0.3s ease-out;
+    }
+    
+    .fa-chevron-down {
+        transition: transform 0.3s ease;
+    }
+`;
+document.head.appendChild(style);

@@ -8,15 +8,63 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
+    <style>
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <script src="../../../js/layout.js"></script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex min-h-screen">
+<body>
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                 <div>
@@ -321,7 +369,7 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <script>

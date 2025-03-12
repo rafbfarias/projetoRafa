@@ -7,127 +7,253 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../../css/styles.css" rel="stylesheet">
-    <script src="../../js/Sidebar.js"></script>
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <!-- Adicionar Interact.js para drag, drop e resize -->
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <!-- Adicionar biblioteca para zoom -->
+    <script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.0/dist/panzoom.min.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Estilos específicos para o board */
+        .board-container {
+            height: calc(100vh - 4rem); /* Ajusta altura considerando o header */
+            overflow: auto;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .reminder-card {
+            background: var(--component-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ajuste para scroll suave */
+        .board-container {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        .board-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .board-container::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        .board-container::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 3px;
+        }
+
+        /* Estilos para o board com zoom */
+        .board-wrapper {
+            width: 100%;
+            height: calc(100vh - 8rem);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .board {
+            position: relative;
+            min-width: 100%;
+            min-height: 100%;
+            transform-origin: 0 0;
+            background: var(--board-bg);
+            padding: 2rem;
+        }
+
+        /* Estilos para os cards */
+        .reminder-card {
+            position: absolute;
+            min-width: 250px;
+            min-height: 150px;
+            background: var(--component-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            touch-action: none;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .reminder-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Estilo para o resize handle */
+        .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            bottom: 0;
+            right: 0;
+            cursor: se-resize;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        /* Estilos para clusters */
+        .cluster {
+            position: absolute;
+            min-width: 300px;
+            min-height: 200px;
+            background: rgba(var(--cluster-bg), 0.1);
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            padding: 1rem;
+            touch-action: none;
+        }
+
+        /* Controles de zoom */
+        .zoom-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 50;
+        }
+
+        .zoom-controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--component-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .zoom-controls button:hover {
+            background: var(--hover-bg);
+        }
+
+        /* Indicador de drop zone */
+        .drop-target {
+            border: 2px dashed var(--brand-color) !important;
+        }
+
+        /* Estilo durante o drag */
+        .dragging {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
-        <!-- Sidebar (carregado via JavaScript) -->
-        <app-sidebar></app-sidebar>
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
-            <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div>
-                    <h1 class="text-left text-2xl font-bold">Reminder Board</h1>
-                    <p class="text-muted">Organize suas tarefas e lembretes em um quadro visual</p>
+                    <h1 class="text-2xl font-bold">Reminder Board</h1>
+                    <p class="text-muted">Organize suas notas e lembretes</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
-                    <div class="relative">
-                        <button id="filterDropdownButton" class="btn btn-secondary">
-                            <i class="fas fa-filter mr-2"></i>
-                            <span>Filtrar</span>
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </button>
-                        <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
-                            <div class="p-4">
-                                <h4 class="font-medium mb-2">Filtrar por tipo</h4>
-                                <div class="space-y-2">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" checked data-filter="all">
-                                        <span class="ml-2">Todos</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="user">
-                                        <span class="ml-2">Usuários</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="contract">
-                                        <span class="ml-2">Contratos</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="expense">
-                                        <span class="ml-2">Despesas</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="revenue">
-                                        <span class="ml-2">Receitas</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" data-filter="task">
-                                        <span class="ml-2">Tarefas</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="border-t border-gray-200 dark:border-gray-700 p-4">
-                                <h4 class="font-medium mb-2">Ordenar por</h4>
-                                <select class="form-select w-full">
-                                    <option value="date-desc">Data (mais recente)</option>
-                                    <option value="date-asc">Data (mais antiga)</option>
-                                    <option value="priority-high">Prioridade (alta → baixa)</option>
-                                    <option value="priority-low">Prioridade (baixa → alta)</option>
-                                </select>
-                            </div>
-                            <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-end">
-                                <button class="btn btn-primary">Aplicar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="addNoteBtn" class="btn btn-primary">
+                    <button id="newClusterBtn" class="btn btn-secondary">
+                        <i class="fas fa-object-group mr-2"></i>
+                        Novo Cluster
+                    </button>
+                    <button id="newNoteBtn" class="btn btn-primary">
                         <i class="fas fa-plus mr-2"></i>
-                        <span>Nova Nota</span>
+                        Novo Lembrete
                     </button>
                 </div>
             </div>
 
-            <!-- Área do Board -->
-            <div id="board-container" class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full" style="height: calc(100vh - 220px); overflow: hidden;">
-                <!-- Background com grid -->
-                <div class="absolute inset-0 bg-grid opacity-10"></div>
-                
-                <!-- Container para as notas -->
-                <div id="board" class="absolute inset-0 overflow-auto p-4">
-                    <!-- Notas serão inseridas aqui dinamicamente -->
-                </div>
-                
-                <!-- Mensagem de board vazio -->
-                <div id="empty-board" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
-                    <i class="fas fa-sticky-note text-6xl mb-4"></i>
-                    <p class="text-xl font-medium">Seu board está vazio</p>
-                    <p class="text-sm mt-2">Adicione notas ou selecione elementos do sistema para começar</p>
-                    <button id="addInitialNoteBtn" class="mt-4 btn btn-primary">
-                        <i class="fas fa-plus mr-2"></i>
-                        <span>Adicionar nota</span>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Nota Exemplo para debug - será removida -->
-            <div id="note-template" class="hidden">
-                <div class="note absolute bg-yellow-100 dark:bg-yellow-700 shadow-lg rounded-lg p-4 w-64" style="top: 50px; left: 100px;" data-id="nota-exemplo" data-type="task">
-                    <div class="note-header flex justify-between items-center mb-2">
-                        <div class="note-type px-2 py-1 rounded text-xs font-semibold bg-blue-500 text-white">Tarefa</div>
-                        <div class="note-actions flex space-x-1">
-                            <button class="note-edit text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="note-delete text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                                <i class="fas fa-trash"></i>
-                            </button>
+            <!-- Board Container com Zoom -->
+            <div class="px-8">
+                <div class="board-wrapper dashboard-card">
+                    <div id="board" class="board">
+                        <!-- Mensagem de board vazio -->
+                        <div id="empty-board" class="absolute inset-0 flex items-center justify-center text-center p-8">
+                            <div>
+                                <i class="fas fa-sticky-note text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-500">Nenhuma nota ainda. Clique em "Novo Lembrete" para começar!</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="note-content">
-                        <h3 class="font-medium text-gray-800 dark:text-white mb-1">Título da Nota</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Conteúdo da nota para demonstração</p>
-                    </div>
-                    <div class="note-footer mt-3 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                        <span class="note-date">05/03/2025</span>
-                        <span class="note-priority px-2 py-1 rounded bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400">Alta</span>
-                    </div>
                 </div>
             </div>
-        </main>
+
+            <!-- Controles de Zoom -->
+            <div class="zoom-controls">
+                <button id="zoomOutBtn" title="Diminuir Zoom" class="btn btn-icon">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button id="resetZoomBtn" title="Resetar Zoom" class="btn btn-icon">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                </button>
+                <button id="zoomInBtn" title="Aumentar Zoom" class="btn btn-icon">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Modais -->
@@ -368,13 +494,150 @@
         </div>
     </div>
 
+    <!-- Novo Modal de Cluster -->
+    <div id="clusterModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold mb-4">Novo Cluster</h3>
+                <form id="clusterForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Nome do Cluster</label>
+                            <input type="text" id="clusterName" class="form-input w-full" placeholder="Digite um nome para o cluster">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor</label>
+                            <div class="flex space-x-2">
+                                <!-- Opções de cores similares às notas -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end p-4 border-t">
+                <button class="btn btn-secondary mr-2" onclick="closeClusterModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="createCluster()">Criar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="../../js/reminder/dash.reminder.js"></script>
     <script>
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            initReminderBoard();
+            // Inicializar o zoom
+            const panzoom = Panzoom(document.getElementById('board'), {
+                maxScale: 5,
+                minScale: 0.1,
+                contain: 'outside'
+            });
+
+            // Controles de zoom
+            document.getElementById('zoomInBtn').addEventListener('click', () => panzoom.zoomIn());
+            document.getElementById('zoomOutBtn').addEventListener('click', () => panzoom.zoomOut());
+            document.getElementById('resetZoomBtn').addEventListener('click', () => panzoom.reset());
+
+            // Configurar interatividade para cards
+            interact('.reminder-card')
+                .draggable({
+                    inertia: true,
+                    modifiers: [
+                        interact.modifiers.restrictRect({
+                            restriction: 'parent',
+                            endOnly: true
+                        })
+                    ],
+                    autoScroll: true,
+                    listeners: {
+                        move: dragMoveListener,
+                        start: function (event) {
+                            event.target.classList.add('dragging');
+                        },
+                        end: function (event) {
+                            event.target.classList.remove('dragging');
+                        }
+                    }
+                })
+                .resizable({
+                    edges: { right: true, bottom: true, left: false, top: false },
+                    listeners: {
+                        move: resizeMoveListener
+                    },
+                    modifiers: [
+                        interact.modifiers.restrictSize({
+                            min: { width: 250, height: 150 }
+                        })
+                    ]
+                });
+
+            // Configurar interatividade para clusters
+            interact('.cluster')
+                .draggable({
+                    inertia: true,
+                    modifiers: [
+                        interact.modifiers.restrictRect({
+                            restriction: 'parent',
+                            endOnly: true
+                        })
+                    ],
+                    listeners: {
+                        move: dragMoveListener
+                    }
+                })
+                .resizable({
+                    edges: { right: true, bottom: true, left: false, top: false },
+                    listeners: {
+                        move: resizeMoveListener
+                    },
+                    modifiers: [
+                        interact.modifiers.restrictSize({
+                            min: { width: 300, height: 200 }
+                        })
+                    ]
+                })
+                .dropzone({
+                    accept: '.reminder-card',
+                    overlap: 0.75,
+                    ondropactivate: function (event) {
+                        event.target.classList.add('drop-target');
+                    },
+                    ondropdeactivate: function (event) {
+                        event.target.classList.remove('drop-target');
+                    },
+                    ondrop: function (event) {
+                        const card = event.relatedTarget;
+                        const cluster = event.target;
+                        // Adicionar card ao cluster
+                        cluster.appendChild(card);
+                    }
+                });
         });
+
+        function dragMoveListener(event) {
+            const target = event.target;
+            const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+            const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            target.style.transform = `translate(${x}px, ${y}px)`;
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
+
+        function resizeMoveListener(event) {
+            const target = event.target;
+            let x = (parseFloat(target.getAttribute('data-x')) || 0);
+            let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+            target.style.width = event.rect.width + 'px';
+            target.style.height = event.rect.height + 'px';
+
+            x += event.deltaRect.left;
+            y += event.deltaRect.top;
+
+            target.style.transform = `translate(${x}px, ${y}px)`;
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
     </script>
 </body>
 </html>

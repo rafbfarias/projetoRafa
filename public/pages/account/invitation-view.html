@@ -8,20 +8,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../css/styles.css" rel="stylesheet">
+    <link href="../../css/layout.css" rel="stylesheet">
     <script src="../../js/Sidebar.js"></script>
+    <script src="../../js/layout.js"></script>
 </head>
-<body class="bg-primary">
-    <div class="flex min-h-screen">
+<body>
+    <div class='layout-container'>
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class='sidebar-container'>
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class='main-container'>
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                <div class="text-left">
-                    <h1 class="text-left text-2xl font-bold">Visualizar Convite</h1>
-                    <p class="text-muted">Detalhes do convite e opções de resposta</p>
+            <div class='flex flex-col md:flex-row md:items-center md:justify-between mb-8'>
+                <div class='text-left'>
+                    <h1 class='text-left text-2xl font-bold'>Visualizar Convite</h1>
+                    <p class='text-muted'>Detalhes do convite e opções de resposta</p>
                 </div>
                 <div class="mt-4 md:mt-0">
                     <a href="invitations.html" class="btn btn-secondary">
@@ -147,7 +151,7 @@
                     </div>
                 </form>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Modal de Confirmação -->

@@ -52,9 +52,79 @@
             transform: scale(1.1);
             background-color: rgba(255, 255, 255, 0.2);
         }
+        
+        /* Estilos para a modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease forwards;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: var(--component-bg, white);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 28rem;
+            margin: 2rem auto;
+            animation: slideDown 0.3s ease-out forwards;
+            overflow: hidden;
+            border: 1px solid var(--border-color, #e5e7eb);
+        }
+        
+        .modal-header {
+            position: relative;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color, #e5e7eb);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--header-bg, #f9fafb);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color, #e5e7eb);
+            display: flex;
+            justify-content: flex-end;
+            background-color: var(--footer-bg, #f9fafb);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide-down {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
     </style>
 </head>
-<body class="bg-zinc-900 text-white">
+<body class="bg-zinc-900 text-white no-sidebar">
     <div class="min-h-screen flex items-center justify-center p-4">
         <!-- Botão de Theme -->
         <button class="theme-toggle" id="themeToggle">
@@ -67,21 +137,39 @@
                 <!-- Cabeçalho do card -->
                 <div class="bg-brand-600 text-white p-6 text-center">
                     <div class="flex items-center justify-center mb-4">
-                        <div class="w-12 h-12 bg-white/10 rounded-lg">
+                        <div class="w-12 h-12 bg-white rounded-lg">
                             <img src="images/dineo-logo.png" alt="Logo" class="w-full h-full object-contain p-2">
                         </div>
                     </div>
-                    <h2 class="text-6xl text-brand-100 font-semibold">dineo.</h2>
-                    <p class="text-brand-100 text-sm mt-1">
+                    <h2 class="text-6xl text-white font-semibold">dineo.</h2>
+                    <p class="text-white text-sm mt-1">
                         Sistema de Gestão Empresarial
                     </p>
                 </div>
 
                 <!-- Corpo do card -->
                 <div class="p-6 text-gray-900">
-                    <h3 class="text-xl font-semibold mb-4 text-center">Acesso ao Sistema</h3>
+                    <h3 class="text-xl font-semibold mb-4 text-center" id="formTitle">Acesso ao Sistema</h3>
                     
-                    <form id="loginForm">
+                    <form id="authForm">
+                        <!-- Campo Nome Completo (inicialmente oculto) -->
+                        <div id="fullNameField" class="mb-4 hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="fullName">
+                                Nome Completo
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full pl-10 p-2.5"
+                                    placeholder="Seu nome completo"
+                                />
+                            </div>
+                        </div>
+
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 mb-2" for="email">
                                 E-mail
@@ -114,6 +202,7 @@
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full pl-10 p-2.5"
                                     placeholder="••••••••"
                                     required
+                                    minlength="8"
                                 />
                                 <button 
                                     type="button" 
@@ -132,26 +221,25 @@
                         
                         <button
                             type="submit"
+                            id="submitButton"
                             class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg text-sm px-5 py-3 focus:outline-none transition-colors"
                         >
                             <div class="flex items-center justify-center">
-                                <span>Entrar</span>
+                                <span class="button-text">Entrar</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </div>
                         </button>
                     </form>
-                    
-                    <div class="mt-6 text-center text-sm text-gray-500">
-                        <p>Para demonstração, use:</p>
-                        <p class="mt-1 text-brand-600">
-                            Email: admin@admin.com | Senha: admin123
-                        </p>
-                    </div>
                 </div>
 
                 <!-- Rodapé do card -->
                 <div class="bg-gray-50 px-6 py-4 text-center text-sm text-gray-600 border-t">
-                    <p>Não tem uma conta? <a href="#" class="text-brand-600 hover:text-brand-800 font-medium">Solicite acesso</a></p>
+                    <p>
+                        <span id="toggleText">Não tem uma conta?</span> 
+                        <button id="toggleMode" class="text-brand-600 hover:text-brand-800 font-medium">
+                            Criar conta
+                        </button>
+                    </p>
                 </div>
             </div>
             
@@ -161,62 +249,248 @@
         </div>
     </div>
 
+    <!-- Modal para mensagens de status -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content w-full max-w-md mx-auto mt-20">
+            <div class="modal-header">
+                <h3 class="text-lg font-semibold" id="modalTitle">Aviso</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-700 bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 p-2 rounded-full bg-red-100">
+                        <i id="modalIcon" class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p id="modalMessage" class="text-base text-gray-700">Mensagem de status</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalCloseButton" class="px-5 py-2.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors shadow-sm font-medium">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
-        // Inicializa a página
-        function initPage() {
-            // Configuração do botão de tema
-            const themeToggle = document.getElementById('themeToggle');
-            themeToggle.addEventListener('click', toggleTheme);
-            
-            // Configuração do botão de mostrar/ocultar senha
-            const togglePassword = document.getElementById('togglePassword');
-            togglePassword.addEventListener('click', function() {
-                const passwordInput = document.getElementById('password');
-                const icon = this.querySelector('i');
-                
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+        document.addEventListener('DOMContentLoaded', function() {
+            const authForm = document.getElementById('authForm');
+            const fullNameField = document.getElementById('fullNameField');
+            const fullNameInput = document.getElementById('fullName');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const submitButton = document.getElementById('submitButton');
+            const toggleMode = document.getElementById('toggleMode');
+            const toggleText = document.getElementById('toggleText');
+            const formTitle = document.getElementById('formTitle');
+            let isRegistering = false;
+
+            // Função para mostrar mensagem de status
+            function showStatusModal(message, type = 'info') {
+                const statusModal = document.getElementById('statusModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalMessage = document.getElementById('modalMessage');
+                const modalIcon = document.getElementById('modalIcon');
+
+                // Configurar tipo e ícone
+                switch (type) {
+                    case 'error':
+                        modalTitle.textContent = 'Erro';
+                        modalIcon.className = 'fas fa-exclamation-circle text-red-500 text-xl';
+                        break;
+                    case 'warning':
+                        modalTitle.textContent = 'Aviso';
+                        modalIcon.className = 'fas fa-exclamation-triangle text-yellow-500 text-xl';
+                        break;
+                    case 'info':
+                        modalTitle.textContent = 'Informação';
+                        modalIcon.className = 'fas fa-info-circle text-blue-500 text-xl';
+                        break;
+                    case 'success':
+                        modalTitle.textContent = 'Sucesso';
+                        modalIcon.className = 'fas fa-check-circle text-green-500 text-xl';
+                        break;
                 }
-            });
-            
-            // Configuração do formulário de login
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', function(e) {
+
+                modalMessage.textContent = message;
+                statusModal.style.display = 'block';
+
+                // Se for sucesso, redirecionar automaticamente
+                if (type === 'success') {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            statusModal.style.display = 'none';
+                            resolve();
+                        }, 1000);
+                    });
+                }
+            }
+
+            // Função para alternar entre login e registro
+            function toggleAuthMode() {
+                isRegistering = !isRegistering;
+                
+                formTitle.textContent = isRegistering ? 'Criar Conta' : 'Acesso ao Sistema';
+                fullNameField.classList.toggle('hidden');
+                toggleText.textContent = isRegistering ? 'Já tem uma conta?' : 'Não tem uma conta?';
+                toggleMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
+                const buttonText = submitButton.querySelector('.button-text');
+                buttonText.textContent = isRegistering ? 'Criar Conta' : 'Entrar';
+            }
+
+            // Adicionar event listener para o botão de toggle
+            toggleMode.addEventListener('click', toggleAuthMode);
+
+            // Configuração do formulário
+            authForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+                submitButton.disabled = true;
+                const originalButtonContent = submitButton.innerHTML;
+                submitButton.innerHTML = `<div class="flex items-center justify-center"><i class="fas fa-spinner fa-spin mr-2"></i>${isRegistering ? 'Criando conta...' : 'Entrando...'}</div>`;
                 
-                // Fazer a requisição de login para o servidor
-                fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        // Redirecionar para o dashboard em caso de sucesso
-                        window.location.href = '/pages/dashboard.html';
-                    } else {
-                        alert(data.message || 'Credenciais inválidas');
+                try {
+                    const endpoint = isRegistering ? '/api/auth/register' : '/api/auth/login';
+                    const userData = {
+                        email: emailInput.value,
+                        password: passwordInput.value
+                    };
+
+                    if (isRegistering) {
+                        userData.fullName = fullNameInput.value;
                     }
-                })
-                .catch(error => {
-                    console.error('Erro no login:', error);
-                    alert('Erro ao fazer login. Tente novamente.');
-                });
+
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        console.log('Login bem sucedido, salvando token:', data.token); // Debug
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('userData', JSON.stringify(data.user));
+
+                        // Verificar se foi salvo
+                        const savedToken = localStorage.getItem('token');
+                        console.log('Token salvo:', savedToken); // Debug
+
+                        try {
+                            console.log('Iniciando sessão após login...');
+                            const initResponse = await fetch('/api/auth/init-session', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${data.token}`
+                                },
+                                credentials: 'include'
+                            });
+
+                            const initData = await initResponse.json();
+                            console.log('Resposta da inicialização da sessão:', initData);
+
+                            if (!initResponse.ok || initData.status !== 'success') {
+                                throw new Error(initData.message || 'Erro ao inicializar sessão');
+                            }
+
+                            await showStatusModal('Login realizado com sucesso! Redirecionando...', 'success');
+                            
+                            // Verificar se o usuário tem empresas associadas com plano ativo
+                            try {
+                                const companiesResponse = await fetch('/api/companies/user', {
+                                    headers: {
+                                        'Authorization': `Bearer ${data.token}`
+                                    },
+                                    credentials: 'include'
+                                });
+                                
+                                const companiesData = await companiesResponse.json();
+                                
+                                // Se o usuário tiver pelo menos uma empresa com plano, redirecionar para o dashboard
+                                if (companiesData.success && 
+                                    companiesData.companies && 
+                                    companiesData.companies.length > 0 && 
+                                    companiesData.companies.some(company => company.hasPlan)) {
+                                    console.log('Usuário tem empresas com plano ativo, redirecionando para o dashboard');
+                                    window.location.href = '/pages/dashboard.html';
+                                } else {
+                                    // Seguir o fluxo normal baseado no status de onboarding
+                                    window.location.href = data.user && !data.user.onboardingCompleted 
+                                        ? '/pages/welcome/welcome.html' 
+                                        : '/pages/dashboard.html';
+                                }
+                            } catch (error) {
+                                console.error('Erro ao verificar empresas:', error);
+                                // Em caso de erro, usar a lógica padrão
+                                window.location.href = data.user && !data.user.onboardingCompleted 
+                                    ? '/pages/welcome/welcome.html' 
+                                    : '/pages/dashboard.html';
+                            }
+                        } catch (error) {
+                            console.error('Erro ao inicializar sessão:', error);
+                            await showStatusModal('Erro ao inicializar sessão. Por favor, tente novamente.', 'error');
+                            localStorage.removeItem('token');
+                        }
+                    } else {
+                        // Verificar se o erro é de usuário não encontrado
+                        if (!isRegistering && data.status === 'error' && (
+                            (data.message && data.message.toLowerCase().includes('não encontrado')) ||
+                            (data.message && data.message.toLowerCase().includes('incorretos'))
+                        )) {
+                            await showStatusModal('Usuário não encontrado. Vamos criar uma conta?', 'info');
+                            // Manter o email preenchido
+                            const currentEmail = emailInput.value;
+                            toggleAuthMode();
+                            emailInput.value = currentEmail;
+                            passwordInput.value = '';
+                        } else {
+                            await showStatusModal(data.message || 'Erro ao processar requisição', 'error');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    await showStatusModal('Erro ao processar requisição. Por favor, tente novamente.', 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonContent;
+                }
             });
-        }
+
+            // Toggle de visibilidade da senha
+            const togglePassword = document.getElementById('togglePassword');
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').className = `fas fa-${type === 'password' ? 'eye' : 'eye-slash'}`;
+            });
+
+            // Configuração da modal
+            const closeModal = document.getElementById('closeModal');
+            const modalCloseButton = document.getElementById('modalCloseButton');
+            const statusModal = document.getElementById('statusModal');
+
+            function hideStatusModal() {
+                statusModal.style.display = 'none';
+            }
+
+            if (closeModal) closeModal.addEventListener('click', hideStatusModal);
+            if (modalCloseButton) modalCloseButton.addEventListener('click', hideStatusModal);
+
+            // Fechar modal clicando fora
+            window.addEventListener('click', (event) => {
+                if (event.target === statusModal) {
+                    hideStatusModal();
+                }
+            });
+        });
 
         // Alterna entre os temas claro e escuro
         function toggleTheme() {
@@ -242,8 +516,9 @@
             }
         }
 
-        // Inicializa a página quando o DOM estiver carregado
-        document.addEventListener('DOMContentLoaded', initPage);
+        // Configuração do botão de tema
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', toggleTheme);
     </script>
 </body>
 </html> 

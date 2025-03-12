@@ -11,5 +11,45 @@
     </head>
     <body>
         <p>Redirecionando para login...</p>
+
+        <!-- Garantir que o script está sendo carregado -->
+        <script src="/js/login.js"></script>
+        <script>
+            // Debug para verificar se o script carregou
+            console.log('Script de login carregado');
+            
+            // Verificar se o formulário existe
+            document.addEventListener('DOMContentLoaded', () => {
+                const loginForm = document.getElementById('loginForm');
+                console.log('Formulário encontrado:', !!loginForm);
+                
+                if (loginForm) {
+                    console.log('Adicionando listener ao formulário');
+                    loginForm.addEventListener('submit', handleLogin);
+                }
+            });
+        </script>
+
+        <form id="loginForm" class="space-y-6" onsubmit="return false;">
+            <div>
+                <label for="email" class="block text-sm font-medium">Email</label>
+                <div class="mt-1">
+                    <input id="email" name="email" type="email" required class="form-input">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium">Senha</label>
+                <div class="mt-1">
+                    <input id="password" name="password" type="password" required class="form-input">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" id="loginButton" class="btn btn-primary w-full" onclick="handleLogin(event)">
+                    Entrar
+                </button>
+            </div>
+        </form>
     </body>
 </html>

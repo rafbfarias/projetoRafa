@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const permissionTemplateController = require('../controllers/permissionTemplate.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+const checkPermission = require('../middleware/checkPermission');
 
-// Rotas para templates de permissão
-router.post('/', permissionTemplateController.create);
-router.get('/', permissionTemplateController.findAll);
+// Proteger todas as rotas
+router.use(authMiddleware);
+
+// Rotas para templates de permissão (requerem permissão específica)
+router.post('/', checkPermission('create'), permissionTemplateController.create);
+router.get('/', checkPermission('view'), permissionTemplateController.findAll);
 router.get('/areas', permissionTemplateController.listAreas);
 router.get('/system-pages', permissionTemplateController.listSystemPages);
 router.get('/:id', permissionTemplateController.findOne);

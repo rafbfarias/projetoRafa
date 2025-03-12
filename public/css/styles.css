@@ -1,6 +1,7 @@
 /* Definindo variáveis para tema claro (padrão) */
-:root {
-  --bg-primary: #e4e4e4; 
+:root,
+[data-theme="light"] {
+  --bg-primary: #ffffff;
   --bg-secondary: #f1f5f9;
   --text-primary: #111827;
   --text-secondary: #4b5563;
@@ -25,12 +26,13 @@
   --status-paid: #10b981;
   --status-canceled: #ef4444;
   
-  /* Cores do sidebar */
+  /* Cores do sidebar - tema claro */
   --sidebar-bg: #ffffff;
   --sidebar-hover: rgba(0, 0, 0, 0.05);
-  --sidebar-text: #2b2c30;
+  --sidebar-text: #1a1a1a;
   --sidebar-text-secondary: #64748b;
   --sidebar-border: #e2e8f0;
+  --sidebar-active: rgba(59, 130, 246, 0.1);
   --theme-toggle-bg: #f1f5f9;
   --theme-toggle-color: #0f172a;
   --theme-toggle-hover: #e2e8f0;
@@ -100,7 +102,7 @@
 /* Variáveis para tema escuro */
 [data-theme="dark"] {
   --bg-primary: #111827;
-  --bg-secondary: #1e293b;
+  --bg-secondary: #1f2937;
   --text-primary: #f9fafb;
   --text-secondary: #e5e7eb;
   --text-muted: #9ca3af;
@@ -108,9 +110,9 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
   
   /* Cores da barra de rolagem - tema escuro */
-  --scrollbar-track: #1e293b;
-  --scrollbar-thumb: #475569;
-  --scrollbar-thumb-hover: #64748b;
+  --scrollbar-track: #1f2937;
+  --scrollbar-thumb: #4b5563;
+  --scrollbar-thumb-hover: #6b7280;
   
   /* Cores de botões */
   --button-primary: #3b82f6;
@@ -124,19 +126,20 @@
   --status-paid: #34d399;
   --status-canceled: #f87171;
   
-  /* Cores do sidebar */
+  /* Cores do sidebar - tema escuro */
   --sidebar-bg: #0f172a;
-  --sidebar-hover: rgba(58, 60, 132, 0.2);
+  --sidebar-hover: rgba(255, 255, 255, 0.05);
   --sidebar-text: #f8fafc;
   --sidebar-text-secondary: #94a3b8;
-  --sidebar-border: #1d294c;
+  --sidebar-border: #1e293b;
+  --sidebar-active: rgba(59, 130, 246, 0.2);
   --theme-toggle-bg: #1e293b;
   --theme-toggle-color: #f8fafc;
   --theme-toggle-hover: #334155;
 
   /* Cores específicas para componentes no tema escuro */
   --component-bg: #1f2937;
-  --component-border: #0d1323;
+  --component-border: #374151;
   --component-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   --component-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   
@@ -423,10 +426,13 @@ select {
   width: var(--sidebar-width, 250px);
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #f8f9fa;
+  background-color: var(--sidebar-bg) !important;
+  color: var(--sidebar-text);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   transition: width var(--transition-speed, 0.3s), transform var(--transition-speed, 0.3s);
+  border-color: var(--sidebar-border);
+  border-right: 1px solid var(--sidebar-border);
 }
 
 /* Estado colapsado do sidebar */
@@ -808,7 +814,13 @@ select {
   background-color: var(--sidebar-hover) !important;
 }
 
+.menu-item.active {
+  background-color: var(--sidebar-active) !important;
+  color: var(--sidebar-text) !important;
+}
+
 .submenu {
+  background-color: var(--sidebar-submenu-bg);
   border-left: 1px solid var(--sidebar-border);
   max-height: 0;
   overflow: hidden;
@@ -882,7 +894,7 @@ select {
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
     border-color: var(--btn-primary-bg);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 2px var(--brand-200);
     outline: none;
 }
 
@@ -1026,7 +1038,7 @@ select {
     min-height: 400px;
 }
 
-/* Seleção de Unidade */
+/* Seção de Upload */
 .unit-selector {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1741,19 +1753,21 @@ main {
 }
 
 .menu-item {
-  color: #e5e7eb;
+  color: var(--sidebar-text) !important;
 }
 
 .menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--sidebar-hover) !important;
 }
 
 .menu-item.active {
-  background-color: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
+  background-color: var(--sidebar-active) !important;
+  color: var(--sidebar-text) !important;
 }
 
 .submenu {
+  background-color: var(--sidebar-submenu-bg);
+  border-left: 1px solid var(--sidebar-border);
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s;

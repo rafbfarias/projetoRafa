@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração da Empresa - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+</head>
+<body class="bg-primary">
+    <div class="main-layout">
+        <!-- Botão de Logoff -->
+        <div class="absolute top-4 right-4">
+            <button id="logoffBtn" class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition-colors">
+                <span>Sair</span>
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+
+        <main class="p-4 md:p-8 content-container">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Logo e Boas-vindas -->
+                <div class="text-center space-y-3 dashboard-card p-4">
+                    <div class="w-16 h-16 mx-auto bg-brand-600/10 rounded-xl p-3">
+                        <img src="/images/dineo-logo.png" alt="dineo logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">
+                            Configuração da Empresa
+                            <span class="text-muted text-sm">/ Onboarding</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Etapas -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">1</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Seu Perfil</h3>
+                                <p class="text-xs text-muted">Concluído</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">2</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Empresa</h3>
+                                <p class="text-xs text-muted">Em andamento</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-gray-300">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700 text-sm">3</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Plano</h3>
+                                <p class="text-xs text-muted">Próximo passo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opções -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Card de Convite -->
+                    <div class="dashboard-card p-6 space-y-4">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Aceitar Convite</h2>
+                            <p class="text-sm text-muted">
+                                Você recebeu um convite para participar de uma empresa?
+                            </p>
+                        </div>
+
+                        <div id="invitesList" class="space-y-3">
+                            <!-- Os convites serão carregados aqui dinamicamente -->
+                            <div class="text-center text-sm text-muted py-4">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>
+                                Buscando convites...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Nova Empresa -->
+                    <div class="dashboard-card p-6 space-y-4">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-building text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Criar Nova Empresa</h2>
+                            <p class="text-sm text-muted">
+                                Quer criar sua própria empresa no sistema?
+                            </p>
+                        </div>
+
+                        <!-- Seção de empresas existentes (inicialmente oculta) -->
+                        <div id="existingCompaniesSection" class="space-y-3 hidden">
+                            <h3 class="text-sm font-medium text-center">Suas Empresas</h3>
+                            <p class="text-sm text-muted text-center">Você já possui empresas. Selecione uma para continuar:</p>
+                            
+                            <!-- Lista de empresas existentes -->
+                            <div id="companiesList" class="space-y-2">
+                                <!-- As empresas serão carregadas aqui dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Botão de criar empresa -->
+                        <div class="text-center" id="createCompanySection">
+                            <button 
+                                id="createCompanyBtn"
+                                class="btn btn-primary w-full py-2.5"
+                            >
+                                Criar Empresa
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script para controle da página -->
+    <script src="/js/company/setup.js"></script>
+
+    <style>
+        .company-status {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .status-draft {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+        .status-pendente {
+            background-color: #fff7ed;
+            color: #c2410c;
+        }
+        .status-ativa {
+            background-color: #ecfdf5;
+            color: #0f766e;
+        }
+        .status-inativa {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+    </style>
+</body>
+</html> 

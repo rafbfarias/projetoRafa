@@ -1,0 +1,248 @@
+/* Configuração do layout principal */
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* Sidebar com scroll independente */
+.sidebar-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--sidebar-width, 260px);
+    background-color: var(--sidebar-bg);
+    transition: all 0.3s ease;
+    z-index: 40;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Sidebar interno */
+.sidebar {
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estado colapsado do sidebar */
+.sidebar-container.collapsed {
+    width: var(--sidebar-collapsed-width, 80px);
+}
+
+.sidebar-container.collapsed .sidebar-text,
+.sidebar-container.collapsed .sidebar-logo-text,
+.sidebar-container.collapsed .sidebar-user-info {
+    display: none;
+}
+
+/* Conteúdo principal com scroll independente */
+.main-container {
+    flex: 1;
+    min-height: 100vh;
+    margin-left: var(--sidebar-width, 260px);
+    transition: margin-left 0.3s ease;
+    width: calc(100% - var(--sidebar-width, 260px));
+    overflow-x: hidden;
+    padding: 1rem;
+}
+
+/* Ajuste do main container quando sidebar está colapsado */
+.sidebar-container.collapsed ~ .main-container {
+    margin-left: var(--sidebar-collapsed-width, 80px);
+    width: calc(100% - var(--sidebar-collapsed-width, 80px));
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    .sidebar-container {
+        transform: translateX(-100%);
+        width: var(--sidebar-width, 260px) !important; /* Força largura total em mobile */
+    }
+    
+    .sidebar-container.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-container.collapsed {
+        transform: translateX(-100%);
+    }
+    
+    /* Garante que textos e elementos apareçam mesmo quando colapsado em mobile */
+    .sidebar-container .sidebar-text,
+    .sidebar-container .sidebar-logo-text,
+    .sidebar-container .sidebar-user-info {
+        display: block !important;
+    }
+    
+    .main-container {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 0.75rem;
+    }
+    
+    /* Overlay para quando o menu mobile está aberto */
+    .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 30;
+    }
+    
+    .sidebar-container.mobile-open + .mobile-overlay {
+        display: block;
+    }
+
+    /* Ajustes para menu items em mobile */
+    .menu-item {
+        padding: 0.75rem 1rem;
+    }
+
+    .submenu {
+        padding-left: 1rem;
+    }
+
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mobile-menu-button {
+        display: block;
+    }
+
+    .main-container {
+        padding-top: 0;
+    }
+}
+
+/* Scrollbar customizada */
+.sidebar-container::-webkit-scrollbar,
+.main-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-container::-webkit-scrollbar-track,
+.main-container::-webkit-scrollbar-track {
+    background: var(--scrollbar-track, #f1f1f1);
+}
+
+.sidebar-container::-webkit-scrollbar-thumb,
+.main-container::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb, #888);
+    border-radius: 3px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb:hover,
+.main-container::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover, #555);
+}
+
+/* Estilos do Sidebar */
+.sidebar {
+    background-color: var(--sidebar-bg) !important;
+    height: 100%;
+    width: 100%;
+}
+
+/* Menu Items */
+.menu-item {
+    color: var(--sidebar-text) !important;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+    background-color: var(--sidebar-hover) !important;
+}
+
+.menu-item.active {
+    background-color: var(--sidebar-active, rgba(59, 130, 246, 0.5)) !important;
+}
+
+/* Submenu */
+.submenu {
+    border-left: 1px solid var(--sidebar-border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    display: none;
+}
+
+.submenu.open {
+    max-height: 500px;
+    display: block;
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle i {
+    transition: transform 0.3s;
+}
+
+.sidebar.collapsed .sidebar-toggle i {
+    transform: rotate(180deg);
+}
+
+/* Avatar e Dropdown */
+.avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-dropdown {
+    background-color: var(--dropdown-bg);
+    border: 1px solid var(--dropdown-border);
+    box-shadow: var(--dropdown-shadow);
+    border-radius: 0.5rem;
+    z-index: 50;
+    display: none;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-dropdown-item {
+    color: var(--dropdown-text);
+    transition: background-color 0.2s;
+}
+
+.user-dropdown-item:hover {
+    background-color: var(--dropdown-hover);
+}
+
+/* Header Mobile */
+.mobile-header {
+    display: none;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--bg-primary);
+    z-index: 30;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-menu-button {
+    display: none;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    cursor: pointer;
+} 

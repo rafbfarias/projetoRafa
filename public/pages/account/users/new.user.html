@@ -8,10 +8,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
+    <script src="../../../js/layout.js"></script>
 </head>
-<body class="bg-primary">
-    <div class="flex min-h-screen">
+<body>
+    <div class="app-container">
+            <!-- Sidebar -->
+        <aside class="sidebar">
+            <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
 
@@ -321,5 +330,7 @@
         }
     });
     </script>
+        </main>
+    </div>
 </body>
 </html> 

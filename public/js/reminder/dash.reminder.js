@@ -15,11 +15,15 @@ let isDragging = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 let currentNote = null;
+let panzoom = null;
 
 /**
  * Inicializa o Reminder Board
  */
 function initReminderBoard() {
+    // Inicializar o zoom
+    initializePanZoom();
+    
     // Carregar notas do localStorage
     loadNotes();
     
@@ -29,28 +33,254 @@ function initReminderBoard() {
     // Mostrar ou esconder mensagem de board vazio
     updateEmptyBoardMessage();
     
-    // Popular selects com dados de exemplo (em um projeto real, isso viria do banco de dados)
+    // Popular selects com dados de exemplo
     populateReferenceElements();
+
+    // Inicializar interatividade das notas
+    initializeInteractJS();
+}
+
+/**
+ * Inicializa o PanZoom para controle de zoom do board
+ */
+function initializePanZoom() {
+    const board = document.getElementById('board');
+    panzoom = Panzoom(board, {
+        maxScale: 5,
+        minScale: 0.1,
+        contain: 'outside',
+        startScale: 1
+    });
+
+    // Adicionar event listeners para os botões de zoom
+    document.getElementById('zoomInBtn').addEventListener('click', () => {
+        panzoom.zoomIn();
+    });
+
+    document.getElementById('zoomOutBtn').addEventListener('click', () => {
+        panzoom.zoomOut();
+    });
+
+    document.getElementById('resetZoomBtn').addEventListener('click', () => {
+        panzoom.reset();
+    });
+
+    // Permitir zoom com a roda do mouse
+    board.addEventListener('wheel', (event) => {
+        if (event.ctrlKey) {
+            event.preventDefault();
+            const delta = event.deltaY;
+            if (delta > 0) {
+                panzoom.zoomOut();
+            } else {
+                panzoom.zoomIn();
+            }
+        }
+    });
+}
+
+/**
+ * Inicializa o Interact.js para drag, drop e resize
+ */
+function initializeInteractJS() {
+    // Configurar interatividade para cards
+    interact('.reminder-card')
+        .draggable({
+            inertia: true,
+            modifiers: [
+                interact.modifiers.restrictRect({
+                    restriction: 'parent',
+                    endOnly: true
+                })
+            ],
+            autoScroll: true,
+            listeners: {
+                start: function(event) {
+                    event.target.classList.add('dragging');
+                },
+                move: dragMoveListener,
+                end: function(event) {
+                    event.target.classList.remove('dragging');
+                    // Salvar a nova posição
+                    const noteId = event.target.dataset.id;
+                    const noteIndex = notes.findIndex(n => n.id === noteId);
+                    if (noteIndex !== -1) {
+                        notes[noteIndex].posX = parseFloat(event.target.getAttribute('data-x')) || 0;
+                        notes[noteIndex].posY = parseFloat(event.target.getAttribute('data-y')) || 0;
+                        saveNotesToStorage();
+                    }
+                }
+            }
+        })
+        .resizable({
+            edges: { right: true, bottom: true, left: false, top: false },
+            inertia: true,
+            modifiers: [
+                interact.modifiers.restrictSize({
+                    min: { width: 250, height: 150 }
+                })
+            ],
+            listeners: {
+                move: resizeMoveListener
+            }
+        });
+
+    // Configurar interatividade para clusters
+    interact('.cluster')
+        .draggable({
+            inertia: true,
+            modifiers: [
+                interact.modifiers.restrictRect({
+                    restriction: 'parent',
+                    endOnly: true
+                })
+            ],
+            listeners: {
+                move: dragMoveListener
+            }
+        })
+        .resizable({
+            edges: { right: true, bottom: true, left: false, top: false },
+            modifiers: [
+                interact.modifiers.restrictSize({
+                    min: { width: 300, height: 200 }
+                })
+            ],
+            listeners: {
+                move: resizeMoveListener
+            }
+        })
+        .dropzone({
+            accept: '.reminder-card',
+            overlap: 0.75,
+            ondropactivate: function(event) {
+                event.target.classList.add('drop-target');
+            },
+            ondropdeactivate: function(event) {
+                event.target.classList.remove('drop-target');
+            },
+            ondrop: function(event) {
+                const card = event.relatedTarget;
+                const cluster = event.target;
+                cluster.appendChild(card);
+            }
+        });
+}
+
+/**
+ * Listener para movimento de drag
+ */
+function dragMoveListener(event) {
+    const target = event.target;
+    const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+    const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+    target.style.transform = `translate(${x}px, ${y}px)`;
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+}
+
+/**
+ * Listener para movimento de resize
+ */
+function resizeMoveListener(event) {
+    const target = event.target;
+    let x = (parseFloat(target.getAttribute('data-x')) || 0);
+    let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+    target.style.width = event.rect.width + 'px';
+    target.style.height = event.rect.height + 'px';
+
+    x += event.deltaRect.left;
+    y += event.deltaRect.top;
+
+    target.style.transform = `translate(${x}px, ${y}px)`;
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+}
+
+/**
+ * Cria um novo cluster
+ */
+function createCluster() {
+    const name = document.getElementById('clusterName').value.trim();
+    if (!name) {
+        showToast('error', 'Erro', 'Por favor, informe um nome para o cluster');
+        return;
+    }
+
+    const cluster = document.createElement('div');
+    cluster.className = 'cluster';
+    cluster.innerHTML = `
+        <div class="cluster-header">
+            <h3>${name}</h3>
+            <button class="delete-cluster">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+
+    // Posicionar o cluster no centro do board visível
+    const board = document.getElementById('board');
+    const boardRect = board.getBoundingClientRect();
+    const x = (boardRect.width / 2) - 150;
+    const y = (boardRect.height / 2) - 100;
+
+    cluster.style.transform = `translate(${x}px, ${y}px)`;
+    cluster.setAttribute('data-x', x);
+    cluster.setAttribute('data-y', y);
+
+    board.appendChild(cluster);
+    closeClusterModal();
 }
 
 /**
  * Configura todos os event listeners
  */
 function setupEventListeners() {
-    // Botões de adicionar nota
-    document.getElementById('addNoteBtn').addEventListener('click', openNewNoteModal);
-    document.getElementById('addInitialNoteBtn').addEventListener('click', openNewNoteModal);
-    
-    // Botões nos modais
-    document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
-    document.getElementById('updateNoteBtn').addEventListener('click', updateNote);
-    document.getElementById('confirmDeleteBtn').addEventListener('click', deleteCurrentNote);
-    
-    // Fechar modais
+    // Botão de novo lembrete
+    const newNoteBtn = document.getElementById('newNoteBtn');
+    if (newNoteBtn) {
+        newNoteBtn.addEventListener('click', function() {
+            const modal = document.getElementById('newNoteModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                // Resetar o formulário
+                const form = document.getElementById('newNoteForm');
+                if (form) form.reset();
+                // Focar no título
+                const titleInput = document.getElementById('noteTitle');
+                if (titleInput) titleInput.focus();
+            }
+        });
+    }
+
+    // Botão salvar nota
+    const saveNoteBtn = document.getElementById('saveNoteBtn');
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', function() {
+            saveNote();
+        });
+    }
+
+    // Botões para fechar modais
     document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', closeAllModals);
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.add('hidden');
+            });
+        });
     });
-    
+
+    // Botão novo cluster
+    const newClusterBtn = document.getElementById('newClusterBtn');
+    if (newClusterBtn) {
+        newClusterBtn.addEventListener('click', function() {
+            const modal = document.getElementById('clusterModal');
+            if (modal) modal.classList.remove('hidden');
+        });
+    }
+
     // Mudar tipo de nota
     document.getElementById('noteType').addEventListener('change', handleNoteTypeChange);
     document.getElementById('editNoteType').addEventListener('change', handleEditNoteTypeChange);
@@ -334,72 +564,48 @@ function openDeleteNoteModal(noteId) {
 }
 
 /**
- * Fecha todos os modais
- */
-function closeAllModals() {
-    document.getElementById('newNoteModal').classList.add('hidden');
-    document.getElementById('editNoteModal').classList.add('hidden');
-    document.getElementById('deleteNoteModal').classList.add('hidden');
-    
-    // Resetar nota atual
-    currentNoteId = null;
-}
-
-/**
  * Salva uma nova nota
  */
 function saveNote() {
-    // Obter valores do formulário
-    const type = document.getElementById('noteType').value;
     const title = document.getElementById('noteTitle').value.trim();
     const content = document.getElementById('noteContent').value.trim();
+    const type = document.getElementById('noteType').value;
     const priority = document.getElementById('notePriority').value;
-    const color = document.querySelector('input[name="noteColor"]:checked').value;
-    
-    // Validação básica
+    const color = document.querySelector('input[name="noteColor"]:checked')?.value || 'yellow';
+
     if (!title) {
-        alert('Por favor, informe um título para a nota.');
+        showToast('error', 'Erro', 'Por favor, informe um título para a nota');
         return;
     }
-    
-    // Criar ID único
-    const id = 'note-' + Date.now();
-    
-    // Obter elemento de referência, se aplicável
-    let elementId = null;
-    if (type !== 'task') {
-        elementId = document.getElementById('referenceElement').value;
-    }
-    
-    // Definir posição aleatória no board
-    const board = document.getElementById('board');
-    const boardRect = board.getBoundingClientRect();
-    const posX = Math.random() * (boardRect.width - 300) + 20;
-    const posY = Math.random() * (boardRect.height - 200) + 20;
-    
-    // Criar objeto da nota
+
+    // Criar nova nota
     const newNote = {
-        id,
-        type,
+        id: 'note-' + Date.now(),
         title,
         content,
+        type,
         priority,
         color,
-        elementId,
-        posX,
-        posY,
+        posX: Math.random() * 300,
+        posY: Math.random() * 300,
         date: new Date().toISOString()
     };
-    
-    // Adicionar ao array e salvar
+
+    // Adicionar ao array de notas
     notes.push(newNote);
+    
+    // Salvar no localStorage
     saveNotesToStorage();
     
     // Renderizar notas
     renderNotes();
     
     // Fechar modal
-    closeAllModals();
+    const modal = document.getElementById('newNoteModal');
+    if (modal) modal.classList.add('hidden');
+    
+    // Mostrar mensagem de sucesso
+    showToast('success', 'Sucesso', 'Nota criada com sucesso!');
 }
 
 /**
@@ -447,7 +653,8 @@ function updateNote() {
     renderNotes();
     
     // Fechar modal
-    closeAllModals();
+    const modal = document.getElementById('editNoteModal');
+    if (modal) modal.classList.add('hidden');
 }
 
 /**
@@ -464,7 +671,8 @@ function deleteCurrentNote() {
     renderNotes();
     
     // Fechar modal
-    closeAllModals();
+    const modal = document.getElementById('deleteNoteModal');
+    if (modal) modal.classList.add('hidden');
 }
 
 /**
@@ -498,7 +706,8 @@ function handleOutsideClick(event) {
         if (!modal.classList.contains('hidden')) {
             const modalContent = modal.querySelector('div:first-child');
             if (modal.contains(event.target) && !modalContent.contains(event.target)) {
-                closeAllModals();
+                const modal = document.getElementById('newNoteModal');
+                if (modal) modal.classList.add('hidden');
             }
         }
     });
@@ -741,3 +950,6 @@ function createNoteFromElement(elementType, elementId, elementTitle, elementCont
 
 // Expor função para uso externo
 window.createNoteFromElement = createNoteFromElement;
+
+// Inicializar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', initReminderBoard);

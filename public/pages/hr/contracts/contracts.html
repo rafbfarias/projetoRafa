@@ -6,7 +6,8 @@
     <title>Contratos - Sistema de Gestão</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -18,8 +19,10 @@
             }
         }
     </script>
+    <script src="../../../js/layout.js"></script>
 </head>
 <body>
+    <div class="app-container">
     <!-- Overlay para o menu móvel -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
@@ -32,7 +35,13 @@
             </button>
             
             <!-- Logo e botão para colapsar o menu -->
-            <div class="flex items-center justify-between mb-6">
+                    <!-- Sidebar -->
+        <aside class="sidebar">
+            <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white">
                         <span class="text-xl font-bold">D</span>
@@ -328,5 +337,7 @@
 
     <!-- JavaScript -->
     <script src="/js/contracts/contracts.js"></script>
+        </main>
+    </div>
 </body>
 </html>

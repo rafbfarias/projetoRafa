@@ -17,12 +17,14 @@ const UserCompanyAssociationSchema = new mongoose.Schema({
   // Informação sobre a associação
   role: {
     type: String,
-    required: true
+    required: true,
+    enum: ['superadmin', 'admin', 'user']
   },
   status: {
     type: String,
     enum: ['active', 'inactive'],
-    default: 'active'
+    default: 'active',
+    lowercase: true
   },
   
   // Datas importantes

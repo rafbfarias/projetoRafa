@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Faturação - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <style>
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <script src="../../../js/layout.js"></script>
+</head>
+<body>
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
+            <div className="min-h-screen bg-gray-50">
+                {/* Navbar */}
+                <nav className="bg-white shadow-sm border-b border-gray-200">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between h-16">
+                            <div className="flex">
+                                <div className="flex-shrink-0 flex items-center">
+                                    <span className="text-2xl font-bold text-blue-600">dineo.</span>
+                                </div>
+                                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                    <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Dashboard
+                                    </a>
+                                    <a href="#" className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Faturações
+                                    </a>
+                                    <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Relatórios
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+                                    <button className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <FileText className="h-5 w-5 mr-2" />
+                                        Nova Faturação
+                                    </button>
+                                </div>
+                                <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                                    <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <span className="sr-only">Ver notificações</span>
+                                        <BellIcon className="h-6 w-6" />
+                                    </button>
+                                    <div className="ml-3 relative">
+                                        <div>
+                                            <button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                <span className="sr-only">Abrir menu de usuário</span>
+                                                <img className="h-8 w-8 rounded-full" src="/api/placeholder/32/32" alt="User avatar" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Cabeçalho da página */}
+                <div className="bg-white shadow">
+                    <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div className="flex items-center">
+                                <a href="#" className="mr-4 inline-flex items-center text-sm text-gray-500 hover:text-blue-600">
+                                    <ArrowLeft className="h-4 w-4 mr-1" />
+                                    Voltar para Faturações
+                                </a>
+                                <h1 className="text-2xl font-semibold text-gray-900">Validação de Faturação: {faturacaoData.id}</h1>
+                            </div>
+                            <div className="mt-4 sm:mt-0 flex space-x-3">
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    onClick={() => {}}
+                                >
+                                    <Edit className="h-4 w-4 mr-2" />
+                                    Editar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                    onClick={() => setShowConfirmModal(true)}
+                                >
+                                    <Check className="h-4 w-4 mr-2" />
+                                    Validar Faturação
+                                </button>
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                    onClick={() => setShowRejectModal(true)}
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Rejeitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Conteúdo principal */}
+                <div className="py-6">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Coluna da esquerda - Informações Gerais */}
+                            <div className="lg:col-span-1 space-y-6">
+                                {/* Card de Status */}
+                                <div className="bg-white shadow rounded-lg overflow-hidden">
+                                    <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Status da Faturação</h3>
+                                    </div>
+                                    <div className="px-4 py-5 sm:p-6">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm text-gray-500">Status atual:</span>
+                                            <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                {faturacaoData.status}
+                                            </span>
+                                        </div>
+                                        <div className="mt-3 pt-3 border-t border-gray-200">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Data de Submissão:</span>
+                                                <span className="text-sm font-medium">{faturacaoData.date}</span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 pt-3 border-t border-gray-200">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Responsável:</span>
+                                                <span className="text-sm font-medium">{faturacaoData.factResp}</span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 pt-3 border-t border-gray-200">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Unidade:</span>
+                                                <span className="text-sm font-medium">{faturacaoData.unit}</span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 pt-3 border-t border-gray-200">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Dia da Semana:</span>
+                                                <span className="text-sm font-medium">{faturacaoData.weekDay}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Card de Resumo dos Valores */}
+                                <div className="bg-white shadow rounded-lg overflow-hidden">
+                                    <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Resumo dos Valores</h3>
+                                    </div>
+                                    <div className="px-4 py-5 sm:p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="text-base font-medium text-gray-900">Total Faturado:</span>
+                                            <span className="text-lg font-bold text-blue-600">{formatCurrency(faturacaoData.totalSales)}</span>
+                                        </div>
+                                        
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Dinheiro:</span>
+                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.totalCash)}</span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Cartões:</span>
+                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.cardValue)}</span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Uber Eats:</span>
+                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.uberEats)}</span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-gray-500">Glovo:</span>
+                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.glovo)}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm font-medium text-gray-900">Gorjetas:</span>
+                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.totalTips)}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {hasDiscrepancies() && (
+                                            <div className="mt-4 p-3 bg-yellow-50 rounded-md">
+                                                <div className="flex">
+                                                    <div className="flex-shrink-0">
+                                                        <AlertTriangle className="h-5 w-5 text-yellow-400" />
+                                                    </div>
+                                                    <div className="ml-3">
+                                                        <h3 className="text-sm font-medium text-yellow-800">Atenção</h3>
+                                                        <div className="mt-2 text-sm text-yellow-700">
+                                                            <p>Há discrepâncias nos valores declarados. Verifique cuidadosamente antes de validar.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                {/* Card de notas de validação */}
+                                <div className="bg-white shadow rounded-lg overflow-hidden">
+                                    <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Notas de Validação</h3>
+                                    </div>
+                                    <div className="px-4 py-5 sm:p-6">
+                                        <textarea
+                                            rows="4"
+                                            className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="Adicione notas sobre a validação desta faturação..."
+                                            value={validationNotes}
+                                            onChange={(e) => setValidationNotes(e.target.value)}
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Colunas da direita - Detalhes e Documentação */}
+                            <div className="lg:col-span-2 space-y-6">
+                                {/* Tabs de navegação */}
+                                <div className="bg-white shadow rounded-lg overflow-hidden">
+                                    <div className="border-b border-gray-200">
+                                        <nav className="-mb-px flex space-x-6 px-6" aria-label="Tabs">
+                                            <button
+                                                onClick={() => setActiveTab('general')}
+                                                className={`${
+                                                    activeTab === 'general'
+                                                        ? 'border-blue-500 text-blue-600'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+                                            >
+                                                <DollarSign className="h-5 w-5 mr-2" />
+                                                Geral
+                                            </button>
+                                            <button
+                                                onClick={() => setActiveTab('payments')}
+                                                className={`${
+                                                    activeTab === 'payments'
+                                                        ? 'border-blue-500 text-blue-600'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+                                            >
+                                                <CreditCard className="h-5 w-5 mr-2" />
+                                                Pagamentos
+                                            </button>
+                                            <button
+                                                onClick={() => setActiveTab('documents')}
+                                                className={`${
+                                                    activeTab === 'documents'
+                                                        ? 'border-blue-500 text-blue-600'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+                                            >
+                                                <FileText className="h-5 w-5 mr-2" />
+                                                Documentos
+                                            </button>
+                                            <button
+                                                onClick={() => setActiveTab('metrics')}
+                                                className={`${
+                                                    activeTab === 'metrics'
+                                                        ? 'border-blue-500 text-blue-600'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+                                            >
+                                                <BarChart2 className="h-5 w-5 mr-2" />
+                                                Métricas
+                                            </button>
+                                        </nav>
+                                    </div>
+                                    
+                                    {/* Conteúdo da tab Geral */}
+                                    {activeTab === 'general' && (
+                                        <div className="px-4 py-5 sm:p-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Resumo da Faturação</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                            <div>
+                                                                <p className="text-sm text-gray-500">Total Faturado</p>
+                                                                <p className="text-lg font-bold text-gray-900">{formatCurrency(faturacaoData.totalSales)}</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm text-gray-500">Número de Clientes</p>
+                                                                <p className="text-lg font-bold text-gray-900">{faturacaoData.peopleCount}</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm text-gray-500">Ticket Médio</p>
+                                                                <p className="text-lg font-bold text-gray-900">
+                                                                    {formatCurrency(faturacaoData.totalSales / faturacaoData.peopleCount)}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Série 1 vs Série 2</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-2">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Série 1:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.series1)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Série 2:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.series2)}</span>
+                                                            </div>
+                                                            <div className="pt-2 border-t border-gray-200 flex justify-between">
+                                                                <span className="text-sm font-medium">Diferença:</span>
+                                                                <span className={`text-sm font-medium ${faturacaoData.seriesDiff !== 0 ? 'text-red-600' : 'text-gray-900'}`}>
+                                                                    {formatCurrency(faturacaoData.seriesDiff)}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Transações Canceladas</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-2">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Transações Canceladas:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.canceledTransactions}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Documentos Cancelados:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.canceledDocuments}</span>
+                                                            </div>
+                                                            {faturacaoData.canceledDocumentsJustification && (
+                                                                <div className="pt-2 border-t border-gray-200">
+                                                                    <span className="text-sm text-gray-500 block mb-1">Justificativa:</span>
+                                                                    <p className="text-sm text-gray-900">{faturacaoData.canceledDocumentsJustification}</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Consumo Interno e Descontos</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            <div>
+                                                                <p className="text-sm text-gray-500 mb-1">Consumo Interno:</p>
+                                                                <p className="text-lg font-medium text-gray-900">{formatCurrency(faturacaoData.internalConsumption)}</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm text-gray-500 mb-1">Descontos:</p>
+                                                                <p className="text-lg font-medium text-gray-900">{formatCurrency(faturacaoData.discounts)}</p>
+                                                                {faturacaoData.discountsJustification && (
+                                                                    <p className="text-sm text-gray-500 mt-1">{faturacaoData.discountsJustification}</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Observações do Dia</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <p className="text-sm text-gray-900">{faturacaoData.dayObservations}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Conteúdo da tab Pagamentos */}
+                                    {activeTab === 'payments' && (
+                                        <div className="px-4 py-5 sm:p-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Detalhes dos Pagamentos</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-3">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Dinheiro:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.totalCash)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">POS MB 1:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.posMb1Gross)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">POS MB 2:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.posMb2Gross)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Uber Eats:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.uberEats)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Glovo:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.glovo)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Gorjetas</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-3">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Tips POS MB 1:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.tipsPosMb1)}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Tips POS MB 2:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.tipsPosMb2)}</span>
+                                                            </div>
+                                                            <div className="pt-2 border-t border-gray-200 flex justify-between">
+                                                                <span className="text-sm font-medium">Total de Gorjetas:</span>
+                                                                <span className="text-sm font-medium">{formatCurrency(faturacaoData.totalTips)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="col-span-1 md:col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Resumo da Distribuição</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="mb-4">
+                                                            <div className="flex justify-between mb-1">
+                                                                <span className="text-sm font-medium text-gray-900">Dinheiro</span>
+                                                                <span className="text-sm font-medium text-gray-900">
+                                                                    {formatCurrency(faturacaoData.totalCash)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                <div className="bg-blue-600 h-2.5 rounded-full" style={{ 
+                                                                    width: `${(faturacaoData.totalCash / faturacaoData.totalSales) * 100}%` 
+                                                                }}></div>
+                                                            </div>
+                                                            <div className="flex justify-between mt-1">
+                                                                <span className="text-xs text-gray-500">
+                                                                    {((faturacaoData.totalCash / faturacaoData.totalSales) * 100).toFixed(1)}%
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="mb-4">
+                                                            <div className="flex justify-between mb-1">
+                                                                <span className="text-sm font-medium text-gray-900">Cartões</span>
+                                                                <span className="text-sm font-medium text-gray-900">
+                                                                    {formatCurrency(faturacaoData.cardValue)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                <div className="bg-green-500 h-2.5 rounded-full" style={{ 
+                                                                    width: `${(faturacaoData.cardValue / faturacaoData.totalSales) * 100}%` 
+                                                                }}></div>
+                                                            </div>
+                                                            <div className="flex justify-between mt-1">
+                                                                <span className="text-xs text-gray-500">
+                                                                    {((faturacaoData.cardValue / faturacaoData.totalSales) * 100).toFixed(1)}%
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="mb-4">
+                                                            <div className="flex justify-between mb-1">
+                                                                <span className="text-sm font-medium text-gray-900">Delivery (Uber Eats + Glovo)</span>
+                                                                <span className="text-sm font-medium text-gray-900">
+                                                                    {formatCurrency(faturacaoData.uberEats + faturacaoData.glovo)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                <div className="bg-purple-500 h-2.5 rounded-full" style={{ 
+                                                                    width: `${((faturacaoData.uberEats + faturacaoData.glovo) / faturacaoData.totalSales) * 100}%` 
+                                                                }}></div>
+                                                            </div>
+                                                            <div className="flex justify-between mt-1">
+                                                                <span className="text-xs text-gray-500">
+                                                                    {(((faturacaoData.uberEats + faturacaoData.glovo) / faturacaoData.totalSales) * 100).toFixed(1)}%
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Conteúdo da tab Documentos */}
+                                    {activeTab === 'documents' && (
+                                        <div className="px-4 py-5 sm:p-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="col-span-1 md:col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Comprovantes da Faturação</h4>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">Total da Faturação</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoFactTotal} alt="Comprovante do total da faturação" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">POS MB</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoPosMb} alt="Comprovante POS MB" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">Uber Eats</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoUberEats} alt="Comprovante Uber Eats" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">Glovo</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoGlovoMbCash} alt="Comprovante Glovo" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="col-span-1 md:col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Documentos Adicionais</h4>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">Transações Canceladas</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoCanceledTransactionsDocuments} alt="Documentos de transações canceladas" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                                            <h5 className="text-sm font-medium text-gray-900 mb-2">Consumo Interno</h5>
+                                                            <div className="relative h-48 rounded-md overflow-hidden bg-gray-200">
+                                                                <img src={faturacaoData.photoInternalConsumption} alt="Documentos de consumo interno" className="w-full h-full object-cover" />
+                                                                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="p-2 bg-white rounded-full shadow hover:bg-gray-100"
+                                                                        onClick={() => {}}
+                                                                    >
+                                                                        <Eye className="h-5 w-5 text-gray-700" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Conteúdo da tab Métricas */}
+                                    {activeTab === 'metrics' && (
+                                        <div className="px-4 py-5 sm:p-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Métricas de Operação</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-3">
+                                                            <div>
+                                                                <div className="flex justify-between mb-1">
+                                                                    <span className="text-sm text-gray-500">FM Actual:</span>
+                                                                    <span className="text-sm font-medium">{faturacaoData.fmActual}%</span>
+                                                                </div>
+                                                                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${faturacaoData.fmActual}%` }}></div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div className="flex justify-between mb-1">
+                                                                    <span className="text-sm text-gray-500">EXT Actual:</span>
+                                                                    <span className="text-sm font-medium">{faturacaoData.extActual}%</span>
+                                                                </div>
+                                                                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                    <div className="bg-green-500 h-2.5 rounded-full" style={{ width: `${faturacaoData.extActual}%` }}></div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div className="flex justify-between mb-1">
+                                                                    <span className="text-sm text-gray-500">HR Actual:</span>
+                                                                    <span className="text-sm font-medium">{faturacaoData.hrActual}%</span>
+                                                                </div>
+                                                                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                                                    <div className="bg-purple-500 h-2.5 rounded-full" style={{ width: `${faturacaoData.hrActual}%` }}></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Dados do Dia</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="space-y-3">
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Número de Clientes:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.peopleCount}</span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Ticket Médio:</span>
+                                                                <span className="text-sm font-medium">
+                                                                    {formatCurrency(faturacaoData.totalSales / faturacaoData.peopleCount)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between">
+                                                                <span className="text-sm text-gray-500">Avaliação do Dia:</span>
+                                                                <div className="flex items-center">
+                                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                                        <Star 
+                                                                            key={star}
+                                                                            className={`h-4 w-4 ${
+                                                                                parseInt(faturacaoData.dayEvaluation) >= star
+                                                                                    ? 'text-yellow-400 fill-current'
+                                                                                    : 'text-gray-300'
+                                                                            }`}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="col-span-1 md:col-span-2">
+                                                    <h4 className="text-base font-medium text-gray-900 mb-3">Condições Climatéricas</h4>
+                                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                                            <div>
+                                                                <span className="text-sm text-gray-500 block">Condição:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.dayWeatherDescription}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm text-gray-500 block">Temperatura:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.dayWeatherTemperature}°C</span>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm text-gray-500 block">Precipitação:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.dayWeatherPrecipitation} mm</span>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm text-gray-500 block">Velocidade do Vento:</span>
+                                                                <span className="text-sm font-medium">{faturacaoData.dayWeatherWindSpeed} km/h</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal de Confirmação de Validação */}
+            {showConfirmModal && (
+                <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div>
+                                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                                    <Check className="h-6 w-6 text-green-600" />
+                                </div>
+                                <div className="mt-3 text-center sm:mt-5">
+                                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                                        Confirmar Validação
+                                    </h3>
+                                    <div className="mt-2">
+                                        <p className="text-sm text-gray-500">
+                                            Você está prestes a validar a faturação {faturacaoData.id}. Esta ação confirma que todos os valores foram verificados e estão corretos.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                <button
+                                    type="button"
+                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:col-start-2 sm:text-sm"
+                                    onClick={() => setShowConfirmModal(false)}
+                                >
+                                    Confirmar Validação
+                                </button>
+                                <button
+                                    type="button"
+                                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                                    onClick={() => setShowConfirmModal(false)}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de Rejeição */}
+            {showRejectModal && (
+                <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div>
+                                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                                    <X className="h-6 w-6 text-red-600" />
+                                </div>
+                                <div className="mt-3 text-center sm:mt-5">
+                                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                                        Rejeitar Faturação
+                                    </h3>
+                                    <div className="mt-2">
+                                        <p className="text-sm text-gray-500">
+                                            Por favor, forneça um motivo para a rejeição desta faturação. Esta informação será enviada ao responsável para correção.
+                                        </p>
+                                    </div>
+                                    <div className="mt-4">
+                                        <textarea
+                                            rows="4"
+                                            className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="Descreva o motivo da rejeição..."
+                                            value={rejectReason}
+                                            onChange={(e) => setRejectReason(e.target.value)}
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                <button
+                                    type="button"
+                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
+                                    onClick={() => setShowRejectModal(false)}
+                                    disabled={!rejectReason.trim()}
+                                >
+                                    Rejeitar Faturação
+                                </button>
+                                <button
+                                    type="button"
+                                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                                    onClick={() => setShowRejectModal(false)}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1051 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Calendar, Clock, Users, User, FileText, CheckSquare, Edit3, PlusCircle, Filter, BarChart2, Menu, Bell, ChevronLeft, ChevronRight, Settings, Search, Save, Mail, FileDown, AlertTriangle, Clock8, DollarSign } from 'lucide-react';
+
+const SchedulingSystem = () => {
+  const [activeTab, setActiveTab] = useState('schedule');
+  const [viewMode, setViewMode] = useState('week');
+  const [selectedUnit, setSelectedUnit] = useState('OPO');
+  const [selectedArea, setSelectedArea] = useState('SALA');
+  const [selectedPeriod, setSelectedPeriod] = useState('DEZEMBRO 2025');
+  const [currentWeek, setCurrentWeek] = useState(1);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [dateRange, setDateRange] = useState({ start: '07/12/2025', end: '13/12/2025' });
+  const [totalHours, setTotalHours] = useState(256);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [draggedEmployee, setDraggedEmployee] = useState(null);
+  const [draggedShift, setDraggedShift] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [dragOverCell, setDragOverCell] = useState(null);
+  const [showShiftTemplateModal, setShowShiftTemplateModal] = useState(false);
+  const [selectedCell, setSelectedCell] = useState({ employeeId: null, dayIndex: null });
+  const [shiftTemplates, setShiftTemplates] = useState([
+    { id: 1, name: 'Padrão - Manhã', shiftId: 1 },
+    { id: 2, name: 'Padrão - Tarde', shiftId: 2 },
+    { id: 3, name: 'Part-time Fim de Semana', shiftId: 5 }
+  ]);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [draggingShift, setDraggingShift] = useState(null);
+  const [dropTarget, setDropTarget] = useState(null);
+  const dragItem = useRef(null);
+  const dragItemNode = useRef(null);
+  
+  // Store de configurações da unidade
+  const [unitConfig, setUnitConfig] = useState({
+    openingTime: '08:30',
+    closingTime: '20:00',
+    contractHours: {
+      1: 40, // ID do funcionário: horas contratuais semanais
+      2: 40,
+      3: 40,
+      4: 40,
+      5: 20, // Part-time
+      6: 20, // Part-time
+      7: 40,
+      8: 40
+    },
+    hourlyRate: {
+      1: 12.5, // ID do funcionário: valor da hora
+      2: 10.0,
+      3: 9.5,
+      4: 10.0,
+      5: 9.0,
+      6: 9.0,
+      7: 12.5,
+      8: 10.0
+    }
+  });
+
+  // Mock data for the schedule
+  const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const dayDates = ['07/12', '08/12', '09/12', '10/12', '11/12', '12/12', '13/12'];
+  
+  const shiftTypes = [
+    { id: 1, name: 'ABERTURA', color: 'bg-green-500', time: '08:30-17:00', hours: 8.5 },
+    { id: 2, name: 'FECHO', color: 'bg-blue-500', time: '11:30-20:00', hours: 8.5 },
+    { id: 3, name: 'INTERMEDIO 1', color: 'bg-purple-500', time: '09:00-17:30', hours: 8.5 },
+    { id: 4, name: 'INTERMEDIO 2', color: 'bg-indigo-500', time: '09:30-18:00', hours: 8.5 },
+    { id: 5, name: 'PART-TIME 1', color: 'bg-pink-500', time: '10:00-14:00', hours: 4 },
+    { id: 6, name: 'PART-TIME 2', color: 'bg-red-500', time: '10:30-14:30', hours: 4 },
+    { id: 7, name: 'FÉRIAS', color: 'bg-green-300', time: '', hours: 0 },
+    { id: 8, name: 'FALTA', color: 'bg-red-300', time: '', hours: 0 },
+  ];
+  
+  const employees = [
+    { id: 1, name: 'Ana Silva', position: 'SUPERVISOR', avatar: '/api/placeholder/32/32', status: 'active' },
+    { id: 2, name: 'Bruno Santos', position: 'BARISTA', avatar: '/api/placeholder/32/32', status: 'active' },
+    { id: 3, name: 'Carla Oliveira', position: 'ATENDENTE', avatar: '/api/placeholder/32/32', status: 'active' },
+    { id: 4, name: 'Daniel Costa', position: 'BARISTA', avatar: '/api/placeholder/32/32', status: 'active' },
+    { id: 5, name: 'Elena Martins', position: 'CAIXA', avatar: '/api/placeholder/32/32', status: 'vacation' },
+    { id: 6, name: 'Fábio Pereira', position: 'ATENDENTE', avatar: '/api/placeholder/32/32', status: 'active' },
+    { id: 7, name: 'Gabriela Lima', position: 'SUPERVISOR', avatar: '/api/placeholder/32/32', status: 'absent' },
+    { id: 8, name: 'Hugo Alves', position: 'BARISTA', avatar: '/api/placeholder/32/32', status: 'active' },
+  ];
+
+  // Mock schedule data with useState to enable drag and drop
+  const [scheduleData, setScheduleData] = useState([
+    { employeeId: 1, shifts: [null, 1, 1, 1, 1, 1, null] },
+    { employeeId: 2, shifts: [null, 3, 3, 3, 3, 3, 1] },
+    { employeeId: 3, shifts: [2, null, 4, 4, 4, 4, 2] },
+    { employeeId: 4, shifts: [null, 2, 2, 2, 2, 2, null] },
+    { employeeId: 5, shifts: [5, 5, 5, null, 7, 7, null] },
+    { employeeId: 6, shifts: [6, 6, null, 6, 6, 6, 6] },
+    { employeeId: 7, shifts: [1, null, 8, 1, 1, 1, 2] },
+    { employeeId: 8, shifts: [2, 2, 2, 2, null, null, 2] },
+  ]);
+
+  // Calculate employee hours and check for schedule issues
+  useEffect(() => {
+    let totalHoursCount = 0;
+    let employeeHours = {};
+    let employeeCost = {};
+    let scheduleIssues = [];
+    
+    // Initialize employee hours and cost
+    employees.forEach(emp => {
+      employeeHours[emp.id] = 0;
+      employeeCost[emp.id] = 0;
+    });
+    
+    // Calculate hours per employee and check for opening/closing issue
+    scheduleData.forEach(empSchedule => {
+      let employeeId = empSchedule.employeeId;
+      
+      empSchedule.shifts.forEach((shiftId, dayIndex) => {
+        if (shiftId) {
+          const shift = shiftTypes.find(s => s.id === shiftId);
+          if (shift) {
+            // Add to total hours
+            totalHoursCount += shift.hours;
+            
+            // Add to employee hours
+            employeeHours[employeeId] = (employeeHours[employeeId] || 0) + shift.hours;
+            
+            // Calculate cost based on hourly rate
+            employeeCost[employeeId] = (employeeCost[employeeId] || 0) + (shift.hours * unitConfig.hourlyRate[employeeId]);
+          }
+        }
+      });
+    });
+    
+    // Check for opening and closing coverage for each day
+    weekDays.forEach((day, dayIndex) => {
+      let hasOpening = false;
+      let hasClosing = false;
+      
+      scheduleData.forEach(empSchedule => {
+        const shiftId = empSchedule.shifts[dayIndex];
+        if (shiftId) {
+          const shift = shiftTypes.find(s => s.id === shiftId);
+          if (shift) {
+            // Check if shift covers opening time
+            if (shift.name === 'ABERTURA' || shift.time.split('-')[0] <= unitConfig.openingTime) {
+              hasOpening = true;
+            }
+            
+            // Check if shift covers closing time
+            if (shift.name === 'FECHO' || shift.time.split('-')[1] >= unitConfig.closingTime) {
+              hasClosing = true;
+            }
+          }
+        }
+      });
+      
+      // If missing opening or closing, add to issues
+      if (!hasOpening || !hasClosing) {
+        scheduleIssues.push({
+          day: dayIndex,
+          date: dayDates[dayIndex],
+          missingOpening: !hasOpening,
+          missingClosing: !hasClosing
+        });
+      }
+    });
+    
+    // Set state with calculated values
+    setTotalHours(totalHoursCount);
+    
+    // Store these calculated values for display
+    setEmployeeStats({
+      hours: employeeHours,
+      cost: employeeCost,
+      scheduleIssues: scheduleIssues
+    });
+  }, [scheduleData]);
+  
+  // Store for employee statistics
+  const [employeeStats, setEmployeeStats] = useState({
+    hours: {},
+    cost: {},
+    scheduleIssues: []
+  });
+
+  const getShiftTypeById = (id) => {
+    return id ? shiftTypes.find(type => type.id === id) : null;
+  };
+
+  const getEmployeeById = (id) => {
+    return employees.find(emp => emp.id === id);
+  };
+
+  const getStatusBadge = (status) => {
+    switch(status) {
+      case 'active':
+        return (
+          <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+            Ativo
+          </span>
+        );
+      case 'vacation':
+        return (
+          <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+            <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
+            Férias
+          </span>
+        );
+      case 'absent':
+        return (
+          <span className="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+            Ausente
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Unit selector options
+  const units = [
+    { value: 'OPO', label: 'Porto' },
+    { value: 'LX', label: 'Lisboa' },
+    { value: 'BCN', label: 'Barcelona' },
+    { value: 'MAD', label: 'Madrid' }
+  ];
+
+  // Area selector options
+  const areas = [
+    { value: 'SALA', label: 'Sala' },
+    { value: 'BAR', label: 'Bar' },
+    { value: 'COPA', label: 'Copa' },
+    { value: 'COZINHA', label: 'Cozinha' }
+  ];
+
+  // Simulated date range change
+  const handleDateRangeChange = (start, end) => {
+    setDateRange({ start, end });
+    setShowDatePicker(false);
+  };
+
+  // Previous week
+  const handlePrevWeek = () => {
+    setCurrentWeek(prev => Math.max(1, prev - 1));
+  };
+
+  // Next week
+  const handleNextWeek = () => {
+    setCurrentWeek(prev => prev + 1);
+  };
+
+  // Handle drag start for employee row
+  const handleEmployeeDragStart = (e, index) => {
+    setDraggedEmployee(index);
+  };
+
+  // Handle drag over for employee row
+  const handleEmployeeDragOver = (e, index) => {
+    e.preventDefault();
+    setDragOverIndex(index);
+  };
+
+  // Handle drop for employee row
+  const handleEmployeeDrop = (e) => {
+    e.preventDefault();
+    if (draggedEmployee !== null && dragOverIndex !== null && draggedEmployee !== dragOverIndex) {
+      const newScheduleData = [...scheduleData];
+      const draggedItem = newScheduleData[draggedEmployee];
+      
+      // Remove the dragged item
+      newScheduleData.splice(draggedEmployee, 1);
+      
+      // Insert it at the new position
+      newScheduleData.splice(dragOverIndex, 0, draggedItem);
+      
+      setScheduleData(newScheduleData);
+    }
+    
+    // Reset drag state
+    setDraggedEmployee(null);
+    setDragOverIndex(null);
+  };
+  
+  // Handle drag start for shift cell - usando drag item ref para melhor controle
+  const handleShiftDragStart = (e, params) => {
+    e.stopPropagation();
+    dragItem.current = params;
+    dragItemNode.current = e.target;
+    
+    // Adiciona evento listener para dragend apenas durante o arrasto
+    dragItemNode.current.addEventListener('dragend', handleDragEnd);
+    
+    // Aguarda um momento para permitir que o dragImage seja definido
+    setTimeout(() => {
+      setDraggingShift(true);
+    }, 0);
+    
+    return true;
+  };
+  
+  // Handle drag end
+  const handleDragEnd = (e) => {
+    e.preventDefault();
+    setDraggingShift(false);
+    
+    // Remove o event listener
+    dragItemNode.current.removeEventListener('dragend', handleDragEnd);
+    dragItem.current = null;
+    dragItemNode.current = null;
+    setDropTarget(null);
+  };
+  
+  // Handle drag enter for shift cell
+  const handleDragEnter = (e, params) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Verifica se estamos arrastando e se o target é diferente da origem
+    if (dragItem.current !== null) {
+      setDropTarget(params);
+    }
+  };
+  
+  // Handle drop for shift cell
+  const handleShiftDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Se temos um item sendo arrastado e um alvo válido
+    if (dragItem.current !== null && dropTarget !== null) {
+      const sourceEmpIndex = dragItem.current.empIndex;
+      const sourceDayIndex = dragItem.current.dayIndex;
+      const targetEmpIndex = dropTarget.empIndex;
+      const targetDayIndex = dropTarget.dayIndex;
+      
+      // Se origem e destino são diferentes
+      if (sourceEmpIndex !== targetEmpIndex || sourceDayIndex !== targetDayIndex) {
+        const newScheduleData = [...scheduleData];
+        
+        // Troca os valores (permite swap)
+        const sourceShift = newScheduleData[sourceEmpIndex].shifts[sourceDayIndex];
+        const targetShift = newScheduleData[targetEmpIndex].shifts[targetDayIndex];
+        
+        newScheduleData[sourceEmpIndex].shifts[sourceDayIndex] = targetShift;
+        newScheduleData[targetEmpIndex].shifts[targetDayIndex] = sourceShift;
+        
+        setScheduleData(newScheduleData);
+      }
+    }
+    
+    // Reset drag state
+    setDraggingShift(false);
+    setDropTarget(null);
+    dragItem.current = null;
+  };
+  
+  // Calcula horas excedentes baseado no contrato
+  const getOvertimeHours = (employeeId) => {
+    const contractHours = unitConfig.contractHours[employeeId] || 40;
+    const workedHours = employeeStats.hours[employeeId] || 0;
+    
+    return Math.max(0, workedHours - contractHours);
+  };
+  
+  // Cor para destacar excedente
+  const getHoursColor = (employeeId) => {
+    const overtime = getOvertimeHours(employeeId);
+    if (overtime > 0) return "text-red-600";
+    
+    const contractHours = unitConfig.contractHours[employeeId] || 40;
+    const workedHours = employeeStats.hours[employeeId] || 0;
+    
+    if (workedHours < contractHours * 0.9) return "text-yellow-600";
+    return "text-green-600";
+  };
+
+  // Handle click on empty cell to show shift template modal
+  const handleEmptyCellClick = (employeeId, dayIndex) => {
+    setSelectedCell({ employeeId, dayIndex });
+    setShowShiftTemplateModal(true);
+  };
+
+  // Handle shift template selection
+  const handleTemplateSelect = (templateId) => {
+    const template = shiftTemplates.find(t => t.id === templateId);
+    if (template && selectedCell.employeeId !== null && selectedCell.dayIndex !== null) {
+      const newScheduleData = [...scheduleData];
+      const employeeIndex = scheduleData.findIndex(emp => emp.employeeId === selectedCell.employeeId);
+      
+      if (employeeIndex !== -1) {
+        newScheduleData[employeeIndex].shifts[selectedCell.dayIndex] = template.shiftId;
+        setScheduleData(newScheduleData);
+      }
+    }
+    
+    setShowShiftTemplateModal(false);
+  };
+
+  // Create new template
+  const handleCreateTemplate = (name, shiftId) => {
+    const newTemplate = {
+      id: shiftTemplates.length + 1,
+      name,
+      shiftId
+    };
+    
+    setShiftTemplates([...shiftTemplates, newTemplate]);
+    setShowShiftTemplateModal(false);
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <aside className={`fixed top-0 left-0 z-40 h-screen transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 w-64 bg-gray-800 text-white`} aria-label="Sidebar">
+        <div className="h-full px-3 py-4 overflow-y-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold">Zenith Scheduling</h1>
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="sm:hidden p-1 rounded-lg hover:bg-gray-700"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </div>
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('dashboard')}
+              >
+                <BarChart2 className="w-5 h-5 me-3" />
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'schedule' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('schedule')}
+              >
+                <Calendar className="w-5 h-5 me-3" />
+                <span>Escalas</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'employees' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('employees')}
+              >
+                <Users className="w-5 h-5 me-3" />
+                <span>Funcionários</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'templates' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('templates')}
+              >
+                <FileText className="w-5 h-5 me-3" />
+                <span>Templates</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'reports' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('reports')}
+              >
+                <BarChart2 className="w-5 h-5 me-3" />
+                <span>Relatórios</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" 
+                className={`flex items-center p-2 rounded-lg ${activeTab === 'settings' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+                onClick={() => setActiveTab('settings')}
+              >
+                <Settings className="w-5 h-5 me-3" />
+                <span>Configurações</span>
+              </a>
+            </li>
+          </ul>
+          
+          <div className="pt-5 mt-6 border-t border-gray-700">
+            <p className="text-xs text-gray-400 mb-4">Unidade Atual</p>
+            <select 
+              className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+              value={selectedUnit}
+              onChange={(e) => setSelectedUnit(e.target.value)}
+            >
+              {units.map(unit => (
+                <option key={unit.value} value={unit.value}>{unit.label}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="absolute bottom-5 left-0 right-0 px-3">
+            <div className="flex items-center space-x-3 p-2 rounded-lg bg-gray-700">
+              <img src="/api/placeholder/40/40" alt="User avatar" className="w-10 h-10 rounded-full" />
+              <div>
+                <p className="font-medium">Admin User</p>
+                <p className="text-sm text-gray-400">Administrador</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <div className={`flex-1 ${sidebarOpen ? 'sm:ml-64' : ''}`}>
+        {/* Top navbar */}
+        <nav className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
+          <div className="flex items-center">
+            <button 
+              className={`p-2 mr-3 rounded-lg text-gray-600 hover:bg-gray-100 ${sidebarOpen ? 'sm:hidden' : ''}`}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            
+            <div className="relative w-64">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Search className="w-4 h-4 text-gray-500" />
+              </div>
+              <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Buscar..." />
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <button className="p-2 bg-gray-100 rounded-full relative">
+                <Bell className="w-5 h-5 text-gray-600" />
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+            </div>
+            
+            <div className="flex items-center border-l pl-3 ml-2">
+              <p className="text-sm font-medium mr-2">{selectedUnit} • {selectedArea}</p>
+              <span className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">RASCUNHO</span>
+            </div>
+          </div>
+        </nav>
+
+        {/* Main content area */}
+        <div className="p-4">
+          {activeTab === 'schedule' && (
+            <div className="bg-white rounded-lg shadow">
+              {/* Schedule header */}
+              <div className="p-4 border-b">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold">Escala Semanal</h2>
+                  <div className="flex items-center mt-3 md:mt-0">
+                    <select 
+                      className="bg-gray-50 border border-gray-300 rounded mx-2 px-3 py-1.5 text-sm"
+                      value={selectedArea}
+                      onChange={(e) => setSelectedArea(e.target.value)}
+                    >
+                      {areas.map(area => (
+                        <option key={area.value} value={area.value}>{area.label}</option>
+                      ))}
+                    </select>
+                    
+                    <div className="relative ml-2">
+                      <button 
+                        className="flex items-center space-x-1 bg-gray-50 border border-gray-300 rounded px-3 py-1.5 text-sm"
+                        onClick={() => setShowDatePicker(!showDatePicker)}
+                      >
+                        <Calendar className="w-4 h-4 mr-1" />
+                        <span>{dateRange.start} - {dateRange.end}</span>
+                      </button>
+                      
+                      {showDatePicker && (
+                        <div className="absolute top-full mt-2 right-0 bg-white rounded-lg shadow-lg p-4 z-20 border">
+                          <div className="flex items-center">
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <Calendar className="w-4 h-4 text-gray-500" />
+                              </div>
+                              <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 pl-10 p-2.5" placeholder="Data inicial" value={dateRange.start} onChange={(e) => setDateRange({...dateRange, start: e.target.value})} />
+                            </div>
+                            <span className="mx-4 text-gray-500">até</span>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <Calendar className="w-4 h-4 text-gray-500" />
+                              </div>
+                              <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 pl-10 p-2.5" placeholder="Data final" value={dateRange.end} onChange={(e) => setDateRange({...dateRange, end: e.target.value})} />
+                            </div>
+                          </div>
+                          
+                          <div className="flex justify-end mt-4">
+                            <button className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded mr-2 text-sm" onClick={() => setShowDatePicker(false)}>Cancelar</button>
+                            <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm" onClick={() => handleDateRangeChange(dateRange.start, dateRange.end)}>Aplicar</button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap items-center justify-between">
+                  <div className="flex items-center space-x-4 mb-3 md:mb-0">
+                    <div className="flex space-x-1">
+                      <button className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-l text-sm font-medium" onClick={() => setViewMode('day')}>Dia</button>
+                      <button className={`${viewMode === 'week' ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'} px-3 py-1 text-sm font-medium`} onClick={() => setViewMode('week')}>Semana</button>
+                      <button className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r text-sm font-medium" onClick={() => setViewMode('month')}>Mês</button>
+                    </div>
+                    
+                    <div className="flex items-center ml-4 bg-gray-50 px-3 py-1 rounded-lg border border-gray-200">
+                      <Clock8 className="w-4 h-4 text-gray-500 mr-2" />
+                      <span className="text-sm">Horário: {unitConfig.openingTime} - {unitConfig.closingTime}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button 
+                        className="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100"
+                        onClick={handlePrevWeek}
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <span className="font-medium">Semana {currentWeek} • {dateRange.start}-{dateRange.end}</span>
+                      <button 
+                        className="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100"
+                        onClick={handleNextWeek}
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button className="flex items-center space-x-1 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded text-sm">
+                      <Filter className="w-4 h-4" />
+                      <span>Filtros</span>
+                    </button>
+                    <button className="flex items-center space-x-1 bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded text-sm">
+                      <PlusCircle className="w-4 h-4" />
+                      <span>Adicionar Turno</span>
+                    </button>
+                    <button className="flex items-center space-x-1 bg-green-50 text-green-600 hover:bg-green-100 px-3 py-1 rounded text-sm">
+                      <Save className="w-4 h-4" />
+                      <span>Salvar</span>
+                    </button>
+                    <button className="flex items-center space-x-1 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-1 rounded text-sm">
+                      <CheckSquare className="w-4 h-4" />
+                      <span>Publicar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Schedule table with drag and drop */}
+              <div className="overflow-x-auto relative">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="w-48 border-r border-b p-2 text-left sticky left-0 bg-gray-50 z-10">Funcionário</th>
+                      {weekDays.map((day, index) => {
+                        // Verificar se o dia tem problemas de abertura/fechamento
+                        const issueForDay = employeeStats.scheduleIssues.find(issue => issue.day === index);
+                        const hasIssue = issueForDay !== undefined;
+                        
+                        return (
+                          <th 
+                            key={day} 
+                            className={`border-b p-2 text-center ${hasIssue ? 'bg-red-50' : ''}`}
+                          >
+                            <div className="font-medium flex items-center justify-center">
+                              {day}
+                              {hasIssue && (
+                                <span className="ml-1" title={`Problema: ${issueForDay.missingOpening ? 'Sem abertura' : ''}${issueForDay.missingOpening && issueForDay.missingClosing ? ' e ' : ''}${issueForDay.missingClosing ? 'Sem fechamento' : ''}`}>
+                                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-sm text-gray-500">{dayDates[index]}</div>
+                          </th>
+                        );
+                      })}
+                      {/* Coluna de totais - fixa à direita */}
+                      <th className="border-b border-l p-2 text-center sticky right-0 bg-gray-50 z-10 w-48">
+                        <div className="font-medium">Total</div>
+                        <div className="text-sm text-gray-500">Horas / Custo</div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {scheduleData.map((row, empIndex) => {
+                      const employee = getEmployeeById(row.employeeId);
+                      const totalHoursForEmployee = employeeStats.hours[employee.id] || 0;
+                      const totalCostForEmployee = employeeStats.cost[employee.id] || 0;
+                      const overtimeHours = getOvertimeHours(employee.id);
+                      const hoursColor = getHoursColor(employee.id);
+                                            
+                      return (
+                        <tr 
+                          key={row.employeeId} 
+                          className={`hover:bg-gray-50 ${dragOverIndex === empIndex ? 'bg-blue-50' : ''}`}
+                          draggable
+                          onDragStart={(e) => handleEmployeeDragStart(e, empIndex)}
+                          onDragOver={(e) => handleEmployeeDragOver(e, empIndex)}
+                          onDrop={handleEmployeeDrop}
+                        >
+                          <td className="border-r p-2 cursor-move sticky left-0 bg-white z-10 hover:bg-gray-50">
+                            <div className="flex items-center space-x-2">
+                              <div className="flex items-center justify-center p-1 text-gray-400 cursor-grab">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="8" cy="8" r="1" />
+                                  <circle cx="8" cy="16" r="1" />
+                                  <circle cx="16" cy="8" r="1" />
+                                  <circle cx="16" cy="16" r="1" />
+                                </svg>
+                              </div>
+                              <img 
+                                src={employee.avatar} 
+                                alt={employee.name} 
+                                className="w-8 h-8 rounded-full cursor-pointer hover:ring-2 hover:ring-blue-300" 
+                                onClick={() => {
+                                  setSelectedEmployee(employee);
+                                  setShowEmployeeModal(true);
+                                }}
+                              />
+                              <div>
+                                <div className="font-medium">{employee.name}</div>
+                                <div className="text-xs text-gray-500">{employee.position}</div>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          {row.shifts.map((shiftId, dayIndex) => {
+                            const shift = getShiftTypeById(shiftId);
+                            const isDropTarget = dropTarget && dropTarget.empIndex === empIndex && dropTarget.dayIndex === dayIndex;
+                            const isIssueDay = employeeStats.scheduleIssues.some(issue => issue.day === dayIndex);
+                            
+                            return (
+                              <td 
+                                key={dayIndex} 
+                                className={`border p-1 text-center ${isDropTarget ? 'bg-blue-50' : ''} ${isIssueDay ? 'bg-red-50' : ''}`}
+                                onDragEnter={(e) => handleDragEnter(e, { empIndex, dayIndex })}
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={handleShiftDrop}
+                              >
+                                {shift ? (
+                                  <div 
+                                    className={`${shift.color} text-white rounded p-1 flex flex-col items-center justify-center cursor-move hover:opacity-90`}
+                                    draggable="true"
+                                    onDragStart={(e) => handleShiftDragStart(e, { empIndex, dayIndex })}
+                                  >
+                                    <div className="font-medium text-sm">{shift.name}</div>
+                                    {shift.time && <div className="text-xs">{shift.time}</div>}
+                                    <div className="flex mt-1 space-x-1">
+                                      <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded p-1">
+                                        <Edit3 className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <button 
+                                    className={`w-full h-16 ${isIssueDay ? 'bg-red-100 hover:bg-red-200' : 'bg-gray-100 hover:bg-gray-200'} rounded flex items-center justify-center`}
+                                    onClick={() => handleEmptyCellClick(row.employeeId, dayIndex)}
+                                  >
+                                    <PlusCircle className={`h-5 w-5 ${isIssueDay ? 'text-red-400' : 'text-gray-400'}`} />
+                                  </button>
+                                )}
+                              </td>
+                            );
+                          })}
+                          
+                          {/* Célula de totais - fixa à direita */}
+                          <td className="border-l p-2 text-center sticky right-0 bg-white z-10 hover:bg-gray-50">
+                            <div className={`font-medium ${hoursColor}`}>
+                              {totalHoursForEmployee}h
+                              {overtimeHours > 0 && (
+                                <span className="text-xs ml-1 text-red-500">
+                                  (+{overtimeHours})
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-sm text-gray-500 flex items-center justify-center">
+                              <DollarSign className="h-3 w-3 mr-1" />
+                              {totalCostForEmployee.toFixed(2)}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Shift type legend */}
+              <div className="p-4 border-t">
+                <h3 className="font-medium mb-2">Legenda</h3>
+                <div className="flex flex-wrap gap-3">
+                  {shiftTypes.map(shift => (
+                    <div 
+                      key={shift.id} 
+                      className="flex items-center space-x-1 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                      draggable
+                      onDragStart={(e) => {
+                        // Set data for dragging a template from legend
+                        e.dataTransfer.setData('shiftTemplate', JSON.stringify({
+                          shiftId: shift.id
+                        }));
+                      }}
+                    >
+                      <div className={`${shift.color} w-4 h-4 rounded`}></div>
+                      <span className="text-sm">{shift.name}</span>
+                      {shift.time && <span className="text-xs text-gray-500">({shift.time})</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom templates section */}
+              <div className="p-4 border-t">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium">Templates de Turno</h3>
+                  <button className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+                    <PlusCircle className="h-4 w-4 mr-1" />
+                    Novo Template
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {shiftTemplates.map(template => {
+                    const shift = getShiftTypeById(template.shiftId);
+                    return (
+                      <div 
+                        key={template.id} 
+                        className="flex items-center space-x-1 bg-gray-50 hover:bg-gray-100 p-2 rounded cursor-pointer"
+                        draggable
+                        onDragStart={(e) => {
+                          // Set data for dragging a template
+                          e.dataTransfer.setData('shiftTemplate', JSON.stringify({
+                            templateId: template.id,
+                            shiftId: template.shiftId
+                          }));
+                        }}
+                      >
+                        {shift && <div className={`${shift.color} w-3 h-3 rounded`}></div>}
+                        <span className="text-sm">{template.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Status bar */}
+              <div className="bg-gray-100 border-t p-2 flex items-center justify-between text-sm text-gray-500">
+                <span>Unidade: {selectedUnit} • Área: {selectedArea} • Período: {selectedPeriod}</span>
+                <span>{employees.length} funcionários • {totalHours} horas totais</span>
+                <span>Última atualização: 05/03/2025 15:32</span>
+              </div>
+            </div>
+          )}
+
+          {/* Employee management tab */}
+          {activeTab === 'employees' && (
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-4 border-b">
+                <h2 className="text-xl font-bold mb-4">Gestão de Funcionários</h2>
+                <div className="flex justify-between items-center">
+                  <div className="relative w-64">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <Search className="w-4 h-4 text-gray-500" />
+                    </div>
+                    <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Buscar funcionário..." />
+                  </div>
+                  <button className="flex items-center space-x-1 bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded text-sm">
+                    <PlusCircle className="w-4 h-4" />
+                    <span>Adicionar Funcionário</span>
+                  </button>
+                </div>
+              </div>
+              <div className="p-4">
+                <ul className="divide-y divide-gray-200">
+                  {employees.map(employee => (
+                    <li key={employee.id} className="py-3 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <img src={employee.avatar} alt={employee.name} className="w-10 h-10 rounded-full" />
+                        <div>
+                          <p className="font-medium">{employee.name}</p>
+                          <p className="text-sm text-gray-500">{employee.position}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        {getStatusBadge(employee.status)}
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Templates tab */}
+          {activeTab === 'templates' && (
+            <div className="bg-white rounded-lg shadow p-4">
+              <h2 className="text-xl font-bold mb-4">Templates de Escala</h2>
+              <p className="text-gray-500 mb-6">Crie e gerencie templates para agilizar a criação de escalas.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-gray-400 hover:text-gray-600 hover:border-gray-400 cursor-pointer">
+                  <PlusCircle className="w-8 h-8 mb-2" />
+                  <p className="font-medium">Criar Novo Template</p>
+                </div>
+                
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="font-medium text-lg">Template Semanal {i}</h3>
+                      <div className="flex space-x-2">
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-gray-500">8 funcionários • 40 turnos</p>
+                      <div className="flex space-x-1">
+                        {[1, 2, 3, 4, 5].map(j => (
+                          <div key={j} className={`w-6 h-2 rounded-sm ${['bg-green-500', 'bg-blue-500', 'bg-purple-500', 'bg-indigo-500', 'bg-pink-500'][j % 5]}`}></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Reports tab */}
+          {activeTab === 'reports' && (
+            <div className="bg-white rounded-lg shadow p-4">
+              <h2 className="text-xl font-bold mb-4">Relatórios e Análises</h2>
+              <p className="text-gray-500 mb-6">Visualize relatórios de horas, custos e eficiência das escalas.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                  <h3 className="font-medium text-blue-800 mb-2">Total de Horas</h3>
+                  <p className="text-2xl font-bold">{totalHours}</p>
+                  <p className="text-sm text-blue-600">+5% em relação à semana anterior</p>
+                </div>
+                
+                <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+                  <h3 className="font-medium text-green-800 mb-2">Funcionários Ativos</h3>
+                  <p className="text-2xl font-bold">{employees.length}</p>
+                  <p className="text-sm text-green-600">100% da equipe</p>
+                </div>
+                
+                <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                  <h3 className="font-medium text-purple-800 mb-2">Turnos Preenchidos</h3>
+                  <p className="text-2xl font-bold">42/56</p>
+                  <p className="text-sm text-purple-600">75% de ocupação</p>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 className="font-medium mb-4">Distribuição de Turnos</h3>
+                <div className="h-40 flex items-end space-x-2">
+                  {shiftTypes.slice(0, 6).map((shift, index) => (
+                    <div key={shift.id} className="flex-1 flex flex-col items-center">
+                      <div 
+                        className={`w-full ${shift.color}`} 
+                        style={{ height: `${20 + (index % 3) * 15}%` }}
+                      ></div>
+                      <p className="text-xs mt-2 text-gray-600">{shift.name.split(' ')[0]}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Shift Template Modal */}
+      {showShiftTemplateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-96 max-w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium">Selecionar Turno</h3>
+              <button 
+                className="text-gray-400 hover:text-gray-600" 
+                onClick={() => setShowShiftTemplateModal(false)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-2">Turnos</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {shiftTypes.map(shift => (
+                    <div 
+                      key={shift.id}
+                      className="flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleTemplateSelect(shift.id)}
+                    >
+                      <div className={`${shift.color} w-4 h-4 rounded`}></div>
+                      <span className="text-sm">{shift.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-500 mb-2">Templates Salvos</p>
+                <div className="space-y-2">
+                  {shiftTemplates.map(template => {
+                    const shift = getShiftTypeById(template.shiftId);
+                    return (
+                      <div 
+                        key={template.id}
+                        className="flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50"
+                        onClick={() => handleTemplateSelect(template.id)}
+                      >
+                        {shift && <div className={`${shift.color} w-4 h-4 rounded`}></div>}
+                        <span className="text-sm">{template.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end mt-6">
+              <button 
+                className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded mr-2 text-sm"
+                onClick={() => setShowShiftTemplateModal(false)}
+              >
+                Cancelar
+              </button>
+              <button 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                onClick={() => {
+                  // This would normally open a dialog to create a new template
+                  handleCreateTemplate("Novo Template", 1);
+                }}
+              >
+                Criar Novo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SchedulingSystem;

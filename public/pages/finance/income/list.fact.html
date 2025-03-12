@@ -1,10 +1,81 @@
-                <div class="mt-4 md:mt-0 flex space-x-3">
-                    <a href="new.fact.html" class="bg-brand-600 hover:bg-brand-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center">
-                        <i class="fas fa-plus mr-2"></i>
-                        Nova Receita
-                    </a>
-                </div>
-                        <a href="new.fact.html" class="inline-flex items-center text-brand-600 hover:text-brand-700">
-                            <i class="fas fa-plus mr-2"></i>
-                            Cadastrar Nova Receita
-                        </a> 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Faturações - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <style>
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <script src="../../../js/layout.js"></script>
+</head>
+<body>
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
+            <div class="mt-4 md:mt-0 flex space-x-3">
+                <a href="new.fact.html" class="bg-brand-600 hover:bg-brand-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Nova Receita
+                </a>
+            </div>
+            <a href="new.fact.html" class="inline-flex items-center text-brand-600 hover:text-brand-700">
+                <i class="fas fa-plus mr-2"></i>
+                Cadastrar Nova Receita
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

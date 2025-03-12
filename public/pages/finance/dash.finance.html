@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/Sidebar.js"></script>
+    <script src="/components/shared/filters/DateRangeFilter.js"></script>
+    <script src="/components/finance/cards/TotalReceivedCard.js"></script>
+    <script src="/components/finance/cards/PendingRevenueCard.js"></script>
+    <script src="/components/finance/cards/TotalRevenueCard.js"></script>
+    <script src="/components/finance/cards/AverageRevenueCard.js"></script>
+    <script src="/components/finance/charts/MonthlyEvolutionChart.js"></script>
+    <script src="/components/finance/charts/StatusDistributionChart.js"></script>
+    <script src="/components/finance/tables/LatestRevenueTable.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold">Dashboard Financeiro</h1>
+                    <p class="text-muted">Visão geral das receitas, métricas e análises financeiras do seu negócio</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="new.fact.html" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        Cadastrar Nova Faturação
+                    </a>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download mr-2"></i>
+                        Download Template XLS
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-file-import mr-2"></i>
+                        Importar Dados XLS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resto do conteúdo em um container com padding -->
+            <div class="px-8">
+                <!-- Filtro de Data -->
+                <date-range-filter></date-range-filter>
+
+                <!-- Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <total-received-card></total-received-card>
+                    <pending-revenue-card></pending-revenue-card>
+                    <total-revenue-card></total-revenue-card>
+                    <average-revenue-card></average-revenue-card>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <monthly-evolution-chart></monthly-evolution-chart>
+                    <status-distribution-chart></status-distribution-chart>
+                </div>
+
+                <!-- Tabela -->
+                <latest-revenue-table></latest-revenue-table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação antes de carregar os dados
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('Token não encontrado, redirecionando para login');
+                window.location.href = '/index.html';
+                return;
+            }
+
+            // Atualizar todos os componentes quando o filtro de data mudar
+            document.querySelector('date-range-filter').addEventListener('dateFilterChange', (event) => {
+                const { startDate, endDate } = event.detail;
+                
+                // Atualizar cards
+                document.querySelector('total-received-card').loadData(startDate, endDate);
+                document.querySelector('pending-revenue-card').loadData(startDate, endDate);
+                document.querySelector('total-revenue-card').loadData(startDate, endDate);
+                document.querySelector('average-revenue-card').loadData(startDate, endDate);
+                
+                // Atualizar gráficos
+                document.querySelector('monthly-evolution-chart').loadData(startDate, endDate);
+                document.querySelector('status-distribution-chart').loadData(startDate, endDate);
+                
+                // Atualizar tabela
+                document.querySelector('latest-revenue-table').loadData(startDate, endDate);
+            });
+        });
+    </script>
+</body>
+</html> 

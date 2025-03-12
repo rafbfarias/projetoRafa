@@ -3,236 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Despesas | Sistema Financeiro</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="/css/styles.css" rel="stylesheet">
-    <script src="/js/Sidebar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Despesas - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex h-screen">
-    <!-- Sidebar -->
-    <app-sidebar></app-sidebar>
-    
-    <!-- Conteúdo Principal -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <!-- Cabeçalho -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-900">Dashboard de Despesas</h1>
-                <div class="flex space-x-4">
-                    <button id="newExpenseBtn" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <i class="fas fa-plus mr-2"></i>Nova Despesa
-                    </button>
+<body class="bg-primary">
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold">Despesas</h1>
+                    <p class="text-muted">Gestão e controle de despesas</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <select id="filterPeriod" class="form-select">
+                        <option>Últimos 30 dias</option>
+                        <option>Últimos 7 dias</option>
+                        <option>Este mês</option>
+                        <option>Este ano</option>
+                    </select>
+                    <a href="/pages/finance/expense/new.expense.html" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        Nova Despesa
+                    </a>
                 </div>
             </div>
-        </header>
-        
-        <!-- Conteúdo -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div class="max-w-7xl mx-auto">
-                <!-- Filtros -->
-                <div class="bg-white shadow rounded-lg mb-6 p-4 sm:p-6">
-                    <div class="flex flex-col md:flex-row md:items-end md:justify-between space-y-4 md:space-y-0 md:space-x-4">
-                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div>
-                                <label for="periodSelect" class="block text-sm font-medium text-gray-700 mb-1">Período</label>
-                                <select id="periodSelect" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                    <option value="today">Hoje</option>
-                                    <option value="yesterday">Ontem</option>
-                                    <option value="week">Esta Semana</option>
-                                    <option value="month" selected>Este Mês</option>
-                                    <option value="quarter">Este Trimestre</option>
-                                    <option value="year">Este Ano</option>
-                                    <option value="custom">Personalizado</option>
-                                </select>
-    </div>
-                            
-                            <div id="dateRangeContainer" class="hidden sm:col-span-2 lg:col-span-2 grid grid-cols-2 gap-2">
-        <div>
-                                    <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Data Inicial</label>
-                                    <input type="date" id="startDate" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-      </div>
-        <div>
-                                    <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">Data Final</label>
-                                    <input type="date" id="endDate" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-        </div>
-      </div>
-    </div>
-                        
-                        <div class="flex space-x-2">
-                            <button id="applyFilterBtn" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <i class="fas fa-filter mr-2"></i>Aplicar
-                </button>
-                            <button id="resetFilterBtn" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <i class="fas fa-undo mr-2"></i>Limpar
-              </button>
-            </div>
-          </div>
-          
-                    <div class="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div>
-                            <label for="modalityFilter" class="block text-sm font-medium text-gray-700 mb-1">Modalidade</label>
-                            <select id="modalityFilter" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                <option value="">Todas as Modalidades</option>
-                            </select>
-                        </div>
-              <div>
-                            <label for="categoryFilter" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                            <select id="categoryFilter" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" disabled>
-                                <option value="">Todas as Categorias</option>
-                </select>
-              </div>
-              <div>
-                            <label for="subcategoryFilter" class="block text-sm font-medium text-gray-700 mb-1">Subcategoria</label>
-                            <select id="subcategoryFilter" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" disabled>
-                                <option value="">Todas as Subcategorias</option>
-                </select>
-              </div>
-              <div>
-                            <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select id="statusFilter" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                <option value="">Todos os Status</option>
-                </select>
-              </div>
-                        <div>
-                            <label for="supplierFilter" class="block text-sm font-medium text-gray-700 mb-1">Fornecedor</label>
-                            <select id="supplierFilter" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                <option value="">Todos os Fornecedores</option>
-                            </select>
-              </div>
-        </div>
-      </div>
 
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
                 <!-- Cards de Resumo -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <!-- Total de Despesas -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
-                                <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Card de Total de Despesas -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-red-100">
+                                <i class="fas fa-money-bill-wave text-xl text-red-600"></i>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Total de Despesas</p>
-                                <h3 class="text-xl font-bold text-gray-900" id="totalExpensesValue">€0,00</h3>
-          </div>
-            </div>
-                    </div>
-                    
-                    <!-- Despesas Pendentes -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-yellow-100 rounded-full p-3">
-                                <i class="fas fa-clock text-yellow-600 text-xl"></i>
-                  </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Despesas Pendentes</p>
-                                <h3 class="text-xl font-bold text-gray-900" id="pendingExpensesValue">€0,00</h3>
-                </div>
-              </div>
-                    </div>
-                    
-                    <!-- Despesas Pagas -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
-                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                  </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Despesas Pagas</p>
-                                <h3 class="text-xl font-bold text-gray-900" id="paidExpensesValue">€0,00</h3>
-                </div>
-              </div>
-                    </div>
-                    
-                    <!-- Despesas Vencidas -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-red-100 rounded-full p-3">
-                                <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
-                  </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Despesas Vencidas</p>
-                                <h3 class="text-xl font-bold text-gray-900" id="overdueExpensesValue">€0,00</h3>
-                </div>
-              </div>
-                    </div>
-                </div>
-                
-                <!-- Gráficos -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Gráfico de Despesas por Modalidade -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Despesas por Modalidade</h3>
-                        <div class="h-64">
-                            <canvas id="expensesByModalityChart"></canvas>
-              </div>
-            </div>
-                    
-                    <!-- Gráfico de Despesas por Categoria -->
-                    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Categorias</h3>
-                        <div class="h-64">
-                            <canvas id="expensesByCategoryChart"></canvas>
+                                <h3 class="text-muted text-sm">Total de Despesas</h3>
+                                <p class="text-2xl font-bold">€ 12.450,00</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Este mês</span>
+                                <span class="text-red-600">+8.5%</span>
+                            </div>
                         </div>
                     </div>
-                  </div>
-                  
-                <!-- Gráfico de Tendência -->
-                <div class="bg-white shadow rounded-lg p-4 sm:p-6 mb-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Tendência de Despesas</h3>
-                    <div class="h-64">
-                        <canvas id="expensesTrendChart"></canvas>
+
+                    <!-- Card de Despesas Pendentes -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-yellow-100">
+                                <i class="fas fa-clock text-xl text-yellow-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Despesas Pendentes</h3>
+                                <p class="text-2xl font-bold">€ 3.280,00</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">8 despesas</span>
+                                <a href="#" class="text-brand-600 hover:text-brand-700">Ver todas</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Despesas Pagas -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-green-100">
+                                <i class="fas fa-check-circle text-xl text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Despesas Pagas</h3>
+                                <p class="text-2xl font-bold">€ 9.170,00</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">42 despesas</span>
+                                <a href="#" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Média por Despesa -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100">
+                                <i class="fas fa-chart-line text-xl text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Média por Despesa</h3>
+                                <p class="text-2xl font-bold">€ 296,00</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Últimos 30 dias</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              
-                <!-- Tabela de Despesas Recentes -->
-                <div class="bg-white shadow rounded-lg p-4 sm:p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">Despesas Recentes</h3>
-                        <button id="viewAllExpensesBtn" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            Ver Todas <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
-                  </div>
+
+                <!-- Gráfico de Despesas -->
+                <div class="dashboard-card p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Evolução de Despesas</h3>
+                    <div class="h-80">
+                        <canvas id="expensesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabela de Últimas Despesas -->
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">Últimas Despesas</h3>
+                        <a href="#" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                    </div>
                     <div class="overflow-x-auto">
-                        <table id="recentExpensesTable" class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <table class="w-full">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Descrição
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Valor
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Data
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Método
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Ações
-                                    </th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">ID</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Descrição</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Categoria</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Valor</th>
+                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="recentExpensesBody" class="bg-white divide-y divide-gray-200">
-                                <!-- Dados serão carregados via JavaScript -->
+                            <tbody>
                                 <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                        Carregando despesas...
+                                    <td class="px-4 py-3 text-sm font-medium">EXP-2025-0342</td>
+                                    <td class="px-4 py-3 text-sm">Manutenção de Equipamentos</td>
+                                    <td class="px-4 py-3 text-sm">Manutenção</td>
+                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
+                                    <td class="px-4 py-3 text-sm text-right">€ 850,00</td>
+                                    <td class="px-4 py-3 text-sm text-center">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pendente</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-edit"></i></a>
                                     </td>
                                 </tr>
+                                <!-- Adicione mais linhas conforme necessário -->
                             </tbody>
                         </table>
-                  </div>
+                    </div>
                 </div>
-              </div>
-        </main>
             </div>
-    
-    <script src="/public/js/finance/expense/dash.expense.js"></script>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuração do gráfico de despesas
+            const expensesChart = document.getElementById('expensesChart');
+            if (expensesChart) {
+                new Chart(expensesChart, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                        datasets: [{
+                            label: 'Despesas',
+                            data: [12450, 11200, 13800, 10500, 12200, 11800],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '€ ' + value;
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Despesas: € ' + context.raw;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,471 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Caixa - Sistema de Gestão</title>
+    <title>Cashout - Sistema de Gestão</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="text-left">
-                    <h1 class="text-left text-2xl font-bold">Gestão de Caixa</h1>
-                    <p class="text-muted">Controle e gerenciamento de saídas de caixa</p>
+                    <h1 class="text-2xl font-bold">Cashout</h1>
+                    <p class="text-muted">Gestão de pagamentos e retiradas</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
-                    <select class="form-select">
-                        <option>Últimos 30 dias</option>
-                        <option>Últimos 7 dias</option>
-                        <option>Este mês</option>
-                        <option>Este ano</option>
-                    </select>
                     <a href="/pages/finance/cashout/new.cashoutTransaction.html" class="btn btn-primary">
                         <i class="fas fa-plus mr-2"></i>
-                        Nova Transação
+                        Nova Saída Cash
                     </a>
                 </div>
             </div>
 
-            <!-- Cards de Resumo -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Card de Depósitos Pendentes -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
-                            <i class="fas fa-university text-xl" style="color: var(--icon-clients-text);"></i>
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Cards de Resumo -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Card de Total Disponível -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-green-100">
+                                <i class="fas fa-wallet text-xl text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Total Disponível</h3>
+                                <p class="text-2xl font-bold">€ 15.420,00</p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Depósitos Pendentes</h3>
-                            <p class="text-2xl font-bold">€ 3.425,50</p>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Última atualização: 2h atrás</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">7 dias: € 1.275,00</span>
-                            <a href="/finance/cashout/transactions?type=DEPOSIT" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+
+                    <!-- Card de Saídas Pendentes -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-yellow-100">
+                                <i class="fas fa-clock text-xl text-yellow-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Saídas Pendentes</h3>
+                                <p class="text-2xl font-bold">8</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Total: € 3.250,00</span>
+                                <a href="#" class="text-brand-600 hover:text-brand-700">Ver todas</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Saídas Realizadas -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100">
+                                <i class="fas fa-check-circle text-xl text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Saídas Realizadas</h3>
+                                <p class="text-2xl font-bold">42</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Este mês</span>
+                                <a href="#" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Média por Saída -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-purple-100">
+                                <i class="fas fa-chart-line text-xl text-purple-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Média por Saída</h3>
+                                <p class="text-2xl font-bold">€ 850,00</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Últimos 30 dias</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card de Entregas Pendentes -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
-                            <i class="fas fa-hand-holding-usd text-xl" style="color: var(--icon-revenue-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Entregas Pendentes</h3>
-                            <p class="text-2xl font-bold">€ 1.850,00</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">7 dias: € 850,00</span>
-                            <a href="/finance/cashout/transactions?type=HAND_DELIVERY" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card de Gorjetas Pendentes -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
-                            <i class="fas fa-coins text-xl" style="color: var(--icon-contracts-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Gorjetas Pendentes</h3>
-                            <p class="text-2xl font-bold">€ 795,20</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">7 dias: € 365,75</span>
-                            <a href="/finance/cashout/transactions?type=TIPS" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card de Transações Recentes -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
-                            <i class="fas fa-exchange-alt text-xl" style="color: var(--icon-employees-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Transações Recentes</h3>
-                            <p class="text-2xl font-bold">12</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">Esta semana: 5</span>
-                            <a href="/finance/cashout/transactions" class="text-brand-600 hover:text-brand-700">Ver todas</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabs Navigation -->
-            <div class="border-b border-gray-200 mb-6">
-                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
-                    <li class="me-2">
-                        <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="visao-geral">
-                            <i class="fas fa-chart-pie w-4 h-4 me-2"></i>Visão Geral
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="/pages/finance/cashout/transactions?type=DEPOSIT" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="depositos">
-                            <i class="fas fa-university w-4 h-4 me-2"></i>Depósitos
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="/pages/finance/cashout/transactions?type=HAND_DELIVERY" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="entregas">
-                            <i class="fas fa-hand-holding-usd w-4 h-4 me-2"></i>Entregas
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="/pages/finance/cashout/transactions?type=TIPS" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="gorjetas">
-                            <i class="fas fa-coins w-4 h-4 me-2"></i>Gorjetas
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="/pages/finance/cashout/report.cashout.html" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="relatorios">
-                            <i class="fas fa-file-alt w-4 h-4 me-2"></i>Relatórios
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Gráficos e Tabelas -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Gráfico de Distribuição de Pendências -->
-                <div class="dashboard-card p-6 lg:col-span-2">
-                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Distribuição de Pendências</h3>
+                <!-- Gráfico de Distribuição -->
+                <div class="dashboard-card p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Distribuição de Valores</h3>
                     <div class="h-80">
                         <canvas id="distributionChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Tabela de Pendências por Categoria -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-left" class="text-lg font-semibold mb-4 text-left">Pendências por Categoria</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium">Depósitos Bancários</span>
-                                <span class="text-sm font-bold">€ 3.425,50</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium">Entregas em Mãos</span>
-                                <span class="text-sm font-bold">€ 1.850,00</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 45%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium">Gorjetas</span>
-                                <span class="text-sm font-bold">€ 795,20</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-purple-500 h-2.5 rounded-full" style="width: 25%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6">
-                        <h4 class="text-md font-semibold mb-3">Distribuição por Unidade</h4>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-sm font-medium">Matosinhos</span>
-                                    <span class="text-sm font-bold">€ 2.850,70</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-brand-600 h-2.5 rounded-full" style="width: 55%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-sm font-medium">Porto</span>
-                                    <span class="text-sm font-bold">€ 3.220,00</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-brand-600 h-2.5 rounded-full" style="width: 45%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transações Recentes e Pendências por Dia -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- Transações Recentes -->
+                <!-- Tabela de Últimas Saídas -->
                 <div class="dashboard-card p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-left" class="text-lg font-semibold text-left">Transações Recentes</h3>
-                        <a href="/pages/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                        <h3 class="text-lg font-semibold">Últimas Saídas</h3>
+                        <a href="#" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">ID</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Beneficiário</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-muted">Tipo</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-muted">Valor</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Status</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
+                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
                                     <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center">
-                                            <i class="fas fa-university text-blue-600 mr-2"></i>Depósito
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-medium">€ 1.250,00</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/pages/finance/cashout/detail.cashoutTransaction.html" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">03/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center">
-                                            <i class="fas fa-hand-holding-usd text-green-600 mr-2"></i>Entrega
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-medium">€ 750,00</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Parcial</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/finance/cashout/transaction-details/124" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">01/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center">
-                                            <i class="fas fa-coins text-purple-600 mr-2"></i>Gorjetas
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-medium">€ 325,50</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/finance/cashout/transaction-details/125" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">28/02/2025</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center">
-                                            <i class="fas fa-university text-blue-600 mr-2"></i>Depósito
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-medium">€ 2.100,00</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/finance/cashout/transaction-details/126" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">25/02/2025</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center">
-                                            <i class="fas fa-hand-holding-usd text-green-600 mr-2"></i>Entrega
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-medium">€ 950,00</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Concluído</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/finance/cashout/transaction-details/127" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Pendências por Dia -->
-                <div class="dashboard-card p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-left" class="text-lg font-semibold text-left">Pendências por Dia</h3>
-                        <a href="/finance/cashout/transactions" class="text-sm text-brand-600 hover:text-brand-700">Ver Detalhes</a>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Data</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
-                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Depósito</th>
-                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Entrega</th>
-                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Gorjetas</th>
-                                    <th class="px-4 py-2 text-right text-sm font-medium text-muted">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 850,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 425,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 125,00</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-right">€ 1.400,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 1.100,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 550,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 175,50</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-right">€ 1.825,50</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">04/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 675,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 325,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 95,00</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-right">€ 1.095,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">03/03/2025</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 800,50</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 550,00</td>
-                                    <td class="px-4 py-3 text-sm text-right">€ 199,70</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-right">€ 1.550,20</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium text-right" colspan="5">
-                                        <strong>Total Pendente:</strong>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm font-bold text-right">€ 5.870,70</td>
-                                </tr>
+                                <!-- Linhas da tabela aqui -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Configuração do gráfico de distribuição
             const distributionChart = document.getElementById('distributionChart');
-            new Chart(distributionChart, {
-                type: 'line',
-                data: {
-                    labels: ['01/02', '15/02', '01/03', '15/03', '01/04', '15/04', '01/05', '15/05'],
-                    datasets: [
-                        {
-                            label: 'Depósitos',
-                            data: [2500, 3200, 2800, 3500, 4200, 3800, 4500, 4100],
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Entregas',
-                            data: [1200, 1500, 1800, 1450, 1900, 2200, 1950, 2300],
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Gorjetas',
-                            data: [350, 420, 480, 520, 610, 550, 680, 720],
-                            borderColor: '#8b5cf6',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
+            if (distributionChart) {
+                new Chart(distributionChart, {
+                    type: 'line',
+                    data: {
+                        labels: ['01/02', '15/02', '01/03', '15/03', '01/04', '15/04', '01/05', '15/05'],
+                        datasets: [
+                            {
+                                label: 'Depósitos',
+                                data: [2500, 3200, 2800, 3500, 4200, 3800, 4500, 4100],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                fill: true,
+                                tension: 0.4
                             },
-                            ticks: {
-                                callback: function(value) {
-                                    return '€ ' + value;
+                            {
+                                label: 'Entregas',
+                                data: [1200, 1500, 1800, 1450, 1900, 2200, 1950, 2300],
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Gorjetas',
+                                data: [350, 420, 480, 520, 610, 550, 680, 720],
+                                borderColor: '#8b5cf6',
+                                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '€ ' + value;
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
                                 }
                             }
                         },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': € ' + context.raw;
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': € ' + context.raw;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
-
-            // Manipulação de abas
-            const tabButtons = document.querySelectorAll('[data-tab]');
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Remover classe active de todas as abas
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('tab-active');
-                        btn.classList.add('tab-inactive');
-                    });
-                    
-                    // Adicionar classe active na aba clicada
-                    this.classList.add('tab-active');
-                    this.classList.remove('tab-inactive');
                 });
-            });
+            }
         });
     </script>
 </body>

@@ -1,55 +1,73 @@
+document.addEventListener('DOMContentLoaded', function() {
+    initPage();
+    initNotifications();
+    checkPendingInvitations();
+});
+
 // Inicializa a página
 function initPage() {
     // Configuração do botão de tema
     const themeToggle = document.getElementById('themeToggle');
-    const themeText = themeToggle.querySelector('span');
-    themeToggle.addEventListener('click', toggleTheme);
+    if (themeToggle) {
+        const themeText = themeToggle.querySelector('span');
+        themeToggle.addEventListener('click', toggleTheme);
+    }
     
     // Configuração do botão para colapsar o menu
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
     
-    sidebarToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        
-        // Ajusta o conteúdo principal quando o menu é colapsado
-        if (sidebar.classList.contains('collapsed')) {
-            mainContent.style.marginLeft = '0';
-        } else {
-            mainContent.style.marginLeft = '0';
-        }
-    });
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            
+            // Ajusta o conteúdo principal quando o menu é colapsado
+            if (mainContent) {
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '0';
+                } else {
+                    mainContent.style.marginLeft = '0';
+                }
+            }
+        });
+    }
     
     // Configuração do menu móvel
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
-    mobileMenuToggle.addEventListener('click', function() {
-        sidebar.classList.add('mobile-open');
-        sidebarOverlay.classList.add('show');
-        document.body.style.overflow = 'hidden'; // Impede rolagem quando o menu está aberto
-    });
+    if (mobileMenuToggle && sidebar && sidebarOverlay) {
+        mobileMenuToggle.addEventListener('click', function() {
+            sidebar.classList.add('mobile-open');
+            sidebarOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    }
     
-    closeMobileMenu.addEventListener('click', function() {
-        sidebar.classList.remove('mobile-open');
-        sidebarOverlay.classList.remove('show');
-        document.body.style.overflow = ''; // Restaura a rolagem
-    });
+    if (closeMobileMenu && sidebar && sidebarOverlay) {
+        closeMobileMenu.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-open');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+    }
     
-    sidebarOverlay.addEventListener('click', function() {
-        sidebar.classList.remove('mobile-open');
-        sidebarOverlay.classList.remove('show');
-        document.body.style.overflow = ''; // Restaura a rolagem
-    });
+    if (sidebarOverlay && sidebar) {
+        sidebarOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-open');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+    }
     
     // Verifica o tamanho da tela ao carregar e redimensionar
     function checkScreenSize() {
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 768 && sidebar) {
             sidebar.classList.remove('collapsed');
-            mainContent.style.marginLeft = '0';
-        } else {
+            if (mainContent) mainContent.style.marginLeft = '0';
+        } else if (sidebar && sidebarOverlay) {
             sidebar.classList.remove('mobile-open');
             sidebarOverlay.classList.remove('show');
             document.body.style.overflow = '';
@@ -85,6 +103,8 @@ function toggleTheme() {
 // Atualiza a interface com base no tema
 function updateThemeUI(theme) {
     const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+
     const themeIcon = themeToggle.querySelector('i');
     const themeText = themeToggle.querySelector('span');
     
@@ -103,5 +123,38 @@ function updateThemeUI(theme) {
     }
 }
 
-// Inicializa a página quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', initPage); 
+/**
+ * Inicializa as notificações no dashboard
+ */
+function initNotifications() {
+    const notificationArea = document.getElementById('notificationArea');
+    if (notificationArea) {
+        // Aqui você pode adicionar lógica para buscar notificações do servidor
+        // Por enquanto, usamos dados estáticos
+    }
+}
+
+/**
+ * Verifica se há convites pendentes e exibe notificação
+ */
+function checkPendingInvitations() {
+    // Simulação de API - em produção, isso seria uma chamada real à API
+    const pendingInvitations = 2; // Exemplo: 2 convites pendentes
+    
+    if (pendingInvitations > 0) {
+        // Adicionar badge de notificação ao ícone de convites no sidebar
+        const invitationsLink = document.querySelector('a[href="/pages/account/invitations.html"]');
+        if (invitationsLink) {
+            const badge = document.createElement('span');
+            badge.className = 'absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center';
+            badge.textContent = pendingInvitations;
+            
+            // Adicionar badge apenas se o elemento tiver posição relativa
+            const iconContainer = invitationsLink.querySelector('i').parentElement;
+            if (iconContainer) {
+                iconContainer.style.position = 'relative';
+                iconContainer.appendChild(badge);
+            }
+        }
+    }
+} 

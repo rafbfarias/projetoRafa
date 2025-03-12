@@ -7,20 +7,67 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../../../css/styles.css" rel="stylesheet">
-    <script src="../../../js/Sidebar.js"></script>
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
-<body style="background-color: var(--bg-primary)">
-    <div class="flex min-h-screen">
+<body>
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto" style="background-color: var(--bg-primary)">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="text-left">
-                    <h1 class="text-left text-2xl font-bold">Gestão de Usuários</h1>
+                    <h1 class="text-2xl font-bold">Gestão de Usuários</h1>
                     <p class="text-muted">Gerencie usuários e envie convites para acesso ao sistema</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -35,325 +82,328 @@
                 </div>
             </div>
 
-            <!-- Tabs de Navegação -->
-            <div class="mb-6">
-                <div class="border-b border-gray-200" style="border-color: var(--border-color)">
-                    <ul class="flex flex-wrap -mb-px">
-                        <li class="mr-2">
-                            <button class="tab-button active" data-tab="users">
-                                <i class="fas fa-users mr-2"></i>Usuários
-                            </button>
-                        </li>
-                        <li class="mr-2">
-                            <button class="tab-button" data-tab="invitations">
-                                <i class="fas fa-envelope mr-2"></i>Convites
-                            </button>
-                        </li>
-                        <li class="mr-2">
-                            <button class="tab-button" data-tab="permissions">
-                                <i class="fas fa-lock mr-2"></i>Permissões
-                            </button>
-                        </li>
-                    </ul>
+            <!-- Resto do conteúdo em um container com padding -->
+            <div class="px-8">
+                <!-- Tabs de Navegação -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px">
+                            <li class="mr-2">
+                                <button class="tab-button active" data-tab="users">
+                                    <i class="fas fa-users mr-2"></i>Usuários
+                                </button>
+                            </li>
+                            <li class="mr-2">
+                                <button class="tab-button" data-tab="invitations">
+                                    <i class="fas fa-envelope mr-2"></i>Convites
+                                </button>
+                            </li>
+                            <li class="mr-2">
+                                <button class="tab-button" data-tab="permissions">
+                                    <i class="fas fa-lock mr-2"></i>Permissões
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Conteúdo das Tabs -->
+                <div class="tab-content">
+                    <!-- Tab Usuários -->
+                    <div id="users-tab" class="tab-pane active">
+                        <!-- Filtros e Pesquisa -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
+                            <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
+                                <div class="relative">
+                                    <input type="text" placeholder="Buscar usuário..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                                <select class="form-select py-2 w-full md:w-40">
+                                    <option value="">Todas Unidades</option>
+                                    <option value="1">Porto</option>
+                                    <option value="2">Matosinhos</option>
+                                    <option value="3">Lisboa</option>
+                                </select>
+                                <select class="form-select py-2 w-full md:w-40">
+                                    <option value="">Todos Status</option>
+                                    <option value="active">Ativo</option>
+                                    <option value="inactive">Inativo</option>
+                                </select>
+                            </div>
+                            <div class="mt-4 md:mt-0">
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-filter mr-2"></i>Filtrar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Usuários -->
+                        <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
+                            <table class="w-full component-table">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">Usuário</th>
+                                        <th class="px-4 py-3 text-left">Email</th>
+                                        <th class="px-4 py-3 text-left">Unidade</th>
+                                        <th class="px-4 py-3 text-left">Função</th>
+                                        <th class="px-4 py-3 text-center">Status</th>
+                                        <th class="px-4 py-3 text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
+                                                    <img src="../../images/users/1.png" alt="Avatar" class="w-full h-full object-cover">
+                                                </div>
+                                                <span>Ana Silva</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">ana.silva@email.com</td>
+                                        <td class="px-4 py-3">Porto</td>
+                                        <td class="px-4 py-3">Administrador</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
+                                                Ativo
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
+                                                    <img src="../../images/users/2.png" alt="Avatar" class="w-full h-full object-cover">
+                                                </div>
+                                                <span>João Santos</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">joao.santos@email.com</td>
+                                        <td class="px-4 py-3">Matosinhos</td>
+                                        <td class="px-4 py-3">Gerente</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
+                                                Ativo
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
+                                                    <img src="../../images/users/3.png" alt="Avatar" class="w-full h-full object-cover">
+                                                </div>
+                                                <span>Maria Santos</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">maria.santos@email.com</td>
+                                        <td class="px-4 py-3">Matosinhos</td>
+                                        <td class="px-4 py-3">Operador</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
+                                                Ativo
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
+                                                    <img src="../../images/users/4.png" alt="Avatar" class="w-full h-full object-cover">
+                                                </div>
+                                                <span>Carlos Oliveira</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">carlos.oliveira@email.com</td>
+                                        <td class="px-4 py-3">Porto</td>
+                                        <td class="px-4 py-3">Operador</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200">
+                                                Inativo
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Convites -->
+                    <div id="invitations-tab" class="tab-pane hidden">
+                        <!-- Filtros e Pesquisa -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
+                            <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
+                                <div class="relative">
+                                    <input type="text" placeholder="Buscar por email..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Convites -->
+                        <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
+                            <table class="w-full component-table">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">Usuário</th>
+                                        <th class="px-4 py-3 text-left">Email</th>
+                                        <th class="px-4 py-3 text-left">Unidade</th>
+                                        <th class="px-4 py-3 text-center">Status</th>
+                                        <th class="px-4 py-3 text-left">Data de Criação</th>
+                                        <th class="px-4 py-3 text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <!-- Os dados serão inseridos aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Permissões -->
+                    <div id="permissions-tab" class="tab-pane hidden">
+                        <!-- Filtros e Pesquisa -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
+                            <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
+                                <div class="relative">
+                                    <input type="text" placeholder="Buscar permissão..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                                <select class="form-select py-2 w-full md:w-40">
+                                    <option value="">Todos Módulos</option>
+                                    <option value="finance">Finanças</option>
+                                    <option value="hr">RH</option>
+                                    <option value="admin">Administração</option>
+                                </select>
+                            </div>
+                            <div class="mt-4 md:mt-0">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-plus mr-2"></i>Nova Permissão
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Permissões -->
+                        <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
+                            <table class="w-full component-table">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">Função</th>
+                                        <th class="px-4 py-3 text-left">Módulo</th>
+                                        <th class="px-4 py-3 text-left">Descrição</th>
+                                        <th class="px-4 py-3 text-center">Visualizar</th>
+                                        <th class="px-4 py-3 text-center">Criar</th>
+                                        <th class="px-4 py-3 text-center">Editar</th>
+                                        <th class="px-4 py-3 text-center">Excluir</th>
+                                        <th class="px-4 py-3 text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-4 py-3">Administrador</td>
+                                        <td class="px-4 py-3">Finanças</td>
+                                        <td class="px-4 py-3">Acesso completo ao módulo de finanças</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">Gerente</td>
+                                        <td class="px-4 py-3">Finanças</td>
+                                        <td class="px-4 py-3">Acesso parcial ao módulo de finanças</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3">Operador</td>
+                                        <td class="px-4 py-3">Finanças</td>
+                                        <td class="px-4 py-3">Acesso limitado ao módulo de finanças</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <i class="fas fa-times text-red-600 dark:text-red-400"></i>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Conteúdo das Tabs -->
-            <div class="tab-content">
-                <!-- Tab Usuários -->
-                <div id="users-tab" class="tab-pane active">
-                    <!-- Filtros e Pesquisa -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
-                        <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
-                            <div class="relative">
-                                <input type="text" placeholder="Buscar usuário..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
-                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            </div>
-                            <select class="form-select py-2 w-full md:w-40">
-                                <option value="">Todas Unidades</option>
-                                <option value="1">Porto</option>
-                                <option value="2">Matosinhos</option>
-                                <option value="3">Lisboa</option>
-                            </select>
-                            <select class="form-select py-2 w-full md:w-40">
-                                <option value="">Todos Status</option>
-                                <option value="active">Ativo</option>
-                                <option value="inactive">Inativo</option>
-                            </select>
-                        </div>
-                        <div class="mt-4 md:mt-0">
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-filter mr-2"></i>Filtrar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tabela de Usuários -->
-                    <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
-                        <table class="w-full component-table">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-3 text-left">Usuário</th>
-                                    <th class="px-4 py-3 text-left">Email</th>
-                                    <th class="px-4 py-3 text-left">Unidade</th>
-                                    <th class="px-4 py-3 text-left">Função</th>
-                                    <th class="px-4 py-3 text-center">Status</th>
-                                    <th class="px-4 py-3 text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
-                                                <img src="../../images/users/1.png" alt="Avatar" class="w-full h-full object-cover">
-                                            </div>
-                                            <span>Ana Silva</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">ana.silva@email.com</td>
-                                    <td class="px-4 py-3">Porto</td>
-                                    <td class="px-4 py-3">Administrador</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
-                                            Ativo
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
-                                                <img src="../../images/users/2.png" alt="Avatar" class="w-full h-full object-cover">
-                                            </div>
-                                            <span>João Santos</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">joao.santos@email.com</td>
-                                    <td class="px-4 py-3">Matosinhos</td>
-                                    <td class="px-4 py-3">Gerente</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
-                                            Ativo
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
-                                                <img src="../../images/users/3.png" alt="Avatar" class="w-full h-full object-cover">
-                                            </div>
-                                            <span>Maria Santos</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">maria.santos@email.com</td>
-                                    <td class="px-4 py-3">Matosinhos</td>
-                                    <td class="px-4 py-3">Operador</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
-                                            Ativo
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full overflow-hidden mr-3">
-                                                <img src="../../images/users/4.png" alt="Avatar" class="w-full h-full object-cover">
-                                            </div>
-                                            <span>Carlos Oliveira</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3">carlos.oliveira@email.com</td>
-                                    <td class="px-4 py-3">Porto</td>
-                                    <td class="px-4 py-3">Operador</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200">
-                                            Inativo
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab Convites -->
-                <div id="invitations-tab" class="tab-pane hidden">
-                    <!-- Filtros e Pesquisa -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
-                        <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
-                            <div class="relative">
-                                <input type="text" placeholder="Buscar por email..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
-                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tabela de Convites -->
-                    <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
-                        <table class="w-full component-table">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-3 text-left">Usuário</th>
-                                    <th class="px-4 py-3 text-left">Email</th>
-                                    <th class="px-4 py-3 text-left">Unidade</th>
-                                    <th class="px-4 py-3 text-center">Status</th>
-                                    <th class="px-4 py-3 text-left">Data de Criação</th>
-                                    <th class="px-4 py-3 text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <!-- Os dados serão inseridos aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab Permissões -->
-                <div id="permissions-tab" class="tab-pane hidden">
-                    <!-- Filtros e Pesquisa -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6" style="background-color: var(--component-bg); padding: 1rem; border-radius: 0.5rem;">
-                        <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
-                            <div class="relative">
-                                <input type="text" placeholder="Buscar permissão..." class="form-input pl-10 pr-4 py-2 w-full md:w-64">
-                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            </div>
-                            <select class="form-select py-2 w-full md:w-40">
-                                <option value="">Todos Módulos</option>
-                                <option value="finance">Finanças</option>
-                                <option value="hr">RH</option>
-                                <option value="admin">Administração</option>
-                            </select>
-                        </div>
-                        <div class="mt-4 md:mt-0">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-plus mr-2"></i>Nova Permissão
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tabela de Permissões -->
-                    <div class="overflow-x-auto" style="background-color: var(--component-bg); border-radius: 0.5rem;">
-                        <table class="w-full component-table">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-3 text-left">Função</th>
-                                    <th class="px-4 py-3 text-left">Módulo</th>
-                                    <th class="px-4 py-3 text-left">Descrição</th>
-                                    <th class="px-4 py-3 text-center">Visualizar</th>
-                                    <th class="px-4 py-3 text-center">Criar</th>
-                                    <th class="px-4 py-3 text-center">Editar</th>
-                                    <th class="px-4 py-3 text-center">Excluir</th>
-                                    <th class="px-4 py-3 text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3">Administrador</td>
-                                    <td class="px-4 py-3">Finanças</td>
-                                    <td class="px-4 py-3">Acesso completo ao módulo de finanças</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">Gerente</td>
-                                    <td class="px-4 py-3">Finanças</td>
-                                    <td class="px-4 py-3">Acesso parcial ao módulo de finanças</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-times text-red-600 dark:text-red-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">Operador</td>
-                                    <td class="px-4 py-3">Finanças</td>
-                                    <td class="px-4 py-3">Acesso limitado ao módulo de finanças</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-check text-green-600 dark:text-green-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-times text-red-600 dark:text-red-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <i class="fas fa-times text-red-600 dark:text-red-400"></i>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 mr-2">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
     <!-- Modal de Novo Convite -->
@@ -409,6 +459,6 @@
         </div>
     </div>
 
-    <script src="../../../js/account/userManagement.js"></script>
+    <script src="/js/account/userManagement.js"></script>
 </body>
 </html> 

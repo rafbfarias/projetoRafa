@@ -1,177 +1,100 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conta - Sistema de Gestão</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#FF6B00',
-                    }
-                }
-            }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../css/styles.css" rel="stylesheet">
+    <script src="../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-    </script>
-</head>
-<body>
-    <!-- Overlay para o menu móvel -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    
-    <div class="min-h-screen flex">
-        <!-- Menu Lateral -->
-        <aside class="sidebar p-4 relative" id="sidebar">
-            <!-- Botão para fechar o menu em dispositivos móveis -->
-            <button class="absolute top-4 right-4 text-zinc-400 hover:text-white md:hidden" id="closeMobileMenu">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <!-- Logo e botão para colapsar o menu -->
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white">
-                        <span class="text-xl font-bold">D</span>
-                    </div>
-                    <h1 class="text-left" class="text-xl font-bold ml-3 sidebar-logo-text text-left">dineo.</h1>
-                </div>
-                
-                <!-- Botão para colapsar o menu (visível apenas em desktop) -->
-                <button class="sidebar-toggle text-zinc-400 hover:text-white hidden md:block" id="sidebarToggle">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            </div>
-            
-            <!-- Avatar e informações do usuário -->
-            <div class="avatar-container">
-                <div class="avatar">
-                    <img src="/docs/images/people/profile-picture-5.jpg" alt="Avatar do usuário" class="avatar-image">
-                </div>
-                <div class="user-info">
-                    <div class="user-name">Ana Silva</div>
-                    <div class="user-role">Administradora</div>
-                </div>
-                
-                <!-- Botão de tema dentro do container do avatar -->
-                <button class="theme-toggle mt-3" id="themeToggle">
-                    <i class="fas fa-moon mr-2"></i>
-                    <span class="sidebar-text">Modo escuro</span>
-                </button>
-            </div>
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
 
-            <nav>
-                <div class="mb-4">
-                    <h2 class="text-left" class="text-xs font-semibold uppercase mb-2 px-4 sidebar-text text-muted text-left">Menu</h2>
-                    <ul>
-                        <li>
-                            <a href="/pages/dashboard.html" class="menu-item">
-                                <i class="fas fa-th-large"></i>
-                                <span class="sidebar-text">Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pages/welcome/welcome.html" class="menu-item">
-                                <i class="fas fa-star"></i>
-                                <span class="sidebar-text">Bem-vindo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pages/hr/timesheet/timesheet.html" class="menu-item">
-                                <i class="fas fa-clock"></i>
-                                <span class="sidebar-text">Registro de Ponto</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pages/finance/finance.html" class="menu-item">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span class="sidebar-text">Financeiro</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pages/contracts/contracts.html" class="menu-item">
-                                <i class="fas fa-file-contract"></i>
-                                <span class="sidebar-text">Contratos</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="mt-6">
-                    <h2 class="text-left" class="text-xs font-semibold uppercase mb-2 px-4 sidebar-text text-muted text-left">Sistema</h2>
-                    <ul>
-                        <li>
-                            <a href="/pages/account/account.html" class="menu-item active">
-                                <i class="fas fa-user-circle"></i>
-                                <span class="sidebar-text">Conta</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pages/settings/settings.html" class="menu-item">
-                                <i class="fas fa-cog"></i>
-                                <span class="sidebar-text">Configurações</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/index.html" class="menu-item">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span class="sidebar-text">Sair</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </aside>
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 overflow-auto main-content" id="mainContent">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <header class="header-bg p-4 shadow-sm">
-                <div class="flex justify-between items-center">
-                    <!-- Botão de menu móvel (visível apenas em dispositivos móveis) -->
-                    <button class="mobile-menu-toggle text-zinc-400 hover:text-white mr-2" id="mobileMenuToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <h1 class="text-left" class="text-xl font-bold text-left">Minha Conta</h1>
-                    <div class="flex items-center space-x-4">
-                        <!-- Notificações -->
-                        <div class="relative">
-                            <button class="text-zinc-400 hover:text-white">
-                                <i class="fas fa-bell"></i>
-                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                            </button>
-                        </div>
-                    </div>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
+                <div class="text-left">
+                    <h1 class="text-left text-2xl font-bold">Minha Conta</h1>
+                    <p class="text-muted">Gerencie suas informações e preferências</p>
                 </div>
-            </header>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-edit mr-2"></i>
+                        Editar Perfil
+                    </button>
+                </div>
+            </div>
 
-            <!-- Conteúdo da Página -->
-            <div class="p-6">
-                <!-- Informações do Perfil -->
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Grid de cards -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Coluna 1: Perfil -->
-                    <div class="card-bg rounded-lg p-6 shadow-sm">
+                    <!-- Card de Perfil -->
+                    <div class="dashboard-card p-6">
                         <div class="flex flex-col items-center text-center">
                             <div class="w-24 h-24 rounded-full overflow-hidden mb-4">
                                 <img src="/docs/images/people/profile-picture-5.jpg" alt="Foto de perfil" class="w-full h-full object-cover">
                             </div>
-                            <h2 class="text-left" class="text-xl font-bold text-left">Ana Silva</h2>
+                            <h2 class="text-xl font-bold">Ana Silva</h2>
                             <p class="text-muted">Administradora</p>
                             <p class="text-sm mt-2">ana.silva@dineo.com</p>
-                            
-                            <div class="mt-6 w-full">
-                                <button class="w-full bg-brand-500 hover:bg-brand-600 text-white py-2 rounded-lg">
-                                    Editar Perfil
-                                </button>
-                            </div>
                         </div>
                         
                         <div class="mt-6 pt-6 border-t border-zinc-700">
-                            <h3 class="text-left" class="font-semibold mb-4 text-left">Informações de Contato</h3>
+                            <h3 class="font-semibold mb-4">Informações de Contato</h3>
                             <div class="space-y-3">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-zinc-700 p-2 rounded-lg">
@@ -203,9 +126,9 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Coluna 2: Configurações da Conta -->
-                    <div class="card-bg rounded-lg p-6 shadow-sm">
+
+                    <!-- Card de Configurações -->
+                    <div class="dashboard-card p-6">
                         <h2 class="text-left" class="text-xl font-bold mb-4 text-left">Configurações da Conta</h2>
                         
                         <div class="space-y-6">
@@ -273,9 +196,9 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Coluna 3: Plano e Faturamento -->
-                    <div class="card-bg rounded-lg p-6 shadow-sm">
+
+                    <!-- Card de Plano -->
+                    <div class="dashboard-card p-6">
                         <h2 class="text-left" class="text-xl font-bold mb-4 text-left">Plano e Faturamento</h2>
                         
                         <div class="bg-brand-500/10 p-4 rounded-lg mb-6">
@@ -330,9 +253,9 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Atividade Recente -->
-                <div class="card-bg rounded-lg p-6 shadow-sm">
+
+                <!-- Card de Atividade -->
+                <div class="dashboard-card p-6">
                     <h2 class="text-left" class="text-xl font-bold mb-4 text-left">Atividade Recente</h2>
                     
                     <div class="overflow-x-auto">
@@ -416,10 +339,10 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- JavaScript -->
-    <script src="/js/account/account.js"></script>
+    <script src="../../js/account/account.js"></script>
 </body>
 </html>

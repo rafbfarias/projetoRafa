@@ -1,0 +1,18 @@
+---
+description: creatng routes / testing routes /defining routes
+globs: 
+alwaysApply: false
+---
+Ordem consistente de middlewares e rotas:
+Middlewares globais (como CORS, bodyParser, etc.) sempre devem vir primeiro
+Rotas públicas devem ser definidas antes do middleware de autenticação
+Rotas protegidas devem vir após o middleware de autenticação
+Organização clara do arquivo server.js:
+Dividir claramente o arquivo em seções comentadas
+Manter uma estrutura consistente: configurações → middlewares → rotas públicas → middleware de autenticação → rotas protegidas
+Documentação de rotas:
+Adicionar comentários explicando claramente cada rota
+Manter uma lista atualizada de todas as rotas públicas
+Testes automatizados:
+Criar testes para verificar se todas as rotas estão acessíveis
+Incluir testes específicos para verificar se as rotas públicas realmente não exigem autenticação

@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<nav id="sidebar" class="sidebar h-screen bg-slate-900 shadow-lg flex flex-col">
+<nav id="sidebar" class="sidebar h-screen shadow-lg flex flex-col">
     <!-- Logo (Fixo no topo) -->
     <div class="flex items-center p-4 flex-shrink-0">
         <div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
@@ -76,6 +76,36 @@
                     <span class="sidebar-text">Reminder Board</span>
                     <span class="ml-auto bg-brand-600 text-white text-xs font-medium px-2 py-0.5 rounded-full sidebar-text">Novo</span>
                 </a>
+            </li>
+            <!-- Adicionar após a seção de Reminder Board e antes de Account -->
+            <li>
+                <div class="menu-item flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer" data-submenu="projects">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-project-diagram w-5 text-center"></i>
+                        <span class="sidebar-text">Projetos</span>
+                    </div>
+                    <i class="fas fa-chevron-right sidebar-text transition-transform"></i>
+                </div>
+                <ul class="submenu pl-4 space-y-1" id="projects-submenu">
+                    <li>
+                        <a href="/pages/project/dash.project.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/project/new.project.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-plus w-5 text-center"></i>
+                            <span class="sidebar-text">Novo Projeto</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pages/project/list.project.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                            <i class="fas fa-list w-5 text-center"></i>
+                            <span class="sidebar-text">Lista de Projetos</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <!-- Account - Nova seção -->
             <li>
@@ -174,13 +204,23 @@
                 </div>
                 <ul class="submenu pl-4 space-y-1" id="finance-submenu">
                     <li>
-                        <a href="/pages/finance/income/fact.dash.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                        <a href="/pages/finance/income/dash[Error] Erro ao buscar dados: – Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                        Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                            (função anónima) (welcome.js:110)
+                        [Error] Failed to load resource: the server responded with a status of 500 (Internal Server Error) (me, line 0)
+                        [Error] Erro ao buscar dados: – Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                        Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                            (função anónima) (welcome.js:110)
+                        [Error] Failed to load resource: the server responded with a status of 500 (Internal Server Error) (me, line 0)
+                        [Error] Erro ao buscar dados: – Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                        Error: Erro interno do servidor. Por favor, tente novamente. — welcome.js:101
+                            (função anónima) (welcome.js:110).finance.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
                             <i class="fas fa-tachometer-alt w-5 text-center"></i>
                             <span class="sidebar-text">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/pages/finance/income/list.fact.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
+                        <a href="/pages/finance/income/dash.income.html" class="menu-item flex items-center space-x-3 p-3 rounded-lg transition-colors">
                             <i class="fas fa-chart-line w-5 text-center"></i>
                             <span class="sidebar-text">Receitas</span>
                         </a>
@@ -259,9 +299,9 @@
         
         <!-- Botões mais compactos -->
         <div class="px-4 py-2">
-            <button class="menu-item flex items-center space-x-3 p-2 rounded-lg transition-colors w-full text-sm text-slate-400 hover:text-slate-200" id="themeToggle">
+            <button class="menu-item flex items-center space-x-3 p-2 rounded-lg transition-colors w-full text-sm" id="themeToggle">
                 <i class="fas fa-moon w-4 text-center"></i>
-                <span class="sidebar-text">Alternar Tema</span>
+                <span class="sidebar-text">Modo Escuro</span>
             </button>
             <a href="/index.html" class="menu-item flex items-center space-x-3 p-2 rounded-lg transition-colors w-full text-sm text-slate-400 hover:text-red-400">
                 <i class="fas fa-sign-out-alt w-4 text-center"></i>

@@ -8,18 +8,64 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
-    <link href="../../../css/procurement/orders.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
-        <!-- Sidebar (carregado via JavaScript) -->
-        <app-sidebar></app-sidebar>
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div>
                     <h1 class="text-left text-2xl font-bold">Dashboard de Compras</h1>
                     <p class="text-muted">Gerencie suas ordens de compra e acompanhe entregas</p>
@@ -162,46 +208,140 @@
             </div>
 
             <!-- Orders List Header -->
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-between mb-6 px-8">
                 <div class="flex items-center gap-2">
-                    <h2 id="listTitle" class="text-xl font-semibold text-gray-800">Todos os Pedidos</h2>
+                    <h2 id="listTitle" class="text-xl font-semibold">Todos os Pedidos</h2>
                     <span id="orderCount" class="text-sm font-medium bg-gray-100 text-gray-800 px-2 py-1 rounded-full">0</span>
                 </div>
                 <div>
-                    <button 
-                        id="viewAllButton"
-                        class="px-3 py-1 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100"
-                    >
+                    <button id="viewAllButton" class="px-3 py-1 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100">
                         Ver Todos
                     </button>
                 </div>
             </div>
 
             <!-- Orders List -->
-            <div id="ordersList" class="bg-white rounded-lg shadow overflow-hidden">
-                <!-- Orders will be loaded here -->
-            </div>
+            <div class="px-8">
+                <div id="ordersList" class="space-y-4 mb-8">
+                    <!-- Exemplo de um pedido expansível -->
+                    <div class="dashboard-card">
+                        <!-- Cabeçalho do Pedido (Clicável) -->
+                        <div class="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between" onclick="toggleOrder(this)">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <span class="text-sm font-medium text-gray-600">#ORD-2025-001</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium">Fornecedor ABC Ltda</h3>
+                                    <p class="text-sm text-gray-500">12 itens - Total: €1.234,56</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                    Pendente
+                                </span>
+                                <i class="fas fa-chevron-down transform transition-transform"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalhes do Pedido (Expansível) -->
+                        <div class="order-details hidden border-t border-gray-100">
+                            <div class="p-4">
+                                <!-- Informações do Pedido -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Data do Pedido</p>
+                                        <p class="text-sm font-medium">06/03/2025</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Previsão de Entrega</p>
+                                        <p class="text-sm font-medium">13/03/2025</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Status do Pagamento</p>
+                                        <p class="text-sm font-medium">Aguardando</p>
+                                    </div>
+                                </div>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden bg-white p-8 text-center rounded-lg shadow">
-                <i class="fas fa-box text-gray-400 text-5xl mb-4"></i>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum pedido encontrado</h3>
-                <p class="mt-1 text-sm text-gray-500">
-                    Não encontramos pedidos com os filtros selecionados.
-                </p>
-                <div class="mt-6">
-                    <button
-                        id="clearFilters"
-                        class="btn btn-secondary"
-                    >
-                        Limpar filtros
-                    </button>
+                                <!-- Lista de Produtos -->
+                                <div class="border rounded-lg overflow-hidden">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Produto</th>
+                                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500">Qtd</th>
+                                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Valor Unit.</th>
+                                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <!-- Produtos do pedido -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden dashboard-card p-8 text-center">
+                    <i class="fas fa-box text-gray-400 text-5xl mb-4"></i>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum pedido encontrado</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Não encontramos pedidos com os filtros selecionados.
+                    </p>
+                    <div class="mt-6">
+                        <button
+                            id="clearFilters"
+                            class="btn btn-secondary"
+                        >
+                            Limpar filtros
+                        </button>
+                    </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="../../../js/procurement/orders/dash.orders.js"></script>
+    <script>
+    function toggleOrder(element) {
+        // Encontra o container de detalhes
+        const detailsContainer = element.nextElementSibling;
+        // Encontra o ícone de chevron
+        const chevron = element.querySelector('.fa-chevron-down');
+        
+        // Toggle da classe hidden nos detalhes
+        detailsContainer.classList.toggle('hidden');
+        
+        // Rotaciona o chevron
+        if (detailsContainer.classList.contains('hidden')) {
+            chevron.style.transform = 'rotate(0deg)';
+        } else {
+            chevron.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    // Função para carregar os pedidos (exemplo)
+    function loadOrders() {
+        const ordersList = document.getElementById('ordersList');
+        const emptyState = document.getElementById('emptyState');
+        
+        // Aqui você faria a chamada à API para buscar os pedidos
+        // Por enquanto, vamos apenas mostrar/esconder o empty state
+        if (ordersList.children.length === 0) {
+            emptyState.classList.remove('hidden');
+            ordersList.classList.add('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+            ordersList.classList.remove('hidden');
+        }
+    }
+
+    // Carrega os pedidos quando a página iniciar
+    document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
 </body>
 </html>

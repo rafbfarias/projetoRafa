@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const timesheetController = require('../controllers/timesheet.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+
+// Proteger todas as rotas
+router.use(authMiddleware);
 
 // Rotas para registros de ponto
 router.post('/', timesheetController.create);

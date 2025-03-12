@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receitas - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/sidebar.css" rel="stylesheet">
+    <script src="/js/Sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../../js/layout.js"></script>
+    <style>
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="mobile-overlay"></div>
+        <div class="main-container">
+            <div class="mobile-header">
+                <button class="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="text-lg font-semibold">Receitas</h1>
+            </div>
+            <div className="min-h-screen bg-gray-50">
+                {/* Navbar */}
+                <nav className="bg-white shadow-sm border-b border-gray-200">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between h-16">
+                            <div className="flex">
+                                <div className="flex-shrink-0 flex items-center">
+                                    <span className="text-2xl font-bold text-blue-600">dineo.</span>
+                                </div>
+                                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                    <a href="#" className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Dashboard
+                                    </a>
+                                    <a href="#" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Faturações
+                                    </a>
+                                    <a href="#" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                        Relatórios
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+                                    <button className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <PlusIcon className="h-5 w-5 mr-2" />
+                                        Nova Faturação
+                                    </button>
+                                </div>
+                                <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                                    <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <span className="sr-only">Ver notificações</span>
+                                        <BellIcon className="h-6 w-6" />
+                                    </button>
+                                    <div className="ml-3 relative">
+                                        <div>
+                                            <button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                <span className="sr-only">Abrir menu de usuário</span>
+                                                <img className="h-8 w-8 rounded-full" src="/api/placeholder/32/32" alt="User avatar" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Conteúdo Principal */}
+                <div className="py-6">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                            <div>
+                                <h1 className="text-2xl font-semibold text-gray-900">Dashboard de Receitas</h1>
+                                <p className="mt-1 text-sm text-gray-500">Análise e gestão das faturações</p>
+                            </div>
+                            <div className="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                <div className="relative inline-block text-left">
+                                    <select 
+                                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                        value={period}
+                                        onChange={(e) => setPeriod(e.target.value)}
+                                    >
+                                        <option value="daily">Hoje</option>
+                                        <option value="weekly">Esta Semana</option>
+                                        <option value="monthly">Este Mês</option>
+                                        <option value="quarterly">Este Trimestre</option>
+                                        <option value="yearly">Este Ano</option>
+                                    </select>
+                                </div>
+                                <div className="relative inline-block text-left">
+                                    <select 
+                                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                        value={selectedUnit}
+                                        onChange={(e) => setSelectedUnit(e.target.value)}
+                                    >
+                                        <option value="all">Todas as Unidades</option>
+                                        <option value="Porto">Porto</option>
+                                        <option value="Matosinhos">Matosinhos</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cards de Resumo */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            <div className="bg-white overflow-hidden shadow rounded-lg">
+                                <div className="p-5">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 p-3 rounded-md bg-blue-100">
+                                            <TrendingUp className="h-5 w-5 text-blue-600" />
+                                        </div>
+                                        <div className="ml-5 w-0 flex-1">
+                                            <dl>
+                                                <dt className="text-sm font-medium text-gray-500 truncate">Receita Total</dt>
+                                                <dd>
+                                                    <div className="text-lg font-medium text-gray-900">
+                                                        € {totalRevenue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 px-5 py-3">
+                                    <div className="text-sm">
+                                        <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Ver detalhes</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="bg-white overflow-hidden shadow rounded-lg">
+                                <div className="p-5">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 p-3 rounded-md bg-green-100">
+                                            <DollarSign className="h-5 w-5 text-green-600" />
+                                        </div>
+                                        <div className="ml-5 w-0 flex-1">
+                                            <dl>
+                                                <dt className="text-sm font-medium text-gray-500 truncate">Média Diária</dt>
+                                                <dd>
+                                                    <div className="text-lg font-medium text-gray-900">
+                                                        € {avgDailyRevenue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 px-5 py-3">
+                                    <div className="text-sm">
+                                        <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Ver detalhes</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="bg-white overflow-hidden shadow rounded-lg">
+                                <div className="p-5">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 p-3 rounded-md bg-yellow-100">
+                                            <Clock className="h-5 w-5 text-yellow-600" />
+                                        </div>
+                                        <div className="ml-5 w-0 flex-1">
+                                            <dl>
+                                                <dt className="text-sm font-medium text-gray-500 truncate">Pendentes de Validação</dt>
+                                                <dd>
+                                                    <div className="text-lg font-medium text-gray-900">
+                                                        {pendingCount}
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 px-5 py-3">
+                                    <div className="text-sm">
+                                        <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Validar faturações</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="bg-white overflow-hidden shadow rounded-lg">
+                                <div className="p-5">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 p-3 rounded-md bg-indigo-100">
+                                            <Check className="h-5 w-5 text-indigo-600" />
+                                        </div>
+                                        <div className="ml-5 w-0 flex-1">
+                                            <dl>
+                                                <dt className="text-sm font-medium text-gray-500 truncate">Faturações Validadas</dt>
+                                                <dd>
+                                                    <div className="text-lg font-medium text-gray-900">
+                                                        {validatedCount}
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 px-5 py-3">
+                                    <div className="text-sm">
+                                        <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Ver todas</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Gráfico Principal */}
+                        <div className="bg-white shadow rounded-lg mb-6">
+                            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                                    <div>
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Tendência de Receitas</h3>
+                                        <p className="mt-1 max-w-2xl text-sm text-gray-500">Evolução das faturações ao longo do tempo</p>
+                                    </div>
+                                    <div className="mt-3 md:mt-0 flex space-x-3">
+                                        <button
+                                            type="button"
+                                            className={`inline-flex items-center px-3 py-1.5 border rounded-md text-sm font-medium ${
+                                                chartType === 'line'
+                                                    ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                            onClick={() => setChartType('line')}
+                                        >
+                                            <TrendingUp className="h-4 w-4 mr-1.5" />
+                                            Linha
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`inline-flex items-center px-3 py-1.5 border rounded-md text-sm font-medium ${
+                                                chartType === 'area'
+                                                    ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                            onClick={() => setChartType('area')}
+                                        >
+                                            <PieChart className="h-4 w-4 mr-1.5" />
+                                            Área
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`inline-flex items-center px-3 py-1.5 border rounded-md text-sm font-medium ${
+                                                chartType === 'bar'
+                                                    ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                            onClick={() => setChartType('bar')}
+                                        >
+                                            <BarChart2 className="h-4 w-4 mr-1.5" />
+                                            Barras
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-4 h-96">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    {chartType === 'line' && (
+                                        <LineChart
+                                            data={revenueData}
+                                            margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value) => [`€ ${value.toFixed(2)}`, 'Receita']} />
+                                            <Legend />
+                                            <Line 
+                                                type="monotone" 
+                                                dataKey="value" 
+                                                name="Receita" 
+                                                stroke="#3b82f6" 
+                                                strokeWidth={2}
+                                                activeDot={{ r: 8 }} 
+                                            />
+                                        </LineChart>
+                                    )}
+                                    
+                                    {chartType === 'area' && (
+                                        <AreaChart
+                                            data={revenueData}
+                                            margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value) => [`€ ${value.toFixed(2)}`, 'Receita']} />
+                                            <Legend />
+                                            <Area 
+                                                type="monotone" 
+                                                dataKey="value" 
+                                                name="Receita" 
+                                                stroke="#3b82f6" 
+                                                fill="#93c5fd" 
+                                            />
+                                        </AreaChart>
+                                    )}
+                                    
+                                    {chartType === 'bar' && (
+                                        <BarChart
+                                            data={revenueData}
+                                            margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value) => [`€ ${value.toFixed(2)}`, 'Receita']} />
+                                            <Legend />
+                                            <Bar 
+                                                dataKey="value" 
+                                                name="Receita" 
+                                                fill="#3b82f6" 
+                                            />
+                                        </BarChart>
+                                    )}
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* Faturações Recentes */}
+                        <div className="bg-white shadow rounded-lg">
+                            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                    <div>
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Faturações Recentes</h3>
+                                        <p className="mt-1 max-w-2xl text-sm text-gray-500">Lista das últimas faturações registradas</p>
+                                    </div>
+                                    <div className="mt-3 sm:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+                                        <div className="relative flex-grow sm:flex-grow-0">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <Search className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                                placeholder="Buscar faturação..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                            onClick={() => setShowFilters(!showFilters)}
+                                        >
+                                            <Filter className="h-4 w-4 mr-2" />
+                                            Filtros
+                                            <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showFilters ? 'transform rotate-180' : ''}`} />
+                                        </button>
+                                        <div className="relative inline-block text-left">
+                                            <select 
+                                                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                                value={selectedView}
+                                                onChange={(e) => setSelectedView(e.target.value)}
+                                            >
+                                                <option value="chart">Visualizar em Gráfico</option>
+                                                <option value="table">Visualizar em Tabela</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Filtros expandidos */}
+                                {showFilters && (
+                                    <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div>
+                                            <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700">Status</label>
+                                            <select
+                                                id="status-filter"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                            >
+                                                <option value="all">Todos</option>
+                                                <option value="pending">Pendentes</option>
+                                                <option value="validated">Validados</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="date-from" className="block text-sm font-medium text-gray-700">Data Inicial</label>
+                                            <input
+                                                type="date"
+                                                id="date-from"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="date-to" className="block text-sm font-medium text-gray-700">Data Final</label>
+                                            <input
+                                                type="date"
+                                                id="date-to"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Lista de faturações */}
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                ID
+                                            </th>
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Data
+                                            </th>
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Unidade
+                                            </th>
+                                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Valor
+                                            </th>
+                                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Status
+                                            </th>
+                                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Ações
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {filteredFaturacoes.length > 0 ? (
+                                            filteredFaturacoes.map((faturacao) => (
+                                                <tr key={faturacao.id} className="hover:bg-gray-50">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                                                        {faturacao.id}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {faturacao.date}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {faturacao.unit}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">
+                                                        € {faturacao.value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                                                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                            faturacao.status === 'Validado' 
+                                                                ? 'bg-green-100 text-green-800' 
+                                                                : 'bg-yellow-100 text-yellow-800'
+                                                        }`}>
+                                                            {faturacao.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <div className="flex justify-end space-x-2">
+                                                            <button
+                                                                type="button"
+                                                                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                            >
+                                                                <Eye className="h-3.5 w-3.5 mr-1" />
+                                                                Ver
+                                                            </button>
+                                                            {faturacao.status === 'Pendente' && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                                                >
+                                                                    <Check className="h-3.5 w-3.5 mr-1" />
+                                                                    Validar
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                type="button"
+                                                                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                                            >
+                                                                <Edit className="h-3.5 w-3.5 mr-1" />
+                                                                Editar
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="6" className="px-6 py-10 text-center text-sm text-gray-500">
+                                                    Nenhuma faturação encontrada para os filtros aplicados
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            {/* Paginação */}
+                            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                                <div className="flex-1 flex justify-between sm:hidden">
+                                    <a href="#" className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                        Anterior
+                                    </a>
+                                    <a href="#" className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                        Próximo
+                                    </a>
+                                </div>
+                                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                    <div>
+                                        <p className="text-sm text-gray-700">
+                                            Mostrando <span className="font-medium">1</span> a <span className="font-medium">5</span> de <span className="font-medium">5</span> resultados
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                <span className="sr-only">Anterior</span>
+                                                <ChevronLeft className="h-5 w-5" />
+                                            </a>
+                                            <a href="#" aria-current="page" className="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                                1
+                                            </a>
+                                            <a href="#" className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                <span className="sr-only">Próximo</span>
+                                                <ChevronRight className="h-5 w-5" />
+                                            </a>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

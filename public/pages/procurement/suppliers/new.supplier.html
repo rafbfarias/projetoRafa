@@ -8,18 +8,67 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
     <link href="../css/suppliers.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
+    <script src="../../../js/layout.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="flex items-center">
                     <a href="dash.supplier.html" class="mr-4 text-gray-500 hover:text-gray-700">
                         <i class="fas fa-arrow-left"></i>
@@ -42,241 +91,243 @@
             </div>
 
             <!-- Formulário -->
-            <form id="supplierForm" class="space-y-6">
-                <!-- Informações Básicas -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Informações Básicas</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="supplierName" class="block text-sm font-medium mb-1 required">Nome Comercial</label>
-                            <input type="text" id="supplierName" name="supplierName" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="fiscalName" class="block text-sm font-medium mb-1 required">Nome Fiscal</label>
-                            <input type="text" id="fiscalName" name="fiscalName" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="vatNumber" class="block text-sm font-medium mb-1 required">NIF</label>
-                            <input type="text" id="vatNumber" name="vatNumber" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <label for="status" class="block text-sm font-medium required">Status</label>
+            <div class="px-8">
+                <form id="supplierForm" class="space-y-6">
+                    <!-- Informações Básicas -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações Básicas</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="supplierName" class="block text-sm font-medium mb-1 required">Nome Comercial</label>
+                                <input type="text" id="supplierName" name="supplierName" class="form-input w-full" required>
                             </div>
-                            <select id="status" name="status" class="form-select w-full" required>
-                                <option value="1">Ativo</option>
-                                <option value="0">Inativo</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="modality" class="block text-sm font-medium mb-1 required">Modalidade</label>
-                            <select id="modality" name="modality" class="form-select w-full" required>
-                                <option value="">Selecione a Modalidade</option>
-                                <option value="1">Produtos</option>
-                                <option value="2">Serviços</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="category" class="block text-sm font-medium mb-1 required">Categoria</label>
-                            <select id="category" name="category" class="form-select w-full" required>
-                                <option value="">Selecione a Categoria</option>
-                                <option value="1">Alimentação</option>
-                                <option value="2">Bebidas</option>
-                                <option value="3">Materiais</option>
-                                <option value="4">Serviços</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="subcategory" class="block text-sm font-medium mb-1">Subcategoria</label>
-                            <select id="subcategory" name="subcategory" class="form-select w-full">
-                                <option value="">Selecione a Subcategoria</option>
-                                <option value="1">Vinhos</option>
-                                <option value="2">Cervejas</option>
-                                <option value="3">Destilados</option>
-                                <option value="4">Refrigerantes</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Favorito</label>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="isFavorite" name="isFavorite" class="form-checkbox h-5 w-5 text-blue-600">
-                                <label for="isFavorite" class="ml-2 text-sm">Marcar como fornecedor favorito</label>
+                            <div>
+                                <label for="fiscalName" class="block text-sm font-medium mb-1 required">Nome Fiscal</label>
+                                <input type="text" id="fiscalName" name="fiscalName" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <label for="vatNumber" class="block text-sm font-medium mb-1 required">NIF</label>
+                                <input type="text" id="vatNumber" name="vatNumber" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label for="status" class="block text-sm font-medium required">Status</label>
+                                </div>
+                                <select id="status" name="status" class="form-select w-full" required>
+                                    <option value="1">Ativo</option>
+                                    <option value="0">Inativo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="modality" class="block text-sm font-medium mb-1 required">Modalidade</label>
+                                <select id="modality" name="modality" class="form-select w-full" required>
+                                    <option value="">Selecione a Modalidade</option>
+                                    <option value="1">Produtos</option>
+                                    <option value="2">Serviços</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="category" class="block text-sm font-medium mb-1 required">Categoria</label>
+                                <select id="category" name="category" class="form-select w-full" required>
+                                    <option value="">Selecione a Categoria</option>
+                                    <option value="1">Alimentação</option>
+                                    <option value="2">Bebidas</option>
+                                    <option value="3">Materiais</option>
+                                    <option value="4">Serviços</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="subcategory" class="block text-sm font-medium mb-1">Subcategoria</label>
+                                <select id="subcategory" name="subcategory" class="form-select w-full">
+                                    <option value="">Selecione a Subcategoria</option>
+                                    <option value="1">Vinhos</option>
+                                    <option value="2">Cervejas</option>
+                                    <option value="3">Destilados</option>
+                                    <option value="4">Refrigerantes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Favorito</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="isFavorite" name="isFavorite" class="form-checkbox h-5 w-5 text-blue-600">
+                                    <label for="isFavorite" class="ml-2 text-sm">Marcar como fornecedor favorito</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Endereço Fiscal -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Endereço Fiscal</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label for="fiscalAddress" class="block text-sm font-medium mb-1 required">Endereço</label>
-                            <input type="text" id="fiscalAddress" name="fiscalAddress" class="form-<label for="fiscalAddress" class="block text-sm font-medium mb-1 required">Endereço</label>
-                            <input type="text" id="fiscalAddress" name="fiscalAddress" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="fiscalCity" class="block text-sm font-medium mb-1 required">Cidade</label>
-                            <input type="text" id="fiscalCity" name="fiscalCity" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="fiscalPostalCode" class="block text-sm font-medium mb-1 required">Código Postal</label>
-                            <input type="text" id="fiscalPostalCode" name="fiscalPostalCode" class="form-input w-full" required>
-                        </div>
-                        <div>
-                            <label for="fiscalCountry" class="block text-sm font-medium mb-1 required">País</label>
-                            <select id="fiscalCountry" name="fiscalCountry" class="form-select w-full" required>
-                                <option value="Portugal">Portugal</option>
-                                <option value="Espanha">Espanha</option>
-                                <option value="França">França</option>
-                                <option value="Outro">Outro</option>
-                            </select>
+                    <!-- Endereço Fiscal -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Endereço Fiscal</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label for="fiscalAddress" class="block text-sm font-medium mb-1 required">Endereço</label>
+                                <input type="text" id="fiscalAddress" name="fiscalAddress" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <label for="fiscalCity" class="block text-sm font-medium mb-1 required">Cidade</label>
+                                <input type="text" id="fiscalCity" name="fiscalCity" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <label for="fiscalPostalCode" class="block text-sm font-medium mb-1 required">Código Postal</label>
+                                <input type="text" id="fiscalPostalCode" name="fiscalPostalCode" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <label for="fiscalCountry" class="block text-sm font-medium mb-1 required">País</label>
+                                <select id="fiscalCountry" name="fiscalCountry" class="form-select w-full" required>
+                                    <option value="Portugal">Portugal</option>
+                                    <option value="Espanha">Espanha</option>
+                                    <option value="França">França</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Localizações -->
-                <div class="dashboard-card p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Outras Localizações</h3>
-                        <button type="button" id="addLocationBtn" class="text-sm text-blue-600 hover:text-blue-800 flex items-center">
-                            <i class="fas fa-plus-circle mr-1"></i> Adicionar Localização
+                    <!-- Localizações -->
+                    <div class="dashboard-card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Outras Localizações</h3>
+                            <button type="button" id="addLocationBtn" class="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                                <i class="fas fa-plus-circle mr-1"></i> Adicionar Localização
+                            </button>
+                        </div>
+                        
+                        <div id="locationsContainer">
+                            <!-- Área dinâmica para localizações adicionais -->
+                            <div class="location-item p-4 border border-gray-200 rounded-lg mb-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-medium">Localização #1</h4>
+                                    <div class="flex items-center">
+                                        <label class="inline-flex items-center mr-4">
+                                            <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600">
+                                            <span class="ml-2 text-sm">Principal</span>
+                                        </label>
+                                        <button type="button" class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium mb-1 required">Endereço</label>
+                                        <input type="text" name="locations[0][address]" class="form-input w-full" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Cidade</label>
+                                        <input type="text" name="locations[0][city]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Código Postal</label>
+                                        <input type="text" name="locations[0][postalCode]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">País</label>
+                                        <select name="locations[0][country]" class="form-select w-full">
+                                            <option value="Portugal">Portugal</option>
+                                            <option value="Espanha">Espanha</option>
+                                            <option value="França">França</option>
+                                            <option value="Outro">Outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contatos -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Contatos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-3">Contato Comercial</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="commercialName" class="block text-sm font-medium mb-1">Nome</label>
+                                        <input type="text" id="commercialName" name="commercialContact[name]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label for="commercialPhone" class="block text-sm font-medium mb-1">Telefone</label>
+                                        <input type="text" id="commercialPhone" name="commercialContact[phone]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label for="commercialEmail" class="block text-sm font-medium mb-1">Email</label>
+                                        <input type="email" id="commercialEmail" name="commercialContact[email]" class="form-input w-full">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-3">Contato Financeiro</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="financialName" class="block text-sm font-medium mb-1">Nome</label>
+                                        <input type="text" id="financialName" name="financialContact[name]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label for="financialPhone" class="block text-sm font-medium mb-1">Telefone</label>
+                                        <input type="text" id="financialPhone" name="financialContact[phone]" class="form-input w-full">
+                                    </div>
+                                    <div>
+                                        <label for="financialEmail" class="block text-sm font-medium mb-1">Email</label>
+                                        <input type="email" id="financialEmail" name="financialContact[email]" class="form-input w-full">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações Bancárias e Pagamento -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Informações Bancárias e Pagamento</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="iban" class="block text-sm font-medium mb-1">IBAN</label>
+                                <input type="text" id="iban" name="iban" class="form-input w-full">
+                            </div>
+                            <div>
+                                <label for="paymentMethod" class="block text-sm font-medium mb-1">Método de Pagamento</label>
+                                <select id="paymentMethod" name="paymentMethod" class="form-select w-full">
+                                    <option value="Bank Transfer">Transferência Bancária</option>
+                                    <option value="Credit Card">Cartão de Crédito</option>
+                                    <option value="Check">Cheque</option>
+                                    <option value="Cash">Dinheiro</option>
+                                    <option value="Direct Debit">Débito Direto</option>
+                                    <option value="Other">Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="paymentTerms" class="block text-sm font-medium mb-1">Termos de Pagamento</label>
+                                <input type="text" id="paymentTerms" name="paymentTerms" class="form-input w-full" placeholder="Ex: 30 dias">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notas e Observações -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Notas e Observações</h3>
+                        <div>
+                            <label for="observations" class="block text-sm font-medium mb-1">Observações</label>
+                            <textarea id="observations" name="observations" rows="4" class="form-textarea w-full"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Botões de ação -->
+                    <div class="flex justify-end space-x-3 mb-8">
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">
+                            <i class="fas fa-times mr-2"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save mr-2"></i>
+                            Salvar
                         </button>
                     </div>
-                    
-                    <div id="locationsContainer">
-                        <!-- Área dinâmica para localizações adicionais -->
-                        <div class="location-item p-4 border border-gray-200 rounded-lg mb-4">
-                            <div class="flex justify-between items-center mb-3">
-                                <h4 class="font-medium">Localização #1</h4>
-                                <div class="flex items-center">
-                                    <label class="inline-flex items-center mr-4">
-                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600">
-                                        <span class="ml-2 text-sm">Principal</span>
-                                    </label>
-                                    <button type="button" class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium mb-1 required">Endereço</label>
-                                    <input type="text" name="locations[0][address]" class="form-input w-full" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">Cidade</label>
-                                    <input type="text" name="locations[0][city]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">Código Postal</label>
-                                    <input type="text" name="locations[0][postalCode]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">País</label>
-                                    <select name="locations[0][country]" class="form-select w-full">
-                                        <option value="Portugal">Portugal</option>
-                                        <option value="Espanha">Espanha</option>
-                                        <option value="França">França</option>
-                                        <option value="Outro">Outro</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contatos -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Contatos</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-medium mb-3">Contato Comercial</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="commercialName" class="block text-sm font-medium mb-1">Nome</label>
-                                    <input type="text" id="commercialName" name="commercialContact[name]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label for="commercialPhone" class="block text-sm font-medium mb-1">Telefone</label>
-                                    <input type="text" id="commercialPhone" name="commercialContact[phone]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label for="commercialEmail" class="block text-sm font-medium mb-1">Email</label>
-                                    <input type="email" id="commercialEmail" name="commercialContact[email]" class="form-input w-full">
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-medium mb-3">Contato Financeiro</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="financialName" class="block text-sm font-medium mb-1">Nome</label>
-                                    <input type="text" id="financialName" name="financialContact[name]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label for="financialPhone" class="block text-sm font-medium mb-1">Telefone</label>
-                                    <input type="text" id="financialPhone" name="financialContact[phone]" class="form-input w-full">
-                                </div>
-                                <div>
-                                    <label for="financialEmail" class="block text-sm font-medium mb-1">Email</label>
-                                    <input type="email" id="financialEmail" name="financialContact[email]" class="form-input w-full">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Informações Bancárias e Pagamento -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Informações Bancárias e Pagamento</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="iban" class="block text-sm font-medium mb-1">IBAN</label>
-                            <input type="text" id="iban" name="iban" class="form-input w-full">
-                        </div>
-                        <div>
-                            <label for="paymentMethod" class="block text-sm font-medium mb-1">Método de Pagamento</label>
-                            <select id="paymentMethod" name="paymentMethod" class="form-select w-full">
-                                <option value="Bank Transfer">Transferência Bancária</option>
-                                <option value="Credit Card">Cartão de Crédito</option>
-                                <option value="Check">Cheque</option>
-                                <option value="Cash">Dinheiro</option>
-                                <option value="Direct Debit">Débito Direto</option>
-                                <option value="Other">Outro</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="paymentTerms" class="block text-sm font-medium mb-1">Termos de Pagamento</label>
-                            <input type="text" id="paymentTerms" name="paymentTerms" class="form-input w-full" placeholder="Ex: 30 dias">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Notas e Observações -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Notas e Observações</h3>
-                    <div>
-                        <label for="observations" class="block text-sm font-medium mb-1">Observações</label>
-                        <textarea id="observations" name="observations" rows="4" class="form-textarea w-full"></textarea>
-                    </div>
-                </div>
-
-                <!-- Botões de ação -->
-                <div class="flex justify-end space-x-3">
-                    <button type="button" class="btn btn-secondary" onclick="history.back()">
-                        <i class="fas fa-times mr-2"></i>
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save mr-2"></i>
-                        Salvar
-                    </button>
-                </div>
-            </form>
-        </main>
+                </form>
+            </div>
+        </div>
     </div>
-    
-    <script src="../js/form.js"></script>
+
+    <!-- Scripts -->
+    <script src="../../../js/procurement/suppliers/new.supplier.js"></script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,16 +9,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../../css/styles.css" rel="stylesheet">
     <script src="../../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="flex min-h-screen">
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="text-left">
                     <h1 class="text-left text-2xl font-bold">Dashboard de Chamados</h1>
                     <p class="text-muted">Gestão e acompanhamento de tickets e solicitações internas</p>
@@ -38,822 +84,768 @@
                 </div>
             </div>
 
-            <!-- Cards de Resumo -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Card de Chamados Pendentes -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
-                            <i class="fas fa-inbox text-xl" style="color: var(--icon-employees-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-muted text-sm">Chamados Pendentes</h3>
-                            <p class="text-2xl font-bold">12</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">7 dias: 5</span>
-                            <a href="/tickets/pending" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card de Tempo Médio de Resolução -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
-                            <i class="fas fa-clock text-xl" style="color: var(--icon-revenue-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-muted text-sm">Tempo Médio de Resolução</h3>
-                            <p class="text-2xl font-bold">2.5 dias</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">Meta: 2 dias</span>
-                            <a href="/tickets/statistics" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card de Taxa de Resolução -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
-                            <i class="fas fa-check-circle text-xl" style="color: var(--icon-contracts-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-muted text-sm">Taxa de Resolução</h3>
-                            <p class="text-2xl font-bold">82%</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">Meta: 90%</span>
-                            <a href="/tickets/performance" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card de Chamados por Prioridade -->
-                <div class="dashboard-card p-6 flex flex-col">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
-                            <i class="fas fa-exclamation-triangle text-xl" style="color: var(--icon-clients-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-muted text-sm">Chamados Críticos</h3>
-                            <p class="text-2xl font-bold">3</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-muted">Requer atenção</span>
-                            <a href="/tickets/critical" class="text-brand-600 hover:text-brand-700">Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabs Navigation -->
-            <div class="border-b border-gray-200 mb-6">
-                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
-                    <li class="me-2">
-                        <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="visao-geral">
-                            <i class="fas fa-chart-pie w-4 h-4 me-2"></i>Visão Geral
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="caixa-entrada">
-                            <i class="fas fa-inbox w-4 h-4 me-2"></i>Caixa de Entrada
-                            <span class="ml-2 bg-red-500 text-white text-xs font-medium px-2 py-0.5 rounded-full">8</span>
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="enviados">
-                            <i class="fas fa-paper-plane w-4 h-4 me-2"></i>Enviados
-                        </a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="estatisticas">
-                            <i class="fas fa-chart-bar w-4 h-4 me-2"></i>Estatísticas
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Conteúdo das Abas -->
-            <div id="tab-visao-geral" class="tab-content">
-                <!-- Gráficos e Tabelas -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Gráfico de Distribuição de Chamados -->
-                    <div class="dashboard-card p-6 lg:col-span-2">
-                        <h3 class="text-lg font-semibold mb-4">Status dos Chamados</h3>
-                        <div class="h-80">
-                            <canvas id="ticketsStatusChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Chamados Recentes que Requerem Ação -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">Requerem Ação</h3>
-                        <div class="space-y-4">
-                            <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-red-700">
-                                        <i class="fas fa-exclamation-circle mr-2"></i>
-                                        TK-2025-0342
-                                    </span>
-                                    <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Crítico</span>
-                                </div>
-                                <p class="text-sm text-red-600 mt-1">Problema na faturação - PDV offline</p>
-                                <div class="flex justify-between mt-2 text-xs text-red-600">
-                                    <span>Matosinhos</span>
-                                    <span>2h atrás</span>
-                                </div>
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Cards de Resumo -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Card de Chamados Pendentes -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
+                                <i class="fas fa-inbox text-xl" style="color: var(--icon-employees-text);"></i>
                             </div>
-                            
-                            <div class="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-orange-700">
-                                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                                        TK-2025-0339
-                                    </span>
-                                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full">Alta</span>
-                                </div>
-                                <p class="text-sm text-orange-600 mt-1">Erro na importação de produtos</p>
-                                <div class="flex justify-between mt-2 text-xs text-orange-600">
-                                    <span>Porto</span>
-                                    <span>5h atrás</span>
-                                </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Chamados Pendentes</h3>
+                                <p class="text-2xl font-bold">12</p>
                             </div>
-                            
-                            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-yellow-700">
-                                        <i class="fas fa-exclamation mr-2"></i>
-                                        TK-2025-0336
-                                    </span>
-                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">Média</span>
-                                </div>
-                                <p class="text-sm text-yellow-600 mt-1">Ajuste necessário em escala de trabalho</p>
-                                <div class="flex justify-between mt-2 text-xs text-yellow-600">
-                                    <span>Matosinhos</span>
-                                    <span>1d atrás</span>
-                                </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">7 dias: 5</span>
+                                <a href="/tickets/pending" class="text-brand-600 hover:text-brand-700">Detalhes</a>
                             </div>
+                        </div>
+                    </div>
 
-                            <a href="/tickets/pending" class="block text-center text-brand-600 hover:text-brand-700 text-sm font-medium mt-2">
-                                Ver todos os pendentes
+                    <!-- Card de Tempo Médio de Resolução -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
+                                <i class="fas fa-clock text-xl" style="color: var(--icon-revenue-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Tempo Médio de Resolução</h3>
+                                <p class="text-2xl font-bold">2.5 dias</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Meta: 2 dias</span>
+                                <a href="/tickets/statistics" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Taxa de Resolução -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
+                                <i class="fas fa-check-circle text-xl" style="color: var(--icon-contracts-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Taxa de Resolução</h3>
+                                <p class="text-2xl font-bold">82%</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Meta: 90%</span>
+                                <a href="/tickets/performance" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Chamados por Prioridade -->
+                    <div class="dashboard-card p-6 flex flex-col">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
+                                <i class="fas fa-exclamation-triangle text-xl" style="color: var(--icon-clients-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-muted text-sm">Chamados Críticos</h3>
+                                <p class="text-2xl font-bold">3</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-muted">Requer atenção</span>
+                                <a href="/tickets/critical" class="text-brand-600 hover:text-brand-700">Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200 mb-6">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="visao-geral">
+                                <i class="fas fa-chart-pie w-4 h-4 me-2"></i>Visão Geral
                             </a>
-                        </div>
-                    </div>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="caixa-entrada">
+                                <i class="fas fa-inbox w-4 h-4 me-2"></i>Caixa de Entrada
+                                <span class="ml-2 bg-red-500 text-white text-xs font-medium px-2 py-0.5 rounded-full">8</span>
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="enviados">
+                                <i class="fas fa-paper-plane w-4 h-4 me-2"></i>Enviados
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="estatisticas">
+                                <i class="fas fa-chart-bar w-4 h-4 me-2"></i>Estatísticas
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Chamados por Categoria e Área -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <!-- Chamados por Categoria -->
-                    <div class="dashboard-card p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Chamados por Categoria</h3>
-                            <a href="/tickets/categories" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                <!-- Conteúdo das Abas -->
+                <div id="tab-visao-geral" class="tab-content">
+                    <!-- Gráficos e Tabelas -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Gráfico de Distribuição de Chamados -->
+                        <div class="dashboard-card p-6 lg:col-span-2">
+                            <h3 class="text-lg font-semibold mb-4">Status dos Chamados</h3>
+                            <div class="h-80">
+                                <canvas id="ticketsStatusChart"></canvas>
+                            </div>
                         </div>
-                        <div class="h-64">
-                            <canvas id="categoriesChart"></canvas>
+
+                        <!-- Chamados Recentes que Requerem Ação -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Requerem Ação</h3>
+                            <div class="space-y-4">
+                                <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-red-700">
+                                            <i class="fas fa-exclamation-circle mr-2"></i>
+                                            TK-2025-0342
+                                        </span>
+                                        <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Crítico</span>
+                                    </div>
+                                    <p class="text-sm text-red-600 mt-1">Problema na faturação - PDV offline</p>
+                                    <div class="flex justify-between mt-2 text-xs text-red-600">
+                                        <span>Matosinhos</span>
+                                        <span>2h atrás</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-orange-700">
+                                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                                            TK-2025-0339
+                                        </span>
+                                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full">Alta</span>
+                                    </div>
+                                    <p class="text-sm text-orange-600 mt-1">Erro na importação de produtos</p>
+                                    <div class="flex justify-between mt-2 text-xs text-orange-600">
+                                        <span>Porto</span>
+                                        <span>5h atrás</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-yellow-700">
+                                            <i class="fas fa-exclamation mr-2"></i>
+                                            TK-2025-0336
+                                        </span>
+                                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">Média</span>
+                                    </div>
+                                    <p class="text-sm text-yellow-600 mt-1">Ajuste necessário em escala de trabalho</p>
+                                    <div class="flex justify-between mt-2 text-xs text-yellow-600">
+                                        <span>Matosinhos</span>
+                                        <span>1d atrás</span>
+                                    </div>
+                                </div>
+
+                                <a href="/tickets/pending" class="block text-center text-brand-600 hover:text-brand-700 text-sm font-medium mt-2">
+                                    Ver todos os pendentes
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Chamados por Área -->
-                    <div class="dashboard-card p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Chamados por Área</h3>
-                            <a href="/tickets/departments" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                    <!-- Chamados por Categoria e Área -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Chamados por Categoria -->
+                        <div class="dashboard-card p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold">Chamados por Categoria</h3>
+                                <a href="/tickets/categories" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="categoriesChart"></canvas>
+                            </div>
                         </div>
-                        <div class="h-64">
-                            <canvas id="departmentsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Tabela de Chamados Recentes -->
-                <div class="dashboard-card p-6 mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Chamados Recentes</h3>
-                        <a href="/tickets/all" class="text-sm text-brand-600 hover:text-brand-700">Ver Todos</a>
+                        <!-- Chamados por Área -->
+                        <div class="dashboard-card p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold">Chamados por Área</h3>
+                                <a href="/tickets/departments" class="text-sm text-brand-600 hover:text-brand-700">Ver Todas</a>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="departmentsChart"></canvas>
+                            </div>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Categoria</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex justify-center">
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="far fa-star text-yellow-400"></i>
-                                            <span class="ml-1">4.0</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">Daniel Costa</td>
-                                    <td class="px-4 py-3 text-sm text-center">37</td>
-                                    <td class="px-4 py-3 text-sm text-center">35</td>
-                                    <td class="px-4 py-3 text-sm text-center">2.0</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex items-center justify-center">
-                                            <span class="mr-2">94.6%</span>
-                                            <div class="w-24 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 94.6%"></div>
+
+                    <!-- Tabela de Chamados Recentes -->
+                    <div class="dashboard-card p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Chamados Recentes</h3>
+                            <a href="/tickets/all" class="text-sm text-brand-600 hover:text-brand-700">Ver Todos</a>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Categoria</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex justify-center">
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="far fa-star text-yellow-400"></i>
+                                                <span class="ml-1">4.0</span>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex justify-center">
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star-half-alt text-yellow-400"></i>
-                                            <span class="ml-1">4.7</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">Daniel Costa</td>
+                                        <td class="px-4 py-3 text-sm text-center">37</td>
+                                        <td class="px-4 py-3 text-sm text-center">35</td>
+                                        <td class="px-4 py-3 text-sm text-center">2.0</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex items-center justify-center">
+                                                <span class="mr-2">94.6%</span>
+                                                <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 94.6%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex justify-center">
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                                <span class="ml-1">4.7</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caixa de Entrada -->
+                <div id="tab-caixa-entrada" class="tab-content hidden">
+                    <div class="dashboard-card p-6 mb-8">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <h3 class="text-lg font-semibold mb-2 md:mb-0">Caixa de Entrada</h3>
+                            <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-search text-gray-400"></i>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                                        placeholder="Buscar chamados"
+                                    >
+                                </div>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="">Todos os Status</option>
+                                    <option value="open">Abertos</option>
+                                    <option value="in-progress">Em andamento</option>
+                                    <option value="waiting">Em espera</option>
+                                    <option value="scheduled">Agendados</option>
+                                    <option value="resolved">Resolvidos</option>
+                                    <option value="closed">Fechados</option>
+                                </select>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="">Todas as Prioridades</option>
+                                    <option value="critical">Crítica</option>
+                                    <option value="high">Alta</option>
+                                    <option value="medium">Média</option>
+                                    <option value="low">Baixa</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto mt-4">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Solicitante</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Prioridade</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-red-50">
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0342</td>
+                                        <td class="px-4 py-3 text-sm">Problema na faturação - PDV offline</td>
+                                        <td class="px-4 py-3 text-sm">Ana Silva</td>
+                                        <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                        <td class="px-4 py-3 text-sm">06/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Crítico</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Aberto</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0342" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/respond/TK-2025-0342" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-orange-50">
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0339</td>
+                                        <td class="px-4 py-3 text-sm">Erro na importação de produtos</td>
+                                        <td class="px-4 py-3 text-sm">Bruno Santos</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm">06/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Alta</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0339" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/respond/TK-2025-0339" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-yellow-50">
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0336</td>
+                                        <td class="px-4 py-3 text-sm">Ajuste necessário em escala de trabalho</td>
+                                        <td class="px-4 py-3 text-sm">Carla Oliveira</td>
+                                        <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                        <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Média</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Em espera</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0336" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/respond/TK-2025-0336" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0333</td>
+                                        <td class="px-4 py-3 text-sm">Solicitar manutenção do ar condicionado</td>
+                                        <td class="px-4 py-3 text-sm">Daniel Costa</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Média</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0333" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/respond/TK-2025-0333" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0330</td>
+                                        <td class="px-4 py-3 text-sm">Erro ao exportar relatório mensal</td>
+                                        <td class="px-4 py-3 text-sm">Elena Martins</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm">04/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Baixa</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0330" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0328</td>
+                                        <td class="px-4 py-3 text-sm">Atualização dos preços no cardápio digital</td>
+                                        <td class="px-4 py-3 text-sm">Fábio Pereira</td>
+                                        <td class="px-4 py-3 text-sm">Matosinhos</td>
+                                        <td class="px-4 py-3 text-sm">04/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Média</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0328" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/respond/TK-2025-0328" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0325</td>
+                                        <td class="px-4 py-3 text-sm">Problema com registro de ponto de funcionário</td>
+                                        <td class="px-4 py-3 text-sm">Gabriela Lima</td>
+                                        <td class="px-4 py-3 text-sm">Porto</td>
+                                        <td class="px-4 py-3 text-sm">03/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Alta</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0325" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-between items-center pt-4">
+                            <span class="text-sm text-muted">Mostrando 8 de 24 chamados</span>
+                            <div class="flex space-x-1">
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300" disabled>Anterior</button>
+                                <button class="px-3 py-1 bg-brand-600 text-white rounded-md">1</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">2</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">3</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">Próximo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chamados Enviados -->
+                <div id="tab-enviados" class="tab-content hidden">
+                    <div class="dashboard-card p-6 mb-8">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <h3 class="text-lg font-semibold mb-2 md:mb-0">Chamados Enviados</h3>
+                            <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-search text-gray-400"></i>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                                        placeholder="Buscar chamados"
+                                    >
+                                </div>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="">Todos os Status</option>
+                                    <option value="open">Abertos</option>
+                                    <option value="in-progress">Em andamento</option>
+                                    <option value="waiting">Em espera</option>
+                                    <option value="scheduled">Agendados</option>
+                                    <option value="resolved">Resolvidos</option>
+                                    <option value="closed">Fechados</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto mt-4">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Destinatário</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Área</th>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0340</td>
+                                        <td class="px-4 py-3 text-sm">Solicitação de novo equipamento</td>
+                                        <td class="px-4 py-3 text-sm">Departamento de TI</td>
+                                        <td class="px-4 py-3 text-sm">TI</td>
+                                        <td class="px-4 py-3 text-sm">06/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0340" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                            <a href="/tickets/cancel/TK-2025-0340" class="text-red-600 hover:text-red-800 mx-1"><i class="fas fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0335</td>
+                                        <td class="px-4 py-3 text-sm">Solicitação de ajuste no horário de trabalho</td>
+                                        <td class="px-4 py-3 text-sm">RH</td>
+                                        <td class="px-4 py-3 text-sm">Recursos Humanos</td>
+                                        <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0335" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0332</td>
+                                        <td class="px-4 py-3 text-sm">Solicitação de reembolso de despesas</td>
+                                        <td class="px-4 py-3 text-sm">Departamento Financeiro</td>
+                                        <td class="px-4 py-3 text-sm">Financeiro</td>
+                                        <td class="px-4 py-3 text-sm">05/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Em espera</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0332" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0327</td>
+                                        <td class="px-4 py-3 text-sm">Problema com faturação de fornecedor</td>
+                                        <td class="px-4 py-3 text-sm">Departamento Financeiro</td>
+                                        <td class="px-4 py-3 text-sm">Financeiro</td>
+                                        <td class="px-4 py-3 text-sm">04/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0327" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">TK-2025-0324</td>
+                                        <td class="px-4 py-3 text-sm">Solicitação de material de escritório</td>
+                                        <td class="px-4 py-3 text-sm">Almoxarifado</td>
+                                        <td class="px-4 py-3 text-sm">Administrativo</td>
+                                        <td class="px-4 py-3 text-sm">03/03/2025</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Fechado</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="/tickets/view/TK-2025-0324" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-between items-center pt-4">
+                            <span class="text-sm text-muted">Mostrando 5 de 18 chamados</span>
+                            <div class="flex space-x-1">
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300" disabled>Anterior</button>
+                                <button class="px-3 py-1 bg-brand-600 text-white rounded-md">1</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">2</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">3</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">4</button>
+                                <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">Próximo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estatísticas -->
+                <div id="tab-estatisticas" class="tab-content hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Tempo Médio de Resolução -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Tempo Médio de Resolução por Categoria</h3>
+                            <div class="h-80">
+                                <canvas id="resolutionTimeChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Volume de Chamados por Mês -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Volume de Chamados (Últimos 6 meses)</h3>
+                            <div class="h-80">
+                                <canvas id="ticketsVolumeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- KPIs de Performance -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">KPIs de Performance</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm font-medium">Taxa de Resolução no Prazo</span>
+                                        <span class="text-sm font-bold text-green-600">87%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 87%"></div>
+                                    </div>
+                                    <p class="text-xs text-muted mt-1">Meta: 85%</p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm font-medium">Satisfação do Cliente</span>
+                                        <span class="text-sm font-bold text-brand-600">92%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-brand-600 h-2.5 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                    <p class="text-xs text-muted mt-1">Meta: 90%</p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm font-medium">Primeiro Contato</span>
+                                        <span class="text-sm font-bold text-yellow-600">76%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 76%"></div>
+                                    </div>
+                                    <p class="text-xs text-muted mt-1">Meta: 80%</p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm font-medium">Taxa de Reabertura</span>
+                                        <span class="text-sm font-bold text-green-600">5%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 5%"></div>
+                                    </div>
+                                    <p class="text-xs text-muted mt-1">Meta: &lt;8%</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chamados por Prioridade -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Chamados por Prioridade</h3>
+                            <div class="h-64">
+                                <canvas id="priorityDonutChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Status dos Chamados -->
+                        <div class="dashboard-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Status dos Chamados</h3>
+                            <div class="h-64">
+                                <canvas id="statusDonutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Performance por Responsável</h3>
+                            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-40 p-2">
+                                <option>Últimos 30 dias</option>
+                                <option>Últimos 60 dias</option>
+                                <option>Últimos 90 dias</option>
+                            </select>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-muted">Responsável</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Chamados Atribuídos</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Resolvidos</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Tempo Médio (dias)</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Taxa de Resolução</th>
+                                        <th class="px-4 py-2 text-center text-sm font-medium text-muted">Satisfação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">Ana Silva</td>
+                                        <td class="px-4 py-3 text-sm text-center">32</td>
+                                        <td class="px-4 py-3 text-sm text-center">28</td>
+                                        <td class="px-4 py-3 text-sm text-center">1.8</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex items-center justify-center">
+                                                <span class="mr-2">87.5%</span>
+                                                <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 87.5%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex justify-center">
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                                <span class="ml-1">4.5</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">Bruno Santos</td>
+                                        <td class="px-4 py-3 text-sm text-center">45</td>
+                                        <td class="px-4 py-3 text-sm text-center">41</td>
+                                        <td class="px-4 py-3 text-sm text-center">2.3</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex items-center justify-center">
+                                                <span class="mr-2">91.1%</span>
+                                                <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 91.1%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex justify-center">
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <span class="ml-1">4.9</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm font-medium">Carla Oliveira</td>
+                                        <td class="px-4 py-3 text-sm text-center">28</td>
+                                        <td class="px-4 py-3 text-sm text-center">23</td>
+                                        <td class="px-4 py-3 text-sm text-center">3.1</td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex items-center justify-center">
+                                                <span class="mr-2">82.1%</span>
+                                                <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 82.1%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-center">
+                                            <div class="flex justify-center">
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                                <span class="ml-1">4.9</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../../js/tickets-dashboard.js"></script>
 </body>
-</html>4 py-3 text-sm">TK-2025-0342</td>
-                                    <td class="px-4 py-3 text-sm">Problema na faturação - PDV offline</td>
-                                    <td class="px-4 py-3 text-sm">Sistema</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Aberto</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0342" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0342" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">TK-2025-0339</td>
-                                    <td class="px-4 py-3 text-sm">Erro na importação de produtos</td>
-                                    <td class="px-4 py-3 text-sm">Estoque</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0339" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0339" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">TK-2025-0336</td>
-                                    <td class="px-4 py-3 text-sm">Ajuste necessário em escala de trabalho</td>
-                                    <td class="px-4 py-3 text-sm">RH</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Em espera</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0336" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0336" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">TK-2025-0333</td>
-                                    <td class="px-4 py-3 text-sm">Solicitar manutenção do ar condicionado</td>
-                                    <td class="px-4 py-3 text-sm">Manutenção</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0333" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0333" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm">TK-2025-0330</td>
-                                    <td class="px-4 py-3 text-sm">Erro ao exportar relatório mensal</td>
-                                    <td class="px-4 py-3 text-sm">Financeiro</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">04/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0330" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Caixa de Entrada -->
-            <div id="tab-caixa-entrada" class="tab-content hidden">
-                <div class="dashboard-card p-6 mb-8">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                        <h3 class="text-lg font-semibold mb-2 md:mb-0">Caixa de Entrada</h3>
-                        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <i class="fas fa-search text-gray-400"></i>
-                                </div>
-                                <input 
-                                    type="text" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                                    placeholder="Buscar chamados"
-                                >
-                            </div>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                <option value="">Todos os Status</option>
-                                <option value="open">Abertos</option>
-                                <option value="in-progress">Em andamento</option>
-                                <option value="waiting">Em espera</option>
-                                <option value="scheduled">Agendados</option>
-                                <option value="resolved">Resolvidos</option>
-                                <option value="closed">Fechados</option>
-                            </select>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                <option value="">Todas as Prioridades</option>
-                                <option value="critical">Crítica</option>
-                                <option value="high">Alta</option>
-                                <option value="medium">Média</option>
-                                <option value="low">Baixa</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto mt-4">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Solicitante</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Unidade</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Prioridade</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-red-50">
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0342</td>
-                                    <td class="px-4 py-3 text-sm">Problema na faturação - PDV offline</td>
-                                    <td class="px-4 py-3 text-sm">Ana Silva</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Crítico</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Aberto</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0342" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0342" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-orange-50">
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0339</td>
-                                    <td class="px-4 py-3 text-sm">Erro na importação de produtos</td>
-                                    <td class="px-4 py-3 text-sm">Bruno Santos</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Alta</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0339" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0339" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr class="bg-yellow-50">
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0336</td>
-                                    <td class="px-4 py-3 text-sm">Ajuste necessário em escala de trabalho</td>
-                                    <td class="px-4 py-3 text-sm">Carla Oliveira</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Média</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Em espera</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0336" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0336" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0333</td>
-                                    <td class="px-4 py-3 text-sm">Solicitar manutenção do ar condicionado</td>
-                                    <td class="px-4 py-3 text-sm">Daniel Costa</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Média</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0333" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0333" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0330</td>
-                                    <td class="px-4 py-3 text-sm">Erro ao exportar relatório mensal</td>
-                                    <td class="px-4 py-3 text-sm">Elena Martins</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">04/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Baixa</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0330" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0328</td>
-                                    <td class="px-4 py-3 text-sm">Atualização dos preços no cardápio digital</td>
-                                    <td class="px-4 py-3 text-sm">Fábio Pereira</td>
-                                    <td class="px-4 py-3 text-sm">Matosinhos</td>
-                                    <td class="px-4 py-3 text-sm">04/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Média</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0328" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/respond/TK-2025-0328" class="text-green-600 hover:text-green-800 mx-1"><i class="fas fa-reply"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0325</td>
-                                    <td class="px-4 py-3 text-sm">Problema com registro de ponto de funcionário</td>
-                                    <td class="px-4 py-3 text-sm">Gabriela Lima</td>
-                                    <td class="px-4 py-3 text-sm">Porto</td>
-                                    <td class="px-4 py-3 text-sm">03/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Alta</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0325" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="flex justify-between items-center pt-4">
-                        <span class="text-sm text-muted">Mostrando 8 de 24 chamados</span>
-                        <div class="flex space-x-1">
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300" disabled>Anterior</button>
-                            <button class="px-3 py-1 bg-brand-600 text-white rounded-md">1</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">2</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">3</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">Próximo</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chamados Enviados -->
-            <div id="tab-enviados" class="tab-content hidden">
-                <div class="dashboard-card p-6 mb-8">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                        <h3 class="text-lg font-semibold mb-2 md:mb-0">Chamados Enviados</h3>
-                        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <i class="fas fa-search text-gray-400"></i>
-                                </div>
-                                <input 
-                                    type="text" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                                    placeholder="Buscar chamados"
-                                >
-                            </div>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                <option value="">Todos os Status</option>
-                                <option value="open">Abertos</option>
-                                <option value="in-progress">Em andamento</option>
-                                <option value="waiting">Em espera</option>
-                                <option value="scheduled">Agendados</option>
-                                <option value="resolved">Resolvidos</option>
-                                <option value="closed">Fechados</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto mt-4">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Ticket #</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Assunto</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Destinatário</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Área</th>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Criado em</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Status</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0340</td>
-                                    <td class="px-4 py-3 text-sm">Solicitação de novo equipamento</td>
-                                    <td class="px-4 py-3 text-sm">Departamento de TI</td>
-                                    <td class="px-4 py-3 text-sm">TI</td>
-                                    <td class="px-4 py-3 text-sm">06/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Em andamento</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0340" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tickets/cancel/TK-2025-0340" class="text-red-600 hover:text-red-800 mx-1"><i class="fas fa-times"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0335</td>
-                                    <td class="px-4 py-3 text-sm">Solicitação de ajuste no horário de trabalho</td>
-                                    <td class="px-4 py-3 text-sm">RH</td>
-                                    <td class="px-4 py-3 text-sm">Recursos Humanos</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Agendado</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0335" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0332</td>
-                                    <td class="px-4 py-3 text-sm">Solicitação de reembolso de despesas</td>
-                                    <td class="px-4 py-3 text-sm">Departamento Financeiro</td>
-                                    <td class="px-4 py-3 text-sm">Financeiro</td>
-                                    <td class="px-4 py-3 text-sm">05/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Em espera</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0332" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0327</td>
-                                    <td class="px-4 py-3 text-sm">Problema com faturação de fornecedor</td>
-                                    <td class="px-4 py-3 text-sm">Departamento Financeiro</td>
-                                    <td class="px-4 py-3 text-sm">Financeiro</td>
-                                    <td class="px-4 py-3 text-sm">04/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Resolvido</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0327" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">TK-2025-0324</td>
-                                    <td class="px-4 py-3 text-sm">Solicitação de material de escritório</td>
-                                    <td class="px-4 py-3 text-sm">Almoxarifado</td>
-                                    <td class="px-4 py-3 text-sm">Administrativo</td>
-                                    <td class="px-4 py-3 text-sm">03/03/2025</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Fechado</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <a href="/tickets/view/TK-2025-0324" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fas fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="flex justify-between items-center pt-4">
-                        <span class="text-sm text-muted">Mostrando 5 de 18 chamados</span>
-                        <div class="flex space-x-1">
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300" disabled>Anterior</button>
-                            <button class="px-3 py-1 bg-brand-600 text-white rounded-md">1</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">2</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">3</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">4</button>
-                            <button class="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">Próximo</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Estatísticas -->
-            <div id="tab-estatisticas" class="tab-content hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <!-- Tempo Médio de Resolução -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">Tempo Médio de Resolução por Categoria</h3>
-                        <div class="h-80">
-                            <canvas id="resolutionTimeChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Volume de Chamados por Mês -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">Volume de Chamados (Últimos 6 meses)</h3>
-                        <div class="h-80">
-                            <canvas id="ticketsVolumeChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- KPIs de Performance -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">KPIs de Performance</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-sm font-medium">Taxa de Resolução no Prazo</span>
-                                    <span class="text-sm font-bold text-green-600">87%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 87%"></div>
-                                </div>
-                                <p class="text-xs text-muted mt-1">Meta: 85%</p>
-                            </div>
-                            
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-sm font-medium">Satisfação do Cliente</span>
-                                    <span class="text-sm font-bold text-brand-600">92%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-brand-600 h-2.5 rounded-full" style="width: 92%"></div>
-                                </div>
-                                <p class="text-xs text-muted mt-1">Meta: 90%</p>
-                            </div>
-                            
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-sm font-medium">Primeiro Contato</span>
-                                    <span class="text-sm font-bold text-yellow-600">76%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 76%"></div>
-                                </div>
-                                <p class="text-xs text-muted mt-1">Meta: 80%</p>
-                            </div>
-                            
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-sm font-medium">Taxa de Reabertura</span>
-                                    <span class="text-sm font-bold text-green-600">5%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 5%"></div>
-                                </div>
-                                <p class="text-xs text-muted mt-1">Meta: &lt;8%</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Chamados por Prioridade -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">Chamados por Prioridade</h3>
-                        <div class="h-64">
-                            <canvas id="priorityDonutChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Status dos Chamados -->
-                    <div class="dashboard-card p-6">
-                        <h3 class="text-lg font-semibold mb-4">Status dos Chamados</h3>
-                        <div class="h-64">
-                            <canvas id="statusDonutChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dashboard-card p-6 mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Performance por Responsável</h3>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-40 p-2">
-                            <option>Últimos 30 dias</option>
-                            <option>Últimos 60 dias</option>
-                            <option>Últimos 90 dias</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-muted">Responsável</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Chamados Atribuídos</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Resolvidos</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Tempo Médio (dias)</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Taxa de Resolução</th>
-                                    <th class="px-4 py-2 text-center text-sm font-medium text-muted">Satisfação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">Ana Silva</td>
-                                    <td class="px-4 py-3 text-sm text-center">32</td>
-                                    <td class="px-4 py-3 text-sm text-center">28</td>
-                                    <td class="px-4 py-3 text-sm text-center">1.8</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex items-center justify-center">
-                                            <span class="mr-2">87.5%</span>
-                                            <div class="w-24 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 87.5%"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex justify-center">
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star-half-alt text-yellow-400"></i>
-                                            <span class="ml-1">4.5</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">Bruno Santos</td>
-                                    <td class="px-4 py-3 text-sm text-center">45</td>
-                                    <td class="px-4 py-3 text-sm text-center">41</td>
-                                    <td class="px-4 py-3 text-sm text-center">2.3</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex items-center justify-center">
-                                            <span class="mr-2">91.1%</span>
-                                            <div class="w-24 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 91.1%"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex justify-center">
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <i class="fas fa-star text-yellow-400"></i>
-                                            <span class="ml-1">4.9</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 text-sm font-medium">Carla Oliveira</td>
-                                    <td class="px-4 py-3 text-sm text-center">28</td>
-                                    <td class="px-4 py-3 text-sm text-center">23</td>
-                                    <td class="px-4 py-3 text-sm text-center">3.1</td>
-                                    <td class="px-4 py-3 text-sm text-center">
-                                        <div class="flex items-center justify-center">
-                                            <span class="mr-2">82.1%</span>
-                                            <div class="w-24 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 82.1%"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-
+</html>

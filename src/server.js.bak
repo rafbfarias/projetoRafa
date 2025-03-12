@@ -1,0 +1,309 @@
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const path = require('path');
+const nodemailer = require('nodemailer');
+const faturacaoRoutes = require('./routes/faturacao.routes');
+const userRoutes = require('./routes/user.routes');
+const timesheetRoutes = require('./routes/timesheet.routes');
+const unitRoutes = require('./routes/unit.routes');
+const authRoutes = require('./routes/auth.routes');
+const permissionTemplateRoutes = require('./routes/permissionTemplate.routes');
+const productParentRoutes = require('./routes/productParent.routes');
+const supplierRoutes = require('./routes/supplier.routes');
+const productListRoutes = require('./routes/productList.routes');
+const companyRoutes = require('./routes/company.routes');
+const session = require('express-session');
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
+const MongoStore = require('connect-mongo');
+
+const app = express();
+// Modificar a porta para usar 3000
+const PORT = process.env.PORT || 3000;
+
+// Configurar o transporter do Nodemailer
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASSWORD
+    },
+    tls: {
+        rejectUnauthorized: false
+    },
+    debug: true // Ativar logs de debug
+});
+
+// Verificar conexão do email
+emailTransporter.verify()
+    .then(() => {
+        console.log('Conexão com servidor de email estabelecida');
+    })
+    .catch((error) => {
+        console.error('Erro ao verificar conexão com servidor de email:', error);
+    });
+
+// URL base da aplicação (usar a mesma porta do servidor)
+const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+
+// Adicionar configurações ao app
+app.locals.config = {
+    emailTransporter,
+    appUrl: APP_URL
+};
+
+// Middleware
+app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
+
+app.use(bodyParser.json());
+app.use(express.json());
+
+// Middleware para upload de arquivos
+app.use(fileUpload({
+    createParentPath: true,
+    limits: { 
+        fileSize: 10 * 1024 * 1024 // limite de 10MB
+    },
+    abortOnLimit: true
+}));
+
+// Verificar e criar pasta de upload se não existir
+const productsUploadDir = path.join(__dirname, '../public/images/products');
+const usersUploadDir = path.join(__dirname, '../uploads/users');
+if (!fs.existsSync(productsUploadDir)) {
+    fs.mkdirSync(productsUploadDir, { recursive: true });
+}
+if (!fs.existsSync(usersUploadDir)) {
+    fs.mkdirSync(usersUploadDir, { recursive: true });
+}
+
+// Conectar ao MongoDB Atlas
+mongoose.connect(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4 // Use IPv4, skip trying IPv6
+})
+.then(() => {
+    console.log('Conectado ao MongoDB Atlas');
+    
+    // Verificar se a conexão está realmente estabelecida
+    if (mongoose.connection.readyState === 1) {
+        console.log('Estado da conexão: Conectado');
+        
+        // Listar as coleções disponíveis
+        mongoose.connection.db.listCollections().toArray()
+            .then(collections => {
+                console.log('Coleções disponíveis:', collections.map(c => c.name));
+            })
+            .catch(err => console.error('Erro ao listar coleções:', err));
+    } else {
+        console.log('Estado da conexão:', mongoose.connection.readyState);
+    }
+})
+.catch((error) => {
+    console.error('Erro ao conectar ao MongoDB Atlas:', error);
+    console.error('Detalhes do erro:', {
+        name: error.name,
+        message: error.message,
+        code: error.code
+    });
+});
+
+// Monitorar eventos de conexão
+mongoose.connection.on('error', err => {
+    console.error('Erro na conexão MongoDB:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB desconectado');
+});
+
+mongoose.connection.on('reconnected', () => {
+    console.log('MongoDB reconectado');
+});
+
+// Configuração de sessão com MongoDB
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET || 'sua_chave_secreta',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        ttl: 24 * 60 * 60,
+        autoRemove: 'native',
+        touchAfter: 24 * 3600
+    }),
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax'
+    }
+};
+
+app.use(session(sessionConfig));
+
+// Middleware para logs de debug mais detalhados
+app.use((req, res, next) => {
+    console.log('=== Debug Info ===');
+    console.log('Path:', req.path);
+    console.log('Method:', req.method);
+    console.log('Session ID:', req.sessionID);
+    console.log('Session:', req.session);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    console.log('================');
+    next();
+});
+
+// Middleware para disponibilizar o usuário logado em todas as views
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
+
+// Rota explícita para teste de empresas - deve vir ANTES de qualquer middleware de rota
+app.post('/api/companies/test', (req, res) => {
+    console.log('Rota explícita /api/companies/test (POST) acessada');
+    console.log('Body:', req.body);
+    return res.status(200).json({ 
+        success: true, 
+        message: 'Rota de teste funcionando!',
+        data: req.body
+    });
+});
+
+// Rota temporária para criar empresa - simplificada para teste
+app.post('/api/companies', (req, res) => {
+    console.log('POST /api/companies - MÉTODO TEMPORÁRIO');
+    console.log('Request body:', req.body);
+    
+    // Retorna uma resposta de sucesso simulada
+    return res.status(201).json({
+        success: true,
+        message: 'Empresa criada com sucesso (simulado)',
+        data: {
+            _id: 'temp_' + new Date().getTime(),
+            ...req.body,
+            createdAt: new Date().toISOString()
+        }
+    });
+});
+
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Rotas que não precisam de autenticação
+const publicPaths = [
+    '/',
+    '/index.html',
+    '/login.html',
+    '/api/auth/login',
+    '/api/users/validate-token',
+    '/api/users/first-access',
+    '/api/companies',
+    '/api/companies/test',
+    '/pages/account/first-access.html',
+    '/js/account/firstAccess.js',
+    '/css/account/firstAccess.css',
+    '/css/styles.css',
+    '/dineo-logo.png',
+    '/images/users/default-avatar.svg',
+    '/pages/config/permission-templates.html',
+    '/js/config/permissionTemplates.js'
+];
+
+// Todas as rotas da API - definidas ANTES do middleware de autenticação
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+
+// Middleware de autenticação
+const authMiddleware = (req, res, next) => {
+    console.log('Auth Check - Session:', req.session);
+    console.log('Auth Check - Path:', req.path);
+    console.log('Auth Check - Method:', req.method);
+    console.log('Auth Check - Token:', req.headers.authorization);
+
+    // Verificar se é um arquivo estático público
+    if (req.path.startsWith('/css/') || 
+        req.path.startsWith('/js/') || 
+        req.path.startsWith('/images/') || 
+        req.path.startsWith('/fonts/')) {
+        return next();
+    }
+
+    // Adicionar /api/auth/register e /api/companies como caminhos públicos
+    if (req.path === '/api/auth/register' || 
+        req.path.startsWith('/api/companies') || 
+        publicPaths.some(path => req.path === path)) {
+        return next();
+    }
+
+    // Se não estiver autenticado
+    if (!req.session.user) {
+        console.log('Usuário não autenticado');
+        // Se for uma requisição AJAX/API
+        if (req.xhr || req.path.startsWith('/api/')) {
+            return res.status(401).json({
+                status: 'error',
+                code: 'UNAUTHORIZED',
+                message: 'Sessão expirada ou usuário não autenticado'
+            });
+        }
+        // Se for uma requisição normal, redirecionar para o login
+        return res.redirect('/login.html');
+    }
+
+    next();
+};
+
+// Aplicar middleware de autenticação
+app.use(authMiddleware);
+
+// Rotas da API que precisam de autenticação
+app.use('/api/companies', companyRoutes);
+app.use('/api/faturacao', faturacaoRoutes);
+app.use('/api/timesheets', timesheetRoutes);
+app.use('/api/units', unitRoutes);
+app.use('/api/permission-templates', permissionTemplateRoutes);
+app.use('/api/product-parents', productParentRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/product-lists', productListRoutes);
+
+// Rota raiz
+app.get('/', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/pages/dashboard.html');
+    } else {
+        res.redirect('/login.html');
+    }
+});
+
+// Protege o dashboard
+app.get('/pages/dashboard.html', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login.html');
+    }
+    res.sendFile(path.join(__dirname, '../public/pages/dashboard.html'));
+});
+
+// Rota de login
+app.get('/login.html', (req, res) => {
+    if (req.session.user) {
+        return res.redirect('/pages/dashboard.html');
+    }
+    res.sendFile(path.join(__dirname, '../public/login.html'));
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});

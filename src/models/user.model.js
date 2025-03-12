@@ -8,20 +8,19 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   fullName: {
-    type: String
+    type: String,
+    required: true
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+    index: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Por favor, insira um email válido']
   },
   password: {
     type: String,
-    required: function() {
-      return !this.isFirstAccess; // Senha só é obrigatória após o primeiro acesso
-    },
-    default: '$2a$10$XtluUj3B9y5ORx1JOK.0wuQ6HP0tX71zL5eM5MwzWa4r7y8/xZvnG' // Hash de '123'
+    required: true
   },
   
   // Controle de Acesso
@@ -36,7 +35,11 @@ const userSchema = new mongoose.Schema({
   idDocumentType: String,
   idDocumentNumber: {
     type: String,
-    sparse: true
+    sparse: true,
+    index: true,
+    default: function() {
+      return `USER-${Date.now()}`;
+    }
   },
   idDocumentValidity: Date,
   
@@ -76,10 +79,14 @@ const userSchema = new mongoose.Schema({
   bankAccountNumber: String,
   
   // Employment Information
-  currentUnit: {
-    type: String,
-    default: 'Não definida'
-  },
+  currentUnit: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Unit'
+  }],
+  currentCompany: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Company'
+  }],
   userStatus: {
     type: String,
     enum: ['Pendente', 'Ativa', 'Inativa'],
@@ -92,7 +99,7 @@ const userSchema = new mongoose.Schema({
   otherDocuments: String,
   photo: {
     type: String,
-    default: '/images/users/1.png'
+    default: '/images/users/default-avatar.svg'
   },
   signature: String,
   
@@ -129,27 +136,25 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  isDraft: {
-    type: Boolean,
-    default: false
-  },
 
   // Timestamps
-  timestamp: {
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
     type: Date,
     default: Date.now
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  collection: 'users'
 });
 
-// Remover todos os índices existentes
-userSchema.pre('save', async function() {
-  try {
-    await this.collection.dropIndexes();
-  } catch (error) {
-    console.log('Erro ao remover índices:', error);
-  }
+// Middleware para atualizar updatedAt
+userSchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
 });
 
 // Método para gerar token de primeiro acesso

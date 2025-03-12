@@ -196,6 +196,46 @@ function initializeCharts() {
     }
 }
 
+// Função para fazer requisições autenticadas
+async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        throw new Error('Token não encontrado');
+    }
+
+    const defaultOptions = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    };
+
+    return fetch(url, { ...defaultOptions, ...options });
+}
+
+// Usar esta função para todas as requisições
+async function initializeDashboard() {
+    try {
+        // Exemplo de requisição autenticada
+        const response = await fetchWithAuth('/api/dashboard/data');
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Erro ao carregar dados');
+        }
+
+        // Renderizar dados
+        console.log('Dados do dashboard:', data);
+    } catch (error) {
+        console.error('Erro:', error);
+        if (error.message.includes('Token')) {
+            window.location.href = '/login.html';
+        }
+    }
+}
+
 // Carrega todos os componentes quando a página carregar
 document.addEventListener('DOMContentLoaded', async () => {
     // Carrega os cards

@@ -11,16 +11,63 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/Sidebar.js"></script>
     <script src="../../js/dashboard.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
-    <div class="flex min-h-screen">
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="text-left">
                     <h1 class="text-left text-2xl font-bold">Dashboard Principal</h1>
                     <p class="text-muted">Bem-vindo ao seu painel de controle</p>
@@ -39,33 +86,61 @@
                 </div>
             </div>
 
-            <!-- Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div id="totalRevenueCard"></div>
-                <div id="activeClientsCard"></div>
-                <div id="activeContractsCard"></div>
-                <div id="employeesCard"></div>
-            </div>
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div id="totalRevenueCard"></div>
+                    <div id="activeClientsCard"></div>
+                    <div id="activeContractsCard"></div>
+                    <div id="employeesCard"></div>
+                </div>
 
-            <!-- Gráficos -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div id="monthlyRevenueGraph" class="lg:col-span-2"></div>
-                <div id="revenueDistributionGraph"></div>
-            </div>
+                <!-- Gráficos -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div id="monthlyRevenueGraph" class="lg:col-span-2"></div>
+                    <div id="revenueDistributionGraph"></div>
+                </div>
 
-            <!-- Tabelas e Listas -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <div id="recentContracts"></div>
-                <div id="recentActivities"></div>
-            </div>
+                <!-- Tabelas e Listas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div id="recentContracts"></div>
+                    <div id="recentActivities"></div>
+                </div>
 
-            <!-- Tarefas e Projetos -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div id="pendingTasks"></div>
-                <div id="ongoingProjects" class="lg:col-span-2"></div>
+                <!-- Tarefas e Projetos -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div id="pendingTasks"></div>
+                    <div id="ongoingProjects" class="lg:col-span-2"></div>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar autenticação
+        const token = localStorage.getItem('token');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        console.log('Token:', token); // Debug
+        console.log('UserData:', userData); // Debug
+
+        if (!token) {
+            console.log('Sem token, redirecionando para login');
+            window.location.href = '/login.html';
+            return;
+        }
+
+        // Se chegou aqui, inicializar dashboard
+        console.log('Iniciando dashboard...'); // Debug
+        initializeDashboard();
+    });
+
+    function initializeDashboard() {
+        // Código existente de inicialização do dashboard
+    }
+    </script>
 </body>
 </html>
 

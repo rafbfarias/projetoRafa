@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seu Plano - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B00',
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos inline para o botão de tema caso o CSS externo não carregue */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Estilos para a modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease forwards;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: var(--component-bg, white);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 28rem;
+            margin: 2rem auto;
+            animation: slideDown 0.3s ease-out forwards;
+            overflow: hidden;
+            border: 1px solid var(--border-color, #e5e7eb);
+        }
+        
+        .modal-header {
+            position: relative;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color, #e5e7eb);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--header-bg, #f9fafb);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color, #e5e7eb);
+            display: flex;
+            justify-content: flex-end;
+            background-color: var(--footer-bg, #f9fafb);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide-down {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="main-layout">
+        <!-- Botão de Logoff -->
+        <div class="absolute top-4 right-4">
+            <button id="logoffBtn" class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition-colors">
+                <span>Sair</span>
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+
+        <main class="p-4 md:p-8 content-container">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <!-- Logo e Boas-vindas -->
+                <div class="text-white p-6 text-center text-center space-y-3 dashboard-card p-4">
+                    <div class="w-16 h-16 mx-auto bg-brand-600/10 rounded-xl p-3">
+                        <img src="/images/dineo-logo.png" alt="dineo logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-white text-xl font-bold">
+                            Escolha seu Plano
+                            <span class="text-muted text-sm">/ Onboarding</span>
+                        </h1>
+                    </div>
+                    
+                    <!-- Informações da empresa selecionada -->
+                    <div id="selectedCompanyInfo" class="mt-2 py-2 px-4 rounded-lg bg-gray-50 inline-block">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-building text-brand-600"></i>
+                            <div>
+                                <span class="text-sm text-muted">Empresa selecionada:</span>
+                                <strong id="companyNameDisplay" class="ml-1">Carregando...</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etapas -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">1</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Seu Perfil</h3>
+                                <p class="text-xs text-muted">Concluído</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">2</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Empresa</h3>
+                                <p class="text-xs text-muted">Concluído</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">3</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Plano</h3>
+                                <p class="text-xs text-muted">Em andamento</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Planos -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <!-- Plano Básico -->
+                    <div class="dashboard-card p-6 space-y-4">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-coffee text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Básico</h2>
+                            <div class="text-3xl font-bold">
+                                R$ 99<span class="text-sm font-normal text-muted">/mês</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>1 unidade</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Até 5 usuários</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Suporte por email</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            class="btn btn-outline w-full"
+                            onclick="selectPlan('basic')"
+                        >
+                            Selecionar
+                        </button>
+                    </div>
+
+                    <!-- Plano Profissional -->
+                    <div class="dashboard-card p-6 space-y-4 border-brand-600">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-briefcase text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Profissional</h2>
+                            <div class="text-3xl font-bold">
+                                R$ 199<span class="text-sm font-normal text-muted">/mês</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Até 3 unidades</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Até 15 usuários</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Suporte prioritário</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Relatórios avançados</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            class="btn btn-primary w-full"
+                            onclick="selectPlan('professional')"
+                        >
+                            Selecionar
+                        </button>
+                    </div>
+
+                    <!-- Plano Empresarial -->
+                    <div class="dashboard-card p-6 space-y-4">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-building text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Empresarial</h2>
+                            <div class="text-3xl font-bold">
+                                R$ 499<span class="text-sm font-normal text-muted">/mês</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Até 10 unidades</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Usuários ilimitados</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Suporte 24/7</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>API personalizada</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Integrações premium</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            class="btn btn-outline w-full"
+                            onclick="selectPlan('enterprise')"
+                        >
+                            Selecionar
+                        </button>
+                    </div>
+
+                    <!-- Plano Personalizado -->
+                    <div class="dashboard-card p-6 space-y-4">
+                        <div class="text-center space-y-2">
+                            <div class="w-12 h-12 mx-auto bg-brand-600/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-star text-brand-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold">Personalizado</h2>
+                            <div class="text-3xl font-bold">
+                                <i class="fas fa-comments text-brand-600"></i>
+                                <span class="text-sm font-normal text-muted">Consulte</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Unidades ilimitadas</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Usuários ilimitados</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Suporte dedicado</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>Personalização total</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-500"></i>
+                                <span>SLA garantido</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            class="btn btn-outline w-full"
+                            onclick="selectPlan('custom')"
+                        >
+                            Contatar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="flex justify-between pt-4">
+                    <button 
+                        type="button"
+                        id="backBtn"
+                        class="btn btn-outline"
+                    >
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script para controle da página -->
+    <script src="/js/company/plans.js"></script>
+</body>
+</html> 

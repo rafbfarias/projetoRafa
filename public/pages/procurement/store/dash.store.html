@@ -9,22 +9,67 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-    <link href="/css/layout.css" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="bg-primary">
-    <div class="main-layout">
-        <!-- Sidebar com scroll independente -->
+    <div class="layout-container">
+        <!-- Sidebar -->
         <div class="sidebar-container">
             <app-sidebar></app-sidebar>
         </div>
 
-        <!-- Conteúdo Principal com scroll independente -->
-        <main class="p-8 content-container">
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div>
-                    <h1 class="text-left text-2xl font-bold">Online Store</h1>
+                    <h1 class="text-2xl font-bold">Online Store</h1>
                     <p class="text-muted">Sistema de compras para fornecedores</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -42,115 +87,118 @@
                 </div>
             </div>
 
-            <!-- Banner Principal -->
-            <div class="dashboard-card mb-8 overflow-hidden">
-                <div id="main-carousel" class="relative w-full" data-carousel="static">
-                    <!-- Carousel wrapper -->
-                    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-                        <!-- Item 1 -->
-                        <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
-                            <div class="absolute block w-full h-full bg-gradient-to-r from-blue-600 to-blue-400 flex flex-col justify-center px-12">
-                                <h2 class="text-3xl font-bold text-white mb-4">Produtos Frescos de Qualidade</h2>
-                                <p class="text-white mb-6">Descubra nossos fornecedores selecionados e faça seu pedido com facilidade.</p>
-                                <div>
-                                    <button class="bg-white text-blue-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
-                                        Ver Ofertas da Semana
-                                    </button>
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Banner Principal -->
+                <div class="dashboard-card mb-8 overflow-hidden">
+                    <div id="main-carousel" class="relative w-full" data-carousel="static">
+                        <!-- Carousel wrapper -->
+                        <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+                            <!-- Item 1 -->
+                            <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
+                                <div class="absolute block w-full h-full bg-gradient-to-r from-blue-600 to-blue-400 flex flex-col justify-center px-12">
+                                    <h2 class="text-3xl font-bold text-white mb-4">Produtos Frescos de Qualidade</h2>
+                                    <p class="text-white mb-6">Descubra nossos fornecedores selecionados e faça seu pedido com facilidade.</p>
+                                    <div>
+                                        <button class="bg-white text-blue-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+                                            Ver Ofertas da Semana
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                <div class="absolute block w-full h-full bg-gradient-to-r from-green-600 to-green-400 flex flex-col justify-center px-12">
+                                    <h2 class="text-3xl font-bold text-white mb-4">Entrega Programada</h2>
+                                    <p class="text-white mb-6">Escolha a data da sua entrega e receba tudo no horário que precisa.</p>
+                                    <div>
+                                        <button class="bg-white text-green-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+                                            Programar Entrega
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                <div class="absolute block w-full h-full bg-gradient-to-r from-purple-600 to-purple-400 flex flex-col justify-center px-12">
+                                    <h2 class="text-3xl font-bold text-white mb-4">Produtos de Múltiplos Fornecedores</h2>
+                                    <p class="text-white mb-6">Compare preços e encontre a melhor oferta para sua empresa.</p>
+                                    <div>
+                                        <button class="bg-white text-purple-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+                                            Comparar Preços
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Item 2 -->
-                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                            <div class="absolute block w-full h-full bg-gradient-to-r from-green-600 to-green-400 flex flex-col justify-center px-12">
-                                <h2 class="text-3xl font-bold text-white mb-4">Entrega Programada</h2>
-                                <p class="text-white mb-6">Escolha a data da sua entrega e receba tudo no horário que precisa.</p>
-                                <div>
-                                    <button class="bg-white text-green-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
-                                        Programar Entrega
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Item 3 -->
-                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                            <div class="absolute block w-full h-full bg-gradient-to-r from-purple-600 to-purple-400 flex flex-col justify-center px-12">
-                                <h2 class="text-3xl font-bold text-white mb-4">Produtos de Múltiplos Fornecedores</h2>
-                                <p class="text-white mb-6">Compare preços e encontre a melhor oferta para sua empresa.</p>
-                                <div>
-                                    <button class="bg-white text-purple-600 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
-                                        Comparar Preços
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Slider controls -->
+                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                <i class="fas fa-chevron-left w-4 h-4 text-white dark:text-gray-800"></i>
+                                <span class="sr-only">Anterior</span>
+                            </span>
+                        </button>
+                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                <i class="fas fa-chevron-right w-4 h-4 text-white dark:text-gray-800"></i>
+                                <span class="sr-only">Próximo</span>
+                            </span>
+                        </button>
                     </div>
-                    <!-- Slider controls -->
-                    <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                            <i class="fas fa-chevron-left w-4 h-4 text-white dark:text-gray-800"></i>
-                            <span class="sr-only">Anterior</span>
-                        </span>
-                    </button>
-                    <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                            <i class="fas fa-chevron-right w-4 h-4 text-white dark:text-gray-800"></i>
-                            <span class="sr-only">Próximo</span>
-                        </span>
-                    </button>
                 </div>
-            </div>
 
-            <!-- Produtos Favoritos -->
-            <div class="mb-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold">Produtos Favoritos</h2>
-                    <a href="#" class="text-blue-600 hover:underline flex items-center">
-                        <span>Ver Todos</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-container">
-                    <!-- Produtos favoritos serão inseridos aqui via JavaScript -->
-                </div>
-            </div>
-
-            <!-- Catálogo de Produtos -->
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold mb-6">Catálogo de Produtos</h2>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <!-- Sidebar de Categorias -->
-                    <div class="dashboard-card p-6 scrollable-block scrollable-md">
-                        <h3 class="text-lg font-medium mb-4">Categorias</h3>
-                        <ul class="space-y-2" id="categories-list">
-                            <!-- Categorias serão inseridas aqui via JavaScript -->
-                        </ul>
+                <!-- Produtos Favoritos -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold">Produtos Favoritos</h2>
+                        <a href="#" class="text-blue-600 hover:underline flex items-center">
+                            <span>Ver Todos</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
                     </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-container">
+                        <!-- Produtos favoritos serão inseridos aqui via JavaScript -->
+                    </div>
+                </div>
 
-                    <!-- Lista de Produtos -->
-                    <div class="lg:col-span-3">
-                        <div class="dashboard-card p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-medium" id="product-list-title">Todos os Produtos</h3>
-                                <div class="flex space-x-2">
-                                    <select id="sort-select" class="border border-gray-300 rounded-lg text-sm p-2">
-                                        <option value="name-asc">Nome (A-Z)</option>
-                                        <option value="name-desc">Nome (Z-A)</option>
-                                        <option value="price-asc">Preço (Menor-Maior)</option>
-                                        <option value="price-desc">Preço (Maior-Menor)</option>
-                                        <option value="recent">Compras Recentes</option>
-                                    </select>
-                                    <button id="grid-view-btn" class="p-2 rounded-lg bg-blue-600 text-white">
-                                        <i class="fas fa-th"></i>
-                                    </button>
-                                    <button id="list-view-btn" class="p-2 rounded-lg bg-gray-200 text-gray-700">
-                                        <i class="fas fa-list"></i>
-                                    </button>
+                <!-- Catálogo de Produtos -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-6">Catálogo de Produtos</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <!-- Sidebar de Categorias -->
+                        <div class="dashboard-card p-6 scrollable-block scrollable-md">
+                            <h3 class="text-lg font-medium mb-4">Categorias</h3>
+                            <ul class="space-y-2" id="categories-list">
+                                <!-- Categorias serão inseridas aqui via JavaScript -->
+                            </ul>
+                        </div>
+
+                        <!-- Lista de Produtos -->
+                        <div class="lg:col-span-3">
+                            <div class="dashboard-card p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-medium" id="product-list-title">Todos os Produtos</h3>
+                                    <div class="flex space-x-2">
+                                        <select id="sort-select" class="border border-gray-300 rounded-lg text-sm p-2">
+                                            <option value="name-asc">Nome (A-Z)</option>
+                                            <option value="name-desc">Nome (Z-A)</option>
+                                            <option value="price-asc">Preço (Menor-Maior)</option>
+                                            <option value="price-desc">Preço (Maior-Menor)</option>
+                                            <option value="recent">Compras Recentes</option>
+                                        </select>
+                                        <button id="grid-view-btn" class="p-2 rounded-lg bg-blue-600 text-white">
+                                            <i class="fas fa-th"></i>
+                                        </button>
+                                        <button id="list-view-btn" class="p-2 rounded-lg bg-gray-200 text-gray-700">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="products-grid">
-                                <!-- Os produtos serão inseridos aqui dinamicamente via JavaScript -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="products-grid">
+                                    <!-- Os produtos serão inseridos aqui dinamicamente via JavaScript -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,11 +233,10 @@
                     </button>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
-    <!-- Scripts do sistema (no final do body) -->
-    <script src="/js/Sidebar.js"></script>
+    <!-- Scripts -->
     <script src="/js/procurement/store/storeAppManager.js"></script>
     <script src="/js/procurement/store/chart.store.js"></script>
     <script src="/js/procurement/store/store.init.js"></script>

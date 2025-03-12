@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Empresa - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+</head>
+<body class="bg-primary">
+    <div class="main-layout">
+        <!-- Botão de Logoff -->
+        <div class="absolute top-4 right-4">
+            <button id="logoffBtn" class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition-colors">
+                <span>Sair</span>
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+
+        <main class="p-4 md:p-8 content-container">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Logo e Boas-vindas -->
+                <div class="text-center space-y-3 dashboard-card p-4">
+                    <div class="w-16 h-16 mx-auto bg-brand-600/10 rounded-xl p-3">
+                        <img src="/images/dineo-logo.png" alt="dineo logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">
+                            <span id="pageTitle">Criar Nova Empresa</span>
+                            <span class="text-muted text-sm">/ Onboarding</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Etapas -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">1</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Seu Perfil</h3>
+                                <p class="text-xs text-muted">Concluído</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-brand-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-brand-600 text-white text-sm">2</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Empresa</h3>
+                                <p class="text-xs text-muted">Em andamento</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card p-3 border-l-4 border-gray-300">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700 text-sm">3</div>
+                            <div>
+                                <h3 class="text-sm font-medium">Plano</h3>
+                                <p class="text-xs text-muted">Próximo passo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área de seleção de empresas existentes (inicialmente oculta) -->
+                <div id="existingCompaniesSection" class="dashboard-card p-6 hidden">
+                    <div class="space-y-6">
+                        <h3 class="text-lg font-semibold">Suas Empresas</h3>
+                        <p class="text-muted">Você já possui empresas registradas. Selecione uma das opções abaixo:</p>
+                        
+                        <!-- Lista de empresas -->
+                        <div id="companiesList" class="space-y-4">
+                            <!-- As empresas serão adicionadas dinamicamente via JavaScript -->
+                        </div>
+                        
+                        <!-- Template para empresa -->
+                        <template id="companyTemplate">
+                            <div class="company-item dashboard-card p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors">
+                                <div>
+                                    <h4 class="font-medium company-name">Nome da Empresa</h4>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs text-muted company-business-type">Tipo de Negócio</span>
+                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                        <span class="text-xs company-status status-draft">Rascunho</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="select-company-btn px-4 py-2 bg-brand-600 text-white rounded-lg text-sm hover:bg-brand-700 transition-colors">Selecionar</button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Formulário de criação de empresa -->
+                <div id="companyFormSection" class="dashboard-card p-6">
+                    <form id="companyForm" class="space-y-6">
+                        <!-- Legenda de campos obrigatórios -->
+                        <div class="text-sm text-muted mb-4">
+                            <p>* Campos obrigatórios</p>
+                        </div>
+
+                        <!-- Dados da Empresa -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold">Dados da Empresa</h3>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Nome da Empresa -->
+                                <div class="space-y-2">
+                                    <label for="companyName" class="text-sm font-medium">Nome da Empresa *</label>
+                                    <input 
+                                        type="text" 
+                                        id="companyName" 
+                                        name="companyName" 
+                                        class="form-input w-full"
+                                        required
+                                    >
+                                </div>
+
+                                <!-- Número Fiscal -->
+                                <div class="space-y-2">
+                                    <label for="taxId" class="text-sm font-medium">Número Fiscal *</label>
+                                    <input 
+                                        type="text" 
+                                        id="taxId" 
+                                        name="taxId" 
+                                        class="form-input w-full"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Negócio -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold">Tipo de Negócio *</h3>
+                            <div class="grid grid-cols-4 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="businessType" value="restaurant" class="hidden" checked>
+                                    <div class="dashboard-card p-4 text-center space-y-2 transition-all hover:scale-105 border-2 border-transparent">
+                                        <i class="fas fa-utensils text-2xl text-brand-600"></i>
+                                        <div>
+                                            <h4 class="font-medium">Restaurante</h4>
+                                            <p class="text-xs text-muted">Restaurantes e bistrôs</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="businessType" value="cafe" class="hidden">
+                                    <div class="dashboard-card p-4 text-center space-y-2 transition-all hover:scale-105 border-2 border-transparent">
+                                        <i class="fas fa-coffee text-2xl text-brand-600"></i>
+                                        <div>
+                                            <h4 class="font-medium">Café</h4>
+                                            <p class="text-xs text-muted">Cafeterias e padarias</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="businessType" value="bar" class="hidden">
+                                    <div class="dashboard-card p-4 text-center space-y-2 transition-all hover:scale-105 border-2 border-transparent">
+                                        <i class="fas fa-glass-martini-alt text-2xl text-brand-600"></i>
+                                        <div>
+                                            <h4 class="font-medium">Bar</h4>
+                                            <p class="text-xs text-muted">Bares e pubs</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="businessType" value="other" class="hidden">
+                                    <div class="dashboard-card p-4 text-center space-y-2 transition-all hover:scale-105 border-2 border-transparent">
+                                        <i class="fas fa-plus text-2xl text-brand-600"></i>
+                                        <div>
+                                            <h4 class="font-medium">Outro</h4>
+                                            <p class="text-xs text-muted">Personalizado</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <!-- Campo para Outro tipo de negócio -->
+                            <div id="otherBusinessTypeContainer" class="hidden">
+                                <input 
+                                    type="text" 
+                                    id="otherBusinessType" 
+                                    name="otherBusinessType" 
+                                    class="form-input w-full"
+                                    placeholder="Digite o tipo de negócio"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Endereço -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold">Endereço</h3>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- CEP -->
+                                <div class="space-y-2">
+                                    <label for="postalCode" class="text-sm font-medium">Código Postal *</label>
+                                    <input 
+                                        type="text" 
+                                        id="postalCode" 
+                                        name="postalCode" 
+                                        class="form-input w-full"
+                                        required
+                                    >
+                                </div>
+
+                                <!-- Logradouro -->
+                                <div class="space-y-2">
+                                    <label for="street" class="text-sm font-medium">Rua *</label>
+                                    <input 
+                                        type="text" 
+                                        id="street" 
+                                        name="street" 
+                                        class="form-input w-full"
+                                        required
+                                    >
+                                </div>
+
+                                <!-- Número -->
+                                <div class="space-y-2">
+                                    <label for="number" class="text-sm font-medium">Número</label>
+                                    <input 
+                                        type="text" 
+                                        id="number" 
+                                        name="number" 
+                                        class="form-input w-full"
+                                    >
+                                </div>
+
+                                <!-- Complemento -->
+                                <div class="space-y-2">
+                                    <label for="complement" class="text-sm font-medium">Complemento</label>
+                                    <input 
+                                        type="text" 
+                                        id="complement" 
+                                        name="complement" 
+                                        class="form-input w-full"
+                                    >
+                                </div>
+
+                                <!-- Cidade -->
+                                <div class="space-y-2">
+                                    <label for="city" class="text-sm font-medium">Cidade *</label>
+                                    <input 
+                                        type="text" 
+                                        id="city" 
+                                        name="city" 
+                                        class="form-input w-full"
+                                        required
+                                    >
+                                </div>
+
+                                <!-- País -->
+                                <div class="space-y-2">
+                                    <label for="country" class="text-sm font-medium">País *</label>
+                                    <input 
+                                        type="text" 
+                                        id="country" 
+                                        name="country" 
+                                        class="form-input w-full"
+                                        value="Portugal"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="flex justify-between pt-4">
+                            <button 
+                                type="button"
+                                id="backBtn"
+                                class="btn btn-outline"
+                            >
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Voltar
+                            </button>
+
+                            <button 
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Continuar
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script para controle da página -->
+    <script src="/js/company/create.js"></script>
+
+    <style>
+        .company-status {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .status-draft {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+        .status-pendente {
+            background-color: #fff7ed;
+            color: #c2410c;
+        }
+        .status-ativa {
+            background-color: #ecfdf5;
+            color: #0f766e;
+        }
+        .status-inativa {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+    </style>
+</body>
+</html> 

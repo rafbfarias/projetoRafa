@@ -7,345 +7,432 @@
     
     <!-- Estilos -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <link href="../../../css/layout.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Componentes -->
     <script src="/js/Sidebar.js"></script>
+    <script src="../../../js/layout.js"></script>
+    <style>
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex min-h-screen">
+<body>
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8">
-            <div class="max-w-7xl mx-auto">
-                <!-- Cabeçalho -->
-                <div class="flex items-start justify-between mb-6">
-                    <div class="flex flex-col items-start">
-                        <h1 class="text-left text-2xl font-bold">Novo Registro de Faturação</h1>
-                        <p class="text-muted">Preencha os dados da faturação conforme o talão fiscal</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="flex items-center mr-4">
-                            <span class="mr-2 text-sm font-medium">Visualização:</span>
-                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
-                                <input type="checkbox" id="viewToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                                <label for="viewToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                            </div>
-                            <span class="text-sm" id="viewModeText">Por abas</span>
+        <div class="main-container">
+            <div class="flex-1 p-8">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Cabeçalho -->
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="flex flex-col items-start">
+                            <h1 class="text-left text-2xl font-bold">Novo Registro de Faturação</h1>
+                            <p class="text-muted">Preencha os dados da faturação conforme o talão fiscal</p>
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="history.back()">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            <span>Voltar</span>
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="saveButton">
-                            <i class="fas fa-save mr-2"></i>
-                            <span>Salvar Faturação</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tabs Navigation -->
-                <div class="border-b border-gray-200 mb-6" id="tabsNavContainer">
-                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="info-geral">
-                                <i class="fas fa-receipt w-4 h-4 me-2"></i>Informações Gerais
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="pagamentos">
-                                <i class="fas fa-money-bill-wave w-4 h-4 me-2"></i>Métodos de Pagamento
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="movimentos">
-                                <i class="fas fa-ban w-4 h-4 me-2"></i>Movimentos Anulados
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="consumo">
-                                <i class="fas fa-store w-4 h-4 me-2"></i>Consumo Interno
-                            </a>
-                        </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="metricas">
-                                <i class="fas fa-chart-line w-4 h-4 me-2"></i>Métricas
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Main Form Content -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Left Column - Photo Upload and Business Info -->
-                    <div class="md:col-span-1">
-                        <div class="photo-upload mb-6" id="main-photo-upload">
-                            <i class="fas fa-image text-5xl text-gray-400 mb-3"></i>
-                            <p class="text-gray-600 font-medium">Clique para adicionar uma foto do talão</p>
-                            <p class="text-gray-500 text-sm mt-2">Formatos aceitos: JPG, PNG</p>
-                            <input type="file" id="photoFactTotal" name="photoFactTotal" accept="image/*" class="hidden">
-                        </div>
-
-                        <!-- Weather Widget -->
-                        <div class="bg-primary rounded-lg shadow-sm p-4 mb-6 flex items-center">
-                            <div class="mr-4 bg-blue-100 p-2 rounded-full">
-                                <i class="fas fa-sun text-yellow-500 text-2xl"></i>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center mr-4">
+                                <span class="mr-2 text-sm font-medium">Visualização:</span>
+                                <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                    <input type="checkbox" id="viewToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                    <label for="viewToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
                                 </div>
-                                <div>
-                                <div class="text-lg font-semibold" id="weatherTemp">22°C</div>
-                                <div class="text-sm text-gray-600" id="weatherDesc">Céu limpo</div>
+                                <span class="text-sm" id="viewModeText">Por abas</span>
                             </div>
-                        </div>
-
-                        <!-- Day Evaluation -->
-                        <div class="bg-secondary rounded-lg shadow-sm p-6">
-                            <h3 class="text-lg font-semibold mb-4 text-left">Avaliação do Dia</h3>
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-center mb-4">
-                                    <div class="flex space-x-1" id="starRating">
-                                        <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">★</button>
-                                        <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">★</button>
-                                        <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="3">★</button>
-                                        <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="4">★</button>
-                                        <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="5">★</button>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium bg-secondary text-secondary mb-1">Observações do Dia</label>
-                                    <textarea id="dayObservations" rows="4" class="w-full p-2 rounded input-highlight text-sm" placeholder="Descreva como foi o dia..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium bg-secondary text-secondary mb-1">Quantidade de Visitantes</label>
-                                    <input type="number" id="peopleCount" class="w-full p-2 rounded input-highlight text-sm" required>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="history.back()">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                <span>Voltar</span>
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="saveButton">
+                                <i class="fas fa-save mr-2"></i>
+                                <span>Salvar Faturação</span>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Right Column - Receipt Form -->
-                    <div class="md:col-span-2">
-                        <form id="faturacaoForm" class="receipt-container">
-                            <!-- Hidden Fields -->
-                            <input type="hidden" id="weekDay" name="weekDay">
-                            <input type="hidden" id="weekNum" name="weekNum">
-                            <input type="hidden" id="month" name="month">
-                            <input type="hidden" id="year" name="year">
-                            <input type="hidden" id="factDiff" name="factDiff" value="0">
-                            <input type="hidden" id="dayWeatherDescription" name="dayWeatherDescription">
-                            <input type="hidden" id="dayWeatherTemperature" name="dayWeatherTemperature">
-                            <input type="hidden" id="dayWeatherPrecipitation" name="dayWeatherPrecipitation">
-                            <input type="hidden" id="dayWeatherWindSpeed" name="dayWeatherWindSpeed">
-                            <input type="hidden" id="dayEvaluation" name="dayEvaluation" value="0">
-                            <input type="hidden" id="companyId" name="companyId">
-                            <input type="hidden" id="unitId" name="unitId">
-                            <input type="hidden" id="factRespId" name="factRespId">
+                    <!-- Tabs Navigation -->
+                    <div class="border-b border-gray-200 mb-6" id="tabsNavContainer">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabsNav">
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-active group" data-tab="info-geral">
+                                    <i class="fas fa-receipt w-4 h-4 me-2"></i>Informações Gerais
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="pagamentos">
+                                    <i class="fas fa-money-bill-wave w-4 h-4 me-2"></i>Métodos de Pagamento
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="movimentos">
+                                    <i class="fas fa-ban w-4 h-4 me-2"></i>Movimentos Anulados
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="consumo">
+                                    <i class="fas fa-store w-4 h-4 me-2"></i>Consumo Interno
+                                </a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" class="inline-flex items-center justify-center p-4 rounded-t-lg tab-inactive group" data-tab="metricas">
+                                    <i class="fas fa-chart-line w-4 h-4 me-2"></i>Métricas
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-                            <!-- Receipt Header -->
-                            <div class="receipt-section receipt-header bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                <div class="text-center mb-4" id="businessInfo">
-                                    <h3 class="text-2xl font-bold mb-1">Plateiapositiva, Lda</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
-                                            <input type="text" id="companyInput" class="w-full p-2 rounded input-highlight text-sm" list="companyList" placeholder="Selecione a empresa">
-                                            <datalist id="companyList">
-                                                <option value="Plateiapositiva, Lda">
-                                            </datalist>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Unidade</label>
-                                            <input type="text" id="unitInput" class="w-full p-2 rounded input-highlight text-sm" list="unitList" placeholder="Selecione a unidade">
-                                            <datalist id="unitList">
-                                                <option value="Matosinhos">
-                                                <option value="Porto">
-                                            </datalist>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Responsável</label>
-                                            <input type="text" id="respInput" class="w-full p-2 rounded input-highlight text-sm" list="respList" placeholder="Selecione o responsável">
-                                            <datalist id="respList">
-                                                <option value="João Silva">
-                                                <option value="Maria Santos">
-                                            </datalist>
-                                        </div>
+                    <!-- Main Form Content -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Left Column - Photo Upload and Business Info -->
+                        <div class="md:col-span-1">
+                            <div class="photo-upload mb-6" id="main-photo-upload">
+                                <i class="fas fa-image text-5xl text-gray-400 mb-3"></i>
+                                <p class="text-gray-600 font-medium">Clique para adicionar uma foto do talão</p>
+                                <p class="text-gray-500 text-sm mt-2">Formatos aceitos: JPG, PNG</p>
+                                <input type="file" id="photoFactTotal" name="photoFactTotal" accept="image/*" class="hidden">
+                            </div>
+
+                            <!-- Weather Widget -->
+                            <div class="bg-primary rounded-lg shadow-sm p-4 mb-6 flex items-center">
+                                <div class="mr-4 bg-blue-100 p-2 rounded-full">
+                                    <i class="fas fa-sun text-yellow-500 text-2xl"></i>
                                     </div>
-                                    <p class="text-sm mt-3" id="selectedUnit">Rua Sousa Aroso n° 544, Bloco A0.1 Fração K, 4450-286 Matosinhos</p>
-                                    <p class="text-sm">Nr. Contribuinte: 510885411</p>
-                                </div>
-
-                                <div class="receipt-divider my-4"></div>
-
-                                <div class="mb-4">
-                                    <div class="flex justify-center mb-4">
-                                        <div class="w-1/2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1 text-center">Data/Hora</label>
-                                            <input type="datetime-local" id="dateTime" name="dateTime" class="w-full p-2 rounded input-highlight text-sm text-center" required>
-                                        </div>
-                                        </div>
-                                    <div class="grid grid-cols-4 gap-4 mt-2">
-                                        <div class="text-center">
-                                            <label class="block text-xs font-medium text-gray-500 mb-1">Dia da Semana</label>
-                                            <p class="text-sm font-medium" id="weekDayDisplay">--</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <label class="block text-xs font-medium text-gray-500 mb-1">Semana</label>
-                                            <p class="text-sm font-medium" id="weekNumDisplay">--</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <label class="block text-xs font-medium text-gray-500 mb-1">Mês</label>
-                                            <p class="text-sm font-medium" id="monthDisplay">--</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <label class="block text-xs font-medium text-gray-500 mb-1">Ano</label>
-                                            <p class="text-sm font-medium" id="yearDisplay">--</p>
-                                        </div>
-                                    </div>
+                                    <div>
+                                    <div class="text-lg font-semibold" id="weatherTemp">22°C</div>
+                                    <div class="text-sm text-gray-600" id="weatherDesc">Céu limpo</div>
                                 </div>
                             </div>
 
-                            <!-- Tab Content Container -->
-                            <div id="tabContentContainer">
-                                <!-- Tab: Informações Gerais -->
-                                <div class="tab-content" data-tab="info-geral">
-                            <!-- Total por Modos de Pagamento -->
-                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Total por Modos de Pagamento</h3>
-                                        <div class="receipt-divider my-4"></div>
-                                        <table class="receipt-table w-full">
-                                            <tr>
-                                                <td class="py-2">Numerário Euro</td>
-                                                <td class="w-1/3">
-                                            <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                                <td class="py-2">Transferência Bancária</td>
-                                        <td>
-                                            <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                                <td class="py-2">Multibanco 1</td>
-                                        <td>
-                                            <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                                <td class="py-2">Multibanco 2</td>
-                                        <td>
-                                            <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                                <td class="py-2">Uber Eats MB</td>
-                                        <td>
-                                            <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                        </table>
-                                        <div class="receipt-divider my-4"></div>
-                                        <table class="receipt-table w-full">
-                                    <tr class="receipt-total">
-                                                <td class="py-2 font-bold">Total da Faturação:</td>
-                                                <td class="w-1/3">
-                                                    <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00" step="0.01">
-                                        </td>
-                                    </tr>
-                                    <tr id="factDiffRow" class="hidden">
-                                        <td colspan="2" class="text-right text-red-500 text-sm pt-2">
-                                                    Diferença na faturação: <span id="factDiffDisplay">0.00</span>€
-                                        </td>
-                                    </tr>
-                                </table>
+                            <!-- Day Evaluation -->
+                            <div class="bg-secondary rounded-lg shadow-sm p-6">
+                                <h3 class="text-lg font-semibold mb-4 text-left">Avaliação do Dia</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <div class="flex space-x-1" id="starRating">
+                                            <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">★</button>
+                                            <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">★</button>
+                                            <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="3">★</button>
+                                            <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="4">★</button>
+                                            <button class="text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="5">★</button>
+                                        </div>
                                     </div>
+                                    <div>
+                                        <label class="block text-sm font-medium bg-secondary text-secondary mb-1">Observações do Dia</label>
+                                        <textarea id="dayObservations" rows="4" class="w-full p-2 rounded input-highlight text-sm" placeholder="Descreva como foi o dia..."></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium bg-secondary text-secondary mb-1">Quantidade de Visitantes</label>
+                                        <input type="number" id="peopleCount" class="w-full p-2 rounded input-highlight text-sm" required>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
 
-                                <!-- Tab: Métodos de Pagamento -->
-                                <div class="tab-content hidden" data-tab="pagamentos">
-                                    <!-- Detalhes de Pagamentos -->
-                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Detalhes de Pagamentos</h3>
-                                        <div class="receipt-divider my-4"></div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Right Column - Receipt Form -->
+                        <div class="md:col-span-2">
+                            <form id="faturacaoForm" class="receipt-container">
+                                <!-- Hidden Fields -->
+                                <input type="hidden" id="weekDay" name="weekDay">
+                                <input type="hidden" id="weekNum" name="weekNum">
+                                <input type="hidden" id="month" name="month">
+                                <input type="hidden" id="year" name="year">
+                                <input type="hidden" id="factDiff" name="factDiff" value="0">
+                                <input type="hidden" id="dayWeatherDescription" name="dayWeatherDescription">
+                                <input type="hidden" id="dayWeatherTemperature" name="dayWeatherTemperature">
+                                <input type="hidden" id="dayWeatherPrecipitation" name="dayWeatherPrecipitation">
+                                <input type="hidden" id="dayWeatherWindSpeed" name="dayWeatherWindSpeed">
+                                <input type="hidden" id="dayEvaluation" name="dayEvaluation" value="0">
+                                <input type="hidden" id="companyId" name="companyId">
+                                <input type="hidden" id="unitId" name="unitId">
+                                <input type="hidden" id="factRespId" name="factRespId">
+
+                                <!-- Receipt Header -->
+                                <div class="receipt-section receipt-header bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                    <div class="text-center mb-4" id="businessInfo">
+                                        <h3 class="text-2xl font-bold mb-1">Plateiapositiva, Lda</h3>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                                             <div>
-                                                <h4 class="font-medium mb-3">Multibanco 1</h4>
-                                                <div class="space-y-3">
-                                                    <div>
-                                                        <label class="text-sm">Valor Bruto:</label>
-                                                        <input type="number" id="posMb1GrossDetail" name="posMb1GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Taxa (%):</label>
-                                                        <input type="number" id="posMb1Fee" name="posMb1Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Valor Líquido:</label>
-                                                        <input type="number" id="posMb1Net" name="posMb1Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
-                                                    </div>
-                                                </div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+                                                <input type="text" id="companyInput" class="w-full p-2 rounded input-highlight text-sm" list="companyList" placeholder="Selecione a empresa">
+                                                <datalist id="companyList">
+                                                    <option value="Plateiapositiva, Lda">
+                                                </datalist>
                                             </div>
                                             <div>
-                                                <h4 class="font-medium mb-3">Multibanco 2</h4>
-                                                <div class="space-y-3">
-                                                    <div>
-                                                        <label class="text-sm">Valor Bruto:</label>
-                                                        <input type="number" id="posMb2GrossDetail" name="posMb2GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Taxa (%):</label>
-                                                        <input type="number" id="posMb2Fee" name="posMb2Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Valor Líquido:</label>
-                                                        <input type="number" id="posMb2Net" name="posMb2Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
-                                                    </div>
-                                                </div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Unidade</label>
+                                                <input type="text" id="unitInput" class="w-full p-2 rounded input-highlight text-sm" list="unitList" placeholder="Selecione a unidade">
+                                                <datalist id="unitList">
+                                                    <option value="Matosinhos">
+                                                    <option value="Porto">
+                                                </datalist>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Responsável</label>
+                                                <input type="text" id="respInput" class="w-full p-2 rounded input-highlight text-sm" list="respList" placeholder="Selecione o responsável">
+                                                <datalist id="respList">
+                                                    <option value="João Silva">
+                                                    <option value="Maria Santos">
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm mt-3" id="selectedUnit">Rua Sousa Aroso n° 544, Bloco A0.1 Fração K, 4450-286 Matosinhos</p>
+                                        <p class="text-sm">Nr. Contribuinte: 510885411</p>
+                                    </div>
+
+                                    <div class="receipt-divider my-4"></div>
+
+                                    <div class="mb-4">
+                                        <div class="flex justify-center mb-4">
+                                            <div class="w-1/2">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1 text-center">Data/Hora</label>
+                                                <input type="datetime-local" id="dateTime" name="dateTime" class="w-full p-2 rounded input-highlight text-sm text-center" required>
+                                            </div>
+                                            </div>
+                                        <div class="grid grid-cols-4 gap-4 mt-2">
+                                            <div class="text-center">
+                                                <label class="block text-xs font-medium text-gray-500 mb-1">Dia da Semana</label>
+                                                <p class="text-sm font-medium" id="weekDayDisplay">--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <label class="block text-xs font-medium text-gray-500 mb-1">Semana</label>
+                                                <p class="text-sm font-medium" id="weekNumDisplay">--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <label class="block text-xs font-medium text-gray-500 mb-1">Mês</label>
+                                                <p class="text-sm font-medium" id="monthDisplay">--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <label class="block text-xs font-medium text-gray-500 mb-1">Ano</label>
+                                                <p class="text-sm font-medium" id="yearDisplay">--</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Tab: Movimentos Anulados -->
-                                <div class="tab-content hidden" data-tab="movimentos">
-                            <!-- Movimentos Anulados e Descontos -->
-                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Movimentos Anulados</h3>
-                                        <div class="receipt-divider my-4"></div>
-                                <div class="grid grid-cols-1 gap-6">
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Tab Content Container -->
+                                <div id="tabContentContainer">
+                                    <!-- Tab: Informações Gerais -->
+                                    <div class="tab-content" data-tab="info-geral">
+                                <!-- Total por Modos de Pagamento -->
+                                        <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Total por Modos de Pagamento</h3>
+                                            <div class="receipt-divider my-4"></div>
+                                            <table class="receipt-table w-full">
+                                                <tr>
+                                                    <td class="py-2">Numerário Euro</td>
+                                                    <td class="w-1/3">
+                                                <input type="number" id="totalCash" name="totalCash" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                    <td class="py-2">Transferência Bancária</td>
+                                            <td>
+                                                <input type="number" id="wireTransfer" name="wireTransfer" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                    <td class="py-2">Multibanco 1</td>
+                                            <td>
+                                                <input type="number" id="posMb1Gross" name="posMb1Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                    <td class="py-2">Multibanco 2</td>
+                                            <td>
+                                                <input type="number" id="posMb2Gross" name="posMb2Gross" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                    <td class="py-2">Uber Eats MB</td>
+                                            <td>
+                                                <input type="number" id="uberEatsMb" name="uberEatsMb" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                            </table>
+                                            <div class="receipt-divider my-4"></div>
+                                            <table class="receipt-table w-full">
+                                        <tr class="receipt-total">
+                                                    <td class="py-2 font-bold">Total da Faturação:</td>
+                                                    <td class="w-1/3">
+                                                        <input type="number" id="totalFact" name="totalFact" class="w-full p-2 text-right font-bold bg-gray-50" value="0.00" step="0.01">
+                                            </td>
+                                        </tr>
+                                        <tr id="factDiffRow" class="hidden">
+                                            <td colspan="2" class="text-right text-red-500 text-sm pt-2">
+                                                        Diferença na faturação: <span id="factDiffDisplay">0.00</span>€
+                                            </td>
+                                        </tr>
+                                    </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tab: Métodos de Pagamento -->
+                                    <div class="tab-content hidden" data-tab="pagamentos">
+                                        <!-- Detalhes de Pagamentos -->
+                                        <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Detalhes de Pagamentos</h3>
+                                            <div class="receipt-divider my-4"></div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
-                                                    <h4 class="font-medium mb-3">Movimentos Anulados</h4>
+                                                    <h4 class="font-medium mb-3">Multibanco 1</h4>
                                                     <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-sm">Total Transações:</label>
-                                                    <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        <div>
+                                                            <label class="text-sm">Valor Bruto:</label>
+                                                            <input type="number" id="posMb1GrossDetail" name="posMb1GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Taxa (%):</label>
+                                                            <input type="number" id="posMb1Fee" name="posMb1Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Valor Líquido:</label>
+                                                            <input type="number" id="posMb1Net" name="posMb1Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div>
-                                                    <label class="text-sm">Total Documentos:</label>
-                                                    <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    <h4 class="font-medium mb-3">Multibanco 2</h4>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                            <label class="text-sm">Valor Bruto:</label>
+                                                            <input type="number" id="posMb2GrossDetail" name="posMb2GrossDetail" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Taxa (%):</label>
+                                                            <input type="number" id="posMb2Fee" name="posMb2Fee" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Valor Líquido:</label>
+                                                            <input type="number" id="posMb2Net" name="posMb2Net" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tab: Movimentos Anulados -->
+                                    <div class="tab-content hidden" data-tab="movimentos">
+                                <!-- Movimentos Anulados e Descontos -->
+                                        <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Movimentos Anulados</h3>
+                                            <div class="receipt-divider my-4"></div>
+                                    <div class="grid grid-cols-1 gap-6">
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <h4 class="font-medium mb-3">Movimentos Anulados</h4>
+                                                        <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Total Transações:</label>
+                                                        <input type="number" id="canceledTransactions" name="canceledTransactions" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Total Documentos:</label>
+                                                        <input type="number" id="canceledDocuments" name="canceledDocuments" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Justificativa:</label>
+                                                        <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                                    <div>
+                                                        <h4 class="font-medium mb-3">Descontos</h4>
+                                                        <div class="space-y-3">
+                                                    <div>
+                                                        <label class="text-sm">Total:</label>
+                                                        <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    </div>
+                                                    <div>
+                                                        <label class="text-sm">Justificativa:</label>
+                                                        <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                    <!-- Tab: Consumo Interno -->
+                                    <div class="tab-content hidden" data-tab="consumo">
+                                <!-- Consumo Interno e Gift Cards -->
+                                        <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Consumo Interno e Gift Cards</h3>
+                                            <div class="receipt-divider my-4"></div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
-                                                    <label class="text-sm">Justificativa:</label>
-                                                    <textarea id="canceledDocumentsJustification" name="canceledDocumentsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
-                                                </div>
+                                                    <h4 class="font-medium mb-3">Consumo Interno</h4>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                <label class="text-sm">Total:</label>
+                                                            <input type="number" id="internalConsumption" name="internalConsumption" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                        </div>
+                                                        <div>
+                                                            <label class="text-sm">Descrição:</label>
+                                                            <textarea id="internalConsumptionDesc" name="internalConsumptionDesc" class="w-full p-2 input-highlight" rows="2"></textarea>
+                                                        </div>
                                             </div>
                                         </div>
                                         
                                                 <div>
-                                                    <h4 class="font-medium mb-3">Descontos</h4>
+                                                    <h4 class="font-medium mb-3">Gift Cards</h4>
                                                     <div class="space-y-3">
                                                 <div>
-                                                    <label class="text-sm">Total:</label>
-                                                    <input type="number" id="discounts" name="discounts" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                    <label class="text-sm">Vendidos:</label>
+                                                    <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                                 <div>
-                                                    <label class="text-sm">Justificativa:</label>
-                                                    <textarea id="discountsJustification" name="discountsJustification" class="w-full p-2 input-highlight" rows="2"></textarea>
-                                                        </div>
+                                                    <label class="text-sm">Utilizados:</label>
+                                                    <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                                                 </div>
                                             </div>
                                         </div>
@@ -353,62 +440,24 @@
                                 </div>
                             </div>
 
-                                <!-- Tab: Consumo Interno -->
-                                <div class="tab-content hidden" data-tab="consumo">
-                            <!-- Consumo Interno e Gift Cards -->
-                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Consumo Interno e Gift Cards</h3>
-                                        <div class="receipt-divider my-4"></div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div>
-                                                <h4 class="font-medium mb-3">Consumo Interno</h4>
-                                                <div class="space-y-3">
-                                                    <div>
-                                            <label class="text-sm">Total:</label>
-                                                        <input type="number" id="internalConsumption" name="internalConsumption" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-sm">Descrição:</label>
-                                                        <textarea id="internalConsumptionDesc" name="internalConsumptionDesc" class="w-full p-2 input-highlight" rows="2"></textarea>
-                                                    </div>
-                                        </div>
-                                    </div>
-                                    
-                                            <div>
-                                                <h4 class="font-medium mb-3">Gift Cards</h4>
-                                                <div class="space-y-3">
-                                            <div>
-                                                <label class="text-sm">Vendidos:</label>
-                                                <input type="number" id="giftCardSold" name="giftCardSold" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                            </div>
-                                            <div>
-                                                <label class="text-sm">Utilizados:</label>
-                                                <input type="number" id="giftCardUsed" name="giftCardUsed" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    <!-- Tab: Métricas -->
+                                    <div class="tab-content hidden" data-tab="metricas">
+                                        <!-- Métricas do Dia -->
+                                        <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+                                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Métricas do Dia</h3>
+                                            <div class="receipt-divider my-4"></div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 class="font-medium mb-3">Estatísticas</h4>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                            <label class="text-sm">Ticket Médio:</label>
+                                                            <input type="number" id="averageTicket" name="averageTicket" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
                     </div>
-
-                                <!-- Tab: Métricas -->
-                                <div class="tab-content hidden" data-tab="metricas">
-                                    <!-- Métricas do Dia -->
-                                    <div class="receipt-section bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
-                                        <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Métricas do Dia</h3>
-                                        <div class="receipt-divider my-4"></div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div>
-                                                <h4 class="font-medium mb-3">Estatísticas</h4>
-                                                <div class="space-y-3">
-                                                    <div>
-                                                        <label class="text-sm">Ticket Médio:</label>
-                                                        <input type="number" id="averageTicket" name="averageTicket" class="w-full p-2 text-right input-highlight" value="0.00" step="0.01">
+                                                            <div>
+                                                                <label class="text-sm">Número de Transações:</label>
+                                                                <input type="number" id="transactionCount" name="transactionCount" class="w-full p-2 text-right input-highlight" value="0" step="1">
                 </div>
-                                                    <div>
-                                                        <label class="text-sm">Número de Transações:</label>
-                                                        <input type="number" id="transactionCount" name="transactionCount" class="w-full p-2 text-right input-highlight" value="0" step="1">
-            </div>
                                                 </div>
     </div>
 
@@ -642,7 +691,7 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <style>

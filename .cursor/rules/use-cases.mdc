@@ -1,10 +1,9 @@
 ---
-description: 
+description: System Use Cases with Business Rules, review code, add features, edit features
 globs: 
 alwaysApply: false
 ---
-ERP System Use Cases with Business Rules
-
+System Use Cases with Business Rules
 Table of Contents
 Financial Module Use Cases
 Human Resources Module Use Cases
@@ -1219,6 +1218,5 @@ Postconditions:
 Production inventory is updated
 Usage and disposal are tracked
 Split productions maintain traceability
-
 
 

@@ -1,3 +1,6 @@
+// ==========================================
+// 1. IMPORTAÇÕES E CONFIGURAÇÕES BÁSICAS
+// ==========================================
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -5,6 +8,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const session = require('express-session');
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
+const MongoStore = require('connect-mongo');
+
+// Rotas
 const faturacaoRoutes = require('./routes/faturacao.routes');
 const userRoutes = require('./routes/user.routes');
 const timesheetRoutes = require('./routes/timesheet.routes');
@@ -14,13 +23,19 @@ const permissionTemplateRoutes = require('./routes/permissionTemplate.routes');
 const productParentRoutes = require('./routes/productParent.routes');
 const supplierRoutes = require('./routes/supplier.routes');
 const productListRoutes = require('./routes/productList.routes');
-const session = require('express-session');
-const fileUpload = require('express-fileupload');
-const fs = require('fs');
+const companyRoutes = require('./routes/company.routes');
+const invitationRoutes = require('./routes/invitation.routes');
 
+// Criar app Express e definir porta
 const app = express();
-// Modificar a porta para usar 3000
 const PORT = process.env.PORT || 3000;
+
+// URL base da aplicação
+const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+
+// ==========================================
+// 2. CONFIGURAÇÃO DO NODEMAILER E MONGODB
+// ==========================================
 
 // Configurar o transporter do Nodemailer
 const emailTransporter = nodemailer.createTransport({
@@ -44,17 +59,70 @@ emailTransporter.verify()
         console.error('Erro ao verificar conexão com servidor de email:', error);
     });
 
-// URL base da aplicação (usar a mesma porta do servidor)
-const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
-
 // Adicionar configurações ao app
 app.locals.config = {
     emailTransporter,
     appUrl: APP_URL
 };
 
-// Middleware
-app.use(cors());
+// Conectar ao MongoDB Atlas
+mongoose.connect(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4 // Use IPv4, skip trying IPv6
+})
+.then(() => {
+    console.log('Conectado ao MongoDB Atlas');
+    
+    // Verificar se a conexão está realmente estabelecida
+    if (mongoose.connection.readyState === 1) {
+        console.log('Estado da conexão: Conectado');
+        
+        // Listar as coleções disponíveis
+        mongoose.connection.db.listCollections().toArray()
+            .then(collections => {
+                console.log('Coleções disponíveis:', collections.map(c => c.name));
+            })
+            .catch(err => console.error('Erro ao listar coleções:', err));
+    } else {
+        console.log('Estado da conexão:', mongoose.connection.readyState);
+    }
+})
+.catch((error) => {
+    console.error('Erro ao conectar ao MongoDB Atlas:', error);
+    console.error('Detalhes do erro:', {
+        name: error.name,
+        message: error.message,
+        code: error.code
+    });
+});
+
+// Monitorar eventos de conexão
+mongoose.connection.on('error', err => {
+    console.error('Erro na conexão MongoDB:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB desconectado');
+});
+
+mongoose.connection.on('reconnected', () => {
+    console.log('MongoDB reconectado');
+});
+
+// ==========================================
+// 3. MIDDLEWARES GLOBAIS
+// ==========================================
+
+// Configuração CORS
+app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
+
+// Middlewares de parsing para JSON e uploads
 app.use(bodyParser.json());
 app.use(express.json());
 
@@ -69,20 +137,47 @@ app.use(fileUpload({
 
 // Verificar e criar pasta de upload se não existir
 const productsUploadDir = path.join(__dirname, '../public/images/products');
+const usersUploadDir = path.join(__dirname, '../uploads/users');
 if (!fs.existsSync(productsUploadDir)) {
     fs.mkdirSync(productsUploadDir, { recursive: true });
 }
+if (!fs.existsSync(usersUploadDir)) {
+    fs.mkdirSync(usersUploadDir, { recursive: true });
+}
 
-// Configuração de sessão
-app.use(session({
-    secret: 'sua_chave_secreta',
+// Configuração de sessão com MongoDB
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET || 'sua_chave_secreta',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        ttl: 24 * 60 * 60,
+        autoRemove: 'native',
+        touchAfter: 24 * 3600
+    }),
     cookie: {
-        secure: false, // em produção deve ser true
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax'
     }
-}));
+};
+
+app.use(session(sessionConfig));
+
+// Middleware para logs de debug
+app.use((req, res, next) => {
+    console.log('=== Debug Info ===');
+    console.log('Path:', req.path);
+    console.log('Method:', req.method);
+    console.log('Session ID:', req.sessionID);
+    console.log('Session:', req.session);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    console.log('================');
+    next();
+});
 
 // Middleware para disponibilizar o usuário logado em todas as views
 app.use((req, res, next) => {
@@ -90,19 +185,29 @@ app.use((req, res, next) => {
     next();
 });
 
-// Conectar ao MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
-        console.log('Conectado ao MongoDB Atlas');
-    })
-    .catch((error) => {
-        console.error('Erro ao conectar ao MongoDB Atlas:', error);
-    });
-
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Rotas que não precisam de autenticação
+// ==========================================
+// 4. ROTAS E ENDPOINTS DE TESTE
+// ==========================================
+
+// Endpoints para teste - devem vir ANTES das rotas API e middleware de autenticação
+app.post('/api/companies/test', (req, res) => {
+    console.log('Rota explícita /api/companies/test (POST) acessada');
+    console.log('Body:', req.body);
+    return res.status(200).json({ 
+        success: true, 
+        message: 'Rota de teste funcionando!',
+        data: req.body
+    });
+});
+
+// ==========================================
+// 5. ROTAS PÚBLICAS (NÃO PROTEGIDAS)
+// ==========================================
+
+// Lista de caminhos públicos que não precisam de autenticação
 const publicPaths = [
     '/',
     '/index.html',
@@ -110,6 +215,8 @@ const publicPaths = [
     '/api/auth/login',
     '/api/users/validate-token',
     '/api/users/first-access',
+    '/api/companies',
+    '/api/companies/test',
     '/pages/account/first-access.html',
     '/js/account/firstAccess.js',
     '/css/account/firstAccess.css',
@@ -120,8 +227,33 @@ const publicPaths = [
     '/js/config/permissionTemplates.js'
 ];
 
-// Middleware de autenticação
+// Rotas públicas que NUNCA precisam de autenticação
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/companies', companyRoutes);
+app.use('/api/invitations', invitationRoutes);
+
+// Adicionar log para debug de rotas
+app.use((req, res, next) => {
+    console.log('Rota acessada:', {
+        path: req.path,
+        method: req.method,
+        baseUrl: req.baseUrl
+    });
+    next();
+});
+
+// ==========================================
+// 6. MIDDLEWARE DE AUTENTICAÇÃO
+// ==========================================
+
+// Middleware de autenticação que protege rotas não públicas
 const authMiddleware = (req, res, next) => {
+    console.log('Auth Check - Session:', req.session);
+    console.log('Auth Check - Path:', req.path);
+    console.log('Auth Check - Method:', req.method);
+    console.log('Auth Check - Token:', req.headers.authorization);
+
     // Verificar se é um arquivo estático público
     if (req.path.startsWith('/css/') || 
         req.path.startsWith('/js/') || 
@@ -130,13 +262,16 @@ const authMiddleware = (req, res, next) => {
         return next();
     }
 
-    // Verificar se o caminho é público
-    if (publicPaths.some(path => req.path === path)) {
+    // Verificar se é um caminho público
+    if (req.path === '/api/auth/register' || 
+        req.path.startsWith('/api/companies') || 
+        publicPaths.some(path => req.path === path)) {
         return next();
     }
 
     // Se não estiver autenticado
     if (!req.session.user) {
+        console.log('Usuário não autenticado');
         // Se for uma requisição AJAX/API
         if (req.xhr || req.path.startsWith('/api/')) {
             return res.status(401).json({
@@ -152,21 +287,27 @@ const authMiddleware = (req, res, next) => {
     next();
 };
 
-// Aplicar middleware de autenticação
+// Aplicar middleware de autenticação para rotas não públicas
 app.use(authMiddleware);
 
-// Rotas da API
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+// ==========================================
+// 7. ROTAS PROTEGIDAS (AUTENTICADAS)
+// ==========================================
+
+// Rotas da API que precisam de autenticação
 app.use('/api/faturacao', faturacaoRoutes);
-app.use('/api/timesheet', timesheetRoutes);
+app.use('/api/timesheets', timesheetRoutes);
 app.use('/api/units', unitRoutes);
 app.use('/api/permission-templates', permissionTemplateRoutes);
-app.use('/api/products/parent', productParentRoutes);
+app.use('/api/product-parents', productParentRoutes);
 app.use('/api/suppliers', supplierRoutes);
-app.use('/api/products/list', productListRoutes);
+app.use('/api/product-lists', productListRoutes);
 
-// Rota raiz
+// ==========================================
+// 8. ROTAS DE NAVEGAÇÃO E REDIRECIONAMENTO
+// ==========================================
+
+// Rota raiz (redireciona baseado no status de autenticação)
 app.get('/', (req, res) => {
     if (req.session.user) {
         res.redirect('/pages/dashboard.html');
@@ -190,6 +331,48 @@ app.get('/login.html', (req, res) => {
     }
     res.sendFile(path.join(__dirname, '../public/login.html'));
 });
+
+// ==========================================
+// 9. TRATAMENTO DE ERROS E 404
+// ==========================================
+
+// Middleware para rotas não encontradas (404)
+app.use((req, res, next) => {
+    console.log('Rota não encontrada:', req.path);
+    
+    // API routes should return JSON
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({
+            status: 'error',
+            code: 'NOT_FOUND',
+            message: 'Recurso não encontrado'
+        });
+    }
+    
+    // HTML routes should redirect to 404 page or index
+    res.status(404).redirect('/login.html');
+});
+
+// Middleware para tratamento de erros
+app.use((err, req, res, next) => {
+    console.error('Erro na aplicação:', err);
+    
+    // API routes should return JSON
+    if (req.path.startsWith('/api/')) {
+        return res.status(500).json({
+            status: 'error',
+            code: 'SERVER_ERROR',
+            message: 'Erro interno do servidor'
+        });
+    }
+    
+    // HTML routes should redirect to error page or index
+    res.status(500).redirect('/login.html');
+});
+
+// ==========================================
+// 10. INICIALIZAÇÃO DO SERVIDOR
+// ==========================================
 
 // Iniciar servidor
 app.listen(PORT, () => {

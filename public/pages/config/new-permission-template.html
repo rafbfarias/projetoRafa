@@ -19,9 +19,17 @@
     
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script src="../../js/layout.js"></script>
 </head>
-<body class="bg-primary">
-    <div class="flex min-h-screen">
+<body>
+    <div class="app-container">
+            <!-- Sidebar -->
+        <aside class="sidebar">
+            <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
         
@@ -328,5 +336,7 @@
         }
     </script>
     <script src="/js/config/newPermissionTemplate.js"></script>
+        </main>
+    </div>
 </body>
 </html> 

@@ -22,6 +22,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleButton.addEventListener('click', toggleMode);
 
+    // Configuração do modal de status
+    const statusModal = document.getElementById('statusModal');
+    const closeModal = document.getElementById('closeModal');
+    const modalCloseButton = document.getElementById('modalCloseButton');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalIcon = document.getElementById('modalIcon');
+    
+    // Funções para controlar o modal
+    const showStatusModal = (message, type = 'error') => {
+        // Remover classes de tipo anteriores
+        statusModal.classList.remove('error', 'warning', 'info', 'success');
+        
+        // Configurar tipo e ícone
+        switch (type) {
+            case 'error':
+                statusModal.classList.add('error');
+                modalTitle.textContent = 'Erro';
+                modalIcon.className = 'fas fa-exclamation-circle text-red-500 text-xl';
+                break;
+            case 'warning':
+                statusModal.classList.add('warning');
+                modalTitle.textContent = 'Aviso';
+                modalIcon.className = 'fas fa-exclamation-triangle text-yellow-500 text-xl';
+                break;
+            case 'info':
+                statusModal.classList.add('info');
+                modalTitle.textContent = 'Informação';
+                modalIcon.className = 'fas fa-info-circle text-blue-500 text-xl';
+                break;
+            case 'success':
+                statusModal.classList.add('success');
+                modalTitle.textContent = 'Sucesso';
+                modalIcon.className = 'fas fa-check-circle text-green-500 text-xl';
+                break;
+        }
+        
+        // Definir a mensagem
+        modalMessage.textContent = message;
+        
+        // Exibir o modal
+        statusModal.style.display = 'block';
+    };
+    
+    const hideStatusModal = () => {
+        statusModal.style.display = 'none';
+    };
+    
+    // Adicionar event listeners para fechar o modal
+    if (closeModal) closeModal.addEventListener('click', hideStatusModal);
+    if (modalCloseButton) modalCloseButton.addEventListener('click', hideStatusModal);
+    
+    // Fechar o modal clicando fora dele
+    window.addEventListener('click', (event) => {
+        if (event.target === statusModal) {
+            hideStatusModal();
+        }
+    });
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
@@ -39,18 +98,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             console.log('Resposta:', data); // Debug
 
-            if (data.success) {
-                console.log('Redirecionando...');
-                showMessage('Login bem-sucedido! Redirecionando...', false);
-                setTimeout(() => {
-                    window.location.replace('/dashboard.html');
-                }, 1000);
+            if (data.success || data.status === 'success') {
+                console.log('Login bem-sucedido, redirecionando...');
+                
+                // Verificar se o usuário precisa completar o onboarding
+                if (data.user && data.user.onboardingCompleted === false) {
+                    // Redirecionar para a página de boas-vindas
+                    showMessage('Login bem-sucedido! Redirecionando para página de boas-vindas...', false);
+                    setTimeout(() => {
+                        window.location.href = '/pages/welcome/welcome.html';
+                    }, 1000);
+                } else {
+                    // Redirecionar para o dashboard
+                    showMessage('Login bem-sucedido! Redirecionando...', false);
+                    setTimeout(() => {
+                        window.location.replace('/dashboard.html');
+                    }, 1000);
+                }
             } else {
-                showMessage(data.message || 'Erro no login');
+                // Usar o modal para erros, especialmente "Usuário desativado"
+                showStatusModal(data.message || 'Erro no login', 'error');
             }
         } catch (error) {
             console.error('Erro:', error); // Debug
-            showMessage('Erro ao tentar fazer login');
+            showStatusModal('Erro ao tentar fazer login. Verifique sua conexão.', 'error');
         }
     });
 }); 

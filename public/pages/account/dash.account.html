@@ -7,20 +7,116 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../../css/styles.css" rel="stylesheet">
-    <script src="../../js/Sidebar.js"></script>
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/Sidebar.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Menu Mobile */
+        .mobile-header {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                padding: 1rem;
+                background-color: var(--bg-primary);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .sidebar-container {
+                position: fixed;
+                left: -100%;
+                transition: left 0.3s ease;
+                z-index: 40;
+            }
+
+            .sidebar-container.mobile-open {
+                left: 0;
+            }
+
+            .mobile-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+            }
+
+            .mobile-overlay.show {
+                display: block;
+            }
+        }
+    </style>
 </head>
-<body class="bg-primary">
-    <div class="flex min-h-screen">
+<body>
+    <div class="layout-container">
         <!-- Sidebar -->
-        <app-sidebar></app-sidebar>
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay"></div>
 
         <!-- Conteúdo Principal -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <div class="main-container">
+            <!-- Header Mobile (só aparece em telas pequenas) -->
+            <div class="mobile-header">
+                <button class="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="text-left text-lg font-semibold ml-4">Dashboard de Conta</h1>
+            </div>
+
             <!-- Cabeçalho -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
                 <div class="text-left">
-                    <h1 class="text-left text-2xl font-bold">Dashboard de Conta</h1>
+                    <h1 class="text-2xl font-bold">Dashboard de Conta</h1>
                     <p class="text-muted">Gerencie usuários, acessos e permissões do sistema</p>
                 </div>
                 <div class="mt-4 md:mt-0 flex space-x-3">
@@ -31,283 +127,306 @@
                 </div>
             </div>
 
-            <!-- Cards de Estatísticas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="dashboard-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
-                            <i class="fas fa-users text-xl" style="color: var(--icon-clients-text);"></i>
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <!-- Cards de Estatísticas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="dashboard-card p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-clients-bg);">
+                                <i class="fas fa-users text-xl" style="color: var(--icon-clients-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-left" class="text-muted text-sm text-left">Total de Usuários</h3>
+                                <p class="text-2xl font-bold">24</p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Total de Usuários</h3>
-                            <p class="text-2xl font-bold">24</p>
+                    </div>
+
+                    <div class="dashboard-card p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
+                                <i class="fas fa-user-check text-xl" style="color: var(--icon-revenue-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-left" class="text-muted text-sm text-left">Usuários Ativos</h3>
+                                <p class="text-2xl font-bold">18</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
+                                <i class="fas fa-envelope text-xl" style="color: var(--icon-contracts-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-left" class="text-muted text-sm text-left">Convites Pendentes</h3>
+                                <p class="text-2xl font-bold">6</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
+                                <i class="fas fa-building text-xl" style="color: var(--icon-employees-text);"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-left" class="text-muted text-sm text-left">Empresas Vinculadas</h3>
+                                <p class="text-2xl font-bold">3</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="dashboard-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-revenue-bg);">
-                            <i class="fas fa-user-check text-xl" style="color: var(--icon-revenue-text);"></i>
+                <!-- Atividade Recente e Convites -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Atividade Recente -->
+                    <div class="dashboard-card p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-left" class="text-lg font-semibold text-left">Atividade Recente</h3>
+                            <a href="#" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todas</a>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Usuários Ativos</h3>
-                            <p class="text-2xl font-bold">18</p>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="p-2 rounded-full" style="background-color: var(--icon-revenue-bg);">
+                                    <i class="fas fa-user-plus text-sm" style="color: var(--icon-revenue-text);"></i>
+                                </div>
+                                <div class="flex-1 ml-3">
+                                    <p class="text-sm font-medium">Novo usuário adicionado</p>
+                                    <p class="text-xs text-muted">Carlos Oliveira foi adicionado à unidade Porto</p>
+                                    <p class="text-xs text-muted mt-1">Há 2 horas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="p-2 rounded-full" style="background-color: var(--icon-clients-bg);">
+                                    <i class="fas fa-envelope-open-text text-sm" style="color: var(--icon-clients-text);"></i>
+                                </div>
+                                <div class="flex-1 ml-3">
+                                    <p class="text-sm font-medium">Convite aceito</p>
+                                    <p class="text-xs text-muted">Maria Silva aceitou o convite para a unidade Lisboa</p>
+                                    <p class="text-xs text-muted mt-1">Há 5 horas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="p-2 rounded-full" style="background-color: var(--icon-contracts-bg);">
+                                    <i class="fas fa-user-edit text-sm" style="color: var(--icon-contracts-text);"></i>
+                                </div>
+                                <div class="flex-1 ml-3">
+                                    <p class="text-sm font-medium">Permissões atualizadas</p>
+                                    <p class="text-xs text-muted">João Pereira teve suas permissões atualizadas</p>
+                                    <p class="text-xs text-muted mt-1">Há 1 dia</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="p-2 rounded-full" style="background-color: var(--icon-employees-bg);">
+                                    <i class="fas fa-user-times text-sm" style="color: var(--icon-employees-text);"></i>
+                                </div>
+                                <div class="flex-1 ml-3">
+                                    <p class="text-sm font-medium">Usuário desativado</p>
+                                    <p class="text-xs text-muted">Ana Costa foi desativada do sistema</p>
+                                    <p class="text-xs text-muted mt-1">Há 2 dias</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="dashboard-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-contracts-bg);">
-                            <i class="fas fa-envelope text-xl" style="color: var(--icon-contracts-text);"></i>
+                    
+                    <!-- Convites Pendentes -->
+                    <div class="dashboard-card p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-left font-semibold">Convites Pendentes</h3>
+                            <a href="/pages/account/invitation-view.html" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todos</a>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Convites Pendentes</h3>
-                            <p class="text-2xl font-bold">6</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-lg" style="background-color: var(--icon-employees-bg);">
-                            <i class="fas fa-building text-xl" style="color: var(--icon-employees-text);"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-left" class="text-muted text-sm text-left">Empresas Vinculadas</h3>
-                            <p class="text-2xl font-bold">3</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Atividade Recente e Convites -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- Atividade Recente -->
-                <div class="dashboard-card p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-left" class="text-lg font-semibold text-left">Atividade Recente</h3>
-                        <a href="#" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todas</a>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <div class="p-2 rounded-full" style="background-color: var(--icon-revenue-bg);">
-                                <i class="fas fa-user-plus text-sm" style="color: var(--icon-revenue-text);"></i>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
+                                        <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">roberto.almeida@email.com</p>
+                                        <p class="text-xs text-muted">Enviado há 2 dias</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
                             </div>
-                            <div class="flex-1 ml-3">
-                                <p class="text-sm font-medium">Novo usuário adicionado</p>
-                                <p class="text-xs text-muted">Carlos Oliveira foi adicionado à unidade Porto</p>
-                                <p class="text-xs text-muted mt-1">Há 2 horas</p>
+                            
+                            <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
+                                        <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">patricia.santos@email.com</p>
+                                        <p class="text-xs text-muted">Enviado há 3 dias</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
                             </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="p-2 rounded-full" style="background-color: var(--icon-clients-bg);">
-                                <i class="fas fa-envelope-open-text text-sm" style="color: var(--icon-clients-text);"></i>
+                            
+                            <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
+                                        <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">lucas.ferreira@email.com</p>
+                                        <p class="text-xs text-muted">Enviado há 5 dias</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
                             </div>
-                            <div class="flex-1 ml-3">
-                                <p class="text-sm font-medium">Convite aceito</p>
-                                <p class="text-xs text-muted">Maria Silva aceitou o convite para a unidade Lisboa</p>
-                                <p class="text-xs text-muted mt-1">Há 5 horas</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="p-2 rounded-full" style="background-color: var(--icon-contracts-bg);">
-                                <i class="fas fa-user-edit text-sm" style="color: var(--icon-contracts-text);"></i>
-                            </div>
-                            <div class="flex-1 ml-3">
-                                <p class="text-sm font-medium">Permissões atualizadas</p>
-                                <p class="text-xs text-muted">João Pereira teve suas permissões atualizadas</p>
-                                <p class="text-xs text-muted mt-1">Há 1 dia</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="p-2 rounded-full" style="background-color: var(--icon-employees-bg);">
-                                <i class="fas fa-user-times text-sm" style="color: var(--icon-employees-text);"></i>
-                            </div>
-                            <div class="flex-1 ml-3">
-                                <p class="text-sm font-medium">Usuário desativado</p>
-                                <p class="text-xs text-muted">Ana Costa foi desativada do sistema</p>
-                                <p class="text-xs text-muted mt-1">Há 2 dias</p>
+                            
+                            <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
+                                        <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">camila.oliveira@email.com</p>
+                                        <p class="text-xs text-muted">Enviado há 6 dias</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Convites Pendentes -->
-                <div class="dashboard-card p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-left font-semibold">Convites Pendentes</h3>
-                        <a href="/pages/account/invitation-view.html" class="text-sm text-brand-600 dark:text-brand-400 hover:underline">Ver Todos</a>
+                <!-- Distribuição de Usuários e Últimos Acessos -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Distribuição de Usuários por Unidade -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-left" class="text-lg font-semibold mb-6 text-left">Distribuição de Usuários por Unidade</h3>
+                        <div class="h-64 flex items-center justify-center">
+                            <!-- Aqui entraria um gráfico de pizza -->
+                            <div class="text-center">
+                                <i class="fas fa-chart-pie text-6xl text-gray-300 dark:text-gray-600 mb-4 text-xl" style="color: var(--icon-clients-text);"></i>
+                                <p class="text-muted">Gráfico de distribuição de usuários</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="text-sm">Porto: 8 usuários</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                <span class="text-sm">Lisboa: 6 usuários</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <span class="text-sm">Braga: 5 usuários</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <span class="text-sm">Faro: 5 usuários</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
-                                    <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">roberto.almeida@email.com</p>
-                                    <p class="text-xs text-muted">Enviado há 2 dias</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
-                        </div>
-                        
-                        <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
-                                    <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">patricia.santos@email.com</p>
-                                    <p class="text-xs text-muted">Enviado há 3 dias</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
-                        </div>
-                        
-                        <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
-                                    <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">lucas.ferreira@email.com</p>
-                                    <p class="text-xs text-muted">Enviado há 5 dias</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
-                        </div>
-                        
-                        <div class="flex items-center justify-between p-3 dashboard-card rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full mr-3" style="background-color: var(--icon-contracts-bg);">
-                                    <i class="fas fa-envelope text-sm" style="color: var(--icon-contracts-text);"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">camila.oliveira@email.com</p>
-                                    <p class="text-xs text-muted">Enviado há 6 dias</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary text-xs py-1 px-2">Reenviar</button>
+                    
+                    <!-- Últimos Acessos -->
+                    <div class="dashboard-card p-6">
+                        <h3 class="text-left" class="text-lg font-semibold mb-6 text-left">Últimos Acessos ao Sistema</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usuário</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Data/Hora</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">IP</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                                    <img src="/images/users/1.png" alt="Avatar" class="h-full w-full object-cover">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium">João Silva</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">Hoje, 10:45</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.105</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                                    <img src="/images/users/2.png" alt="Avatar" class="h-full w-full object-cover">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium">Maria Santos</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">Hoje, 09:30</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.110</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                                    <img src="/images/users/3.png" alt="Avatar" class="h-full w-full object-cover">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium">Pedro Costa</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">Ontem, 18:15</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.120</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                                    <img src="/images/users/4.png" alt="Avatar" class="h-full w-full object-cover">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium">Ana Oliveira</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">Ontem, 16:20</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.115</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Distribuição de Usuários e Últimos Acessos -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Distribuição de Usuários por Unidade -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-left" class="text-lg font-semibold mb-6 text-left">Distribuição de Usuários por Unidade</h3>
-                    <div class="h-64 flex items-center justify-center">
-                        <!-- Aqui entraria um gráfico de pizza -->
-                        <div class="text-center">
-                            <i class="fas fa-chart-pie text-6xl text-gray-300 dark:text-gray-600 mb-4 text-xl" style="color: var(--icon-clients-text);""></i>
-                            <p class="text-muted">Gráfico de distribuição de usuários</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                            <span class="text-sm">Porto: 8 usuários</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                            <span class="text-sm">Lisboa: 6 usuários</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                            <span class="text-sm">Braga: 5 usuários</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                            <span class="text-sm">Faro: 5 usuários</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Últimos Acessos -->
-                <div class="dashboard-card p-6">
-                    <h3 class="text-left" class="text-lg font-semibold mb-6 text-left">Últimos Acessos ao Sistema</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usuário</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Data/Hora</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">IP</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                                <img src="/images/users/1.png" alt="Avatar" class="h-full w-full object-cover">
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium">João Silva</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">Hoje, 10:45</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.105</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                                <img src="/images/users/2.png" alt="Avatar" class="h-full w-full object-cover">
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium">Maria Santos</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">Hoje, 09:30</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.110</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                                <img src="/images/users/3.png" alt="Avatar" class="h-full w-full object-cover">
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium">Pedro Costa</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">Ontem, 18:15</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.120</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                                <img src="/images/users/4.png" alt="Avatar" class="h-full w-full object-cover">
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium">Ana Oliveira</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">Ontem, 16:20</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm">192.168.1.115</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
-    <script src="../../js/account/accountDashboard.js"></script>
+    <script src="/js/account/accountDashboard.js"></script>
+    <script>
+        // Controle do menu mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const sidebarContainer = document.querySelector('.sidebar-container');
+            const mobileOverlay = document.querySelector('.mobile-overlay');
+
+            if (mobileMenuButton && sidebarContainer && mobileOverlay) {
+                mobileMenuButton.addEventListener('click', () => {
+                    sidebarContainer.classList.toggle('mobile-open');
+                    mobileOverlay.classList.toggle('show');
+                });
+
+                mobileOverlay.addEventListener('click', () => {
+                    sidebarContainer.classList.remove('mobile-open');
+                    mobileOverlay.classList.remove('show');
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

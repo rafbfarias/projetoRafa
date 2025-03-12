@@ -4,62 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Produto - Sistema de Gerenciamento de Cozinha</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../css/styles.css">
-    <link rel="stylesheet" href="../../../css/kitchen/product/new.product.css">
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Script do Sidebar -->
-    <script src="/js/Sidebar.js"></script>
-</head>
-<body class="bg-gray-50 flex">
-    <!-- Sidebar -->
-    <app-sidebar></app-sidebar>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../../css/styles.css" rel="stylesheet">
+    <script src="../../../js/Sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        /* Estilo para scroll independente */
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar-container {
+            flex-shrink: 0;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        .main-container {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
 
-    <!-- Conteúdo principal -->
-    <main class="flex-1 p-8 overflow-y-auto">
-        <div class="bg-gray-50 min-h-screen">
-            <!-- Header -->
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Novo Produto</h1>
-                <p class="text-gray-600">Crie um novo produto guarda-chuva e suas variantes específicas de fornecedores</p>
+        /* Estilizar a barra de rolagem */
+        .sidebar-container::-webkit-scrollbar,
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-track,
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb,
+        .main-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .sidebar-container::-webkit-scrollbar-thumb:hover,
+        .main-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-container">
+            <!-- Cabeçalho -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 p-8">
+                <div class="flex items-center">
+                    <a href="dash.productManagement.html" class="mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl font-bold">Novo Produto</h1>
+                        <p class="text-muted">Crie um novo produto guarda-chuva e suas variantes específicas de fornecedores</p>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" form="product-form" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>
+                        Salvar
+                    </button>
+                </div>
             </div>
-            
-            <form id="product-form">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Resto do conteúdo -->
+            <div class="px-8">
+                <form id="product-form" class="space-y-6">
                     <!-- Informações principais do produto -->
                     <div class="md:col-span-2">
-                        <div class="bg-white rounded-lg shadow p-6 mb-6">
-                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Informações do Produto</h2>
+                        <div class="dashboard-card p-6 mb-6">
+                            <h2 class="text-lg font-semibold mb-4">Informações do Produto</h2>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        Nome do Produto <span class="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="productName"
-                                        id="productName"
-                                        class="w-full p-2 border border-gray-300 rounded-md"
-                                        placeholder="Ex: Filé Mignon"
-                                    >
-                                    <p class="mt-1 text-xs text-red-500 error-message" id="productName-error"></p>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        SKU/ID <span class="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="parentId"
-                                        id="parentId"
-                                        class="w-full p-2 border border-gray-300 rounded-md"
-                                        placeholder="Ex: CAR-FIM-001"
-                                    >
-                                    <p class="mt-1 text-xs text-red-500 error-message" id="parentId-error"></p>
-                                </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Nome do Produto <span class="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="productName"
+                                            id="productName"
+                                            class="w-full p-2 border border-gray-300 rounded-md"
+                                            placeholder="Ex: Filé Mignon"
+                                        >
+                                        <p class="mt-1 text-xs text-red-500 error-message" id="productName-error"></p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            SKU/ID <span class="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="parentId"
+                                            id="parentId"
+                                            class="w-full p-2 border border-gray-300 rounded-md"
+                                            placeholder="Ex: CAR-FIM-001"
+                                        >
+                                        <p class="mt-1 text-xs text-red-500 error-message" id="parentId-error"></p>
+                                    </div>
                             </div>
                             
                             <div class="mb-4">
@@ -76,46 +140,46 @@
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        Família de Produto <span class="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        name="productFamily"
-                                        id="productFamily"
-                                        class="w-full p-2 border border-gray-300 rounded-md"
-                                    >
-                                        <option value="">Selecione uma família</option>
-                                        <option value="Carnes">Carnes</option>
-                                        <option value="Bebidas">Bebidas</option>
-                                        <option value="Vegetais">Vegetais</option>
-                                        <option value="Laticínios">Laticínios</option>
-                                        <option value="Embalagens">Embalagens</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-red-500 error-message" id="productFamily-error"></p>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        Unidade de Medida <span class="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        name="unitMeasure"
-                                        id="unitMeasure"
-                                        class="w-full p-2 border border-gray-300 rounded-md"
-                                    >
-                                        <option value="kg">Quilograma (kg)</option>
-                                        <option value="g">Grama (g)</option>
-                                        <option value="un">Unidade (un)</option>
-                                        <option value="L">Litro (L)</option>
-                                        <option value="ml">Mililitro (ml)</option>
-                                        <option value="pct">Pacote (pct)</option>
-                                        <option value="cx">Caixa (cx)</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-red-500 error-message" id="unitMeasure-error"></p>
-                                </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Família de Produto <span class="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            name="productFamily"
+                                            id="productFamily"
+                                            class="w-full p-2 border border-gray-300 rounded-md"
+                                        >
+                                            <option value="">Selecione uma família</option>
+                                            <option value="Carnes">Carnes</option>
+                                            <option value="Bebidas">Bebidas</option>
+                                            <option value="Vegetais">Vegetais</option>
+                                            <option value="Laticínios">Laticínios</option>
+                                            <option value="Embalagens">Embalagens</option>
+                                        </select>
+                                        <p class="mt-1 text-xs text-red-500 error-message" id="productFamily-error"></p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Unidade de Medida <span class="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            name="unitMeasure"
+                                            id="unitMeasure"
+                                            class="w-full p-2 border border-gray-300 rounded-md"
+                                        >
+                                            <option value="kg">Quilograma (kg)</option>
+                                            <option value="g">Grama (g)</option>
+                                            <option value="un">Unidade (un)</option>
+                                            <option value="L">Litro (L)</option>
+                                            <option value="ml">Mililitro (ml)</option>
+                                            <option value="pct">Pacote (pct)</option>
+                                            <option value="cx">Caixa (cx)</option>
+                                        </select>
+                                        <p class="mt-1 text-xs text-red-500 error-message" id="unitMeasure-error"></p>
+                                    </div>
                             </div>
-
+                            
                             <div class="mt-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     Preço Médio (€) <span class="text-red-500">*</span>
@@ -137,331 +201,305 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Variantes do Produto -->
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800">Variantes de Fornecedores</h2>
-                                <button
-                                    type="button"
-                                    id="add-variant-btn"
-                                    class="flex items-center text-sm text-blue-600 hover:text-blue-800"
-                                >
-                                    <i data-feather="plus" class="w-4 h-4 mr-1"></i>
-                                    Adicionar Variante
-                                </button>
+                    </div>
+                    
+                    <!-- Variantes do Produto -->
+                    <div class="dashboard-card p-6">
+                        <h2 class="text-lg font-semibold mb-4">Variantes de Fornecedores</h2>
+                        <button
+                            type="button"
+                            id="add-variant-btn"
+                            class="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                        >
+                            <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                            Adicionar Variante
+                        </button>
+                    </div>
+                    
+                    <div id="variants-container" class="space-y-4">
+                        <!-- As variantes serão adicionadas aqui dinamicamente -->
+                    </div>
+
+                    <!-- Template para variante -->
+                    <template id="variant-template">
+                        <div class="variant-item border border-gray-200 rounded-lg overflow-hidden" data-variant-id="">
+                            <!-- Cabeçalho da variante -->
+                            <div class="variant-header p-3 bg-gray-50 cursor-pointer flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i data-feather="package" class="w-5 h-5 text-gray-500 mr-2"></i>
+                                    <span class="variant-title font-medium text-gray-800">Nova Variante</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <button
+                                        type="button"
+                                        class="remove-variant-btn p-1 text-red-600 hover:text-red-800 rounded-full hover:bg-red-50 mr-2"
+                                    >
+                                        <i data-feather="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <i data-feather="chevron-down" class="toggle-icon w-5 h-5 text-gray-500"></i>
+                                </div>
                             </div>
                             
-                            <div id="variants-container" class="space-y-4">
-                                <!-- As variantes serão adicionadas aqui dinamicamente -->
-                            </div>
-
-                            <!-- Template para variante -->
-                            <template id="variant-template">
-                                <div class="variant-item border border-gray-200 rounded-lg overflow-hidden" data-variant-id="">
-                                    <!-- Cabeçalho da variante -->
-                                    <div class="variant-header p-3 bg-gray-50 cursor-pointer flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <i data-feather="package" class="w-5 h-5 text-gray-500 mr-2"></i>
-                                            <span class="variant-title font-medium text-gray-800">Nova Variante</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <button
-                                                type="button"
-                                                class="remove-variant-btn p-1 text-red-600 hover:text-red-800 rounded-full hover:bg-red-50 mr-2"
-                                            >
-                                                <i data-feather="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                            <i data-feather="chevron-down" class="toggle-icon w-5 h-5 text-gray-500"></i>
-                                        </div>
+                            <!-- Detalhes da variante -->
+                            <div class="variant-details p-4 hidden">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Fornecedor <span class="text-red-500">*</span>
+                                        </label>
+                                        <select class="supplier w-full p-2 border border-gray-300 rounded-md">
+                                            <option value="">Selecione um fornecedor</option>
+                                            <option value="sup1">FreshMeat Distribuidora</option>
+                                            <option value="sup2">DistribeBem Bebidas</option>
+                                            <option value="sup3">Horta Orgânica</option>
+                                            <option value="sup4">Laticínios do Sul</option>
+                                            <option value="sup5">EmbalaFácil</option>
+                                            <option value="sup6">Açougue Premium</option>
+                                            <option value="sup7">CarnesOnline</option>
+                                            <option value="sup8">Fazenda Verde</option>
+                                        </select>
+                                        <p class="mt-1 text-xs text-red-500 error-message supplier-error"></p>
                                     </div>
                                     
-                                    <!-- Detalhes da variante -->
-                                    <div class="variant-details p-4 hidden">
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Fornecedor <span class="text-red-500">*</span>
-                                                </label>
-                                                <select class="supplier w-full p-2 border border-gray-300 rounded-md">
-                                                    <option value="">Selecione um fornecedor</option>
-                                                    <option value="sup1">FreshMeat Distribuidora</option>
-                                                    <option value="sup2">DistribeBem Bebidas</option>
-                                                    <option value="sup3">Horta Orgânica</option>
-                                                    <option value="sup4">Laticínios do Sul</option>
-                                                    <option value="sup5">EmbalaFácil</option>
-                                                    <option value="sup6">Açougue Premium</option>
-                                                    <option value="sup7">CarnesOnline</option>
-                                                    <option value="sup8">Fazenda Verde</option>
-                                                </select>
-                                                <p class="mt-1 text-xs text-red-500 error-message supplier-error"></p>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Preço <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i data-feather="dollar-sign" class="h-5 w-5 text-gray-400"></i>
                                             </div>
-                                            
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Preço <span class="text-red-500">*</span>
-                                                </label>
-                                                <div class="relative">
-                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                        <i data-feather="dollar-sign" class="h-5 w-5 text-gray-400"></i>
-                                                    </div>
-                                                    <input
-                                                        type="number"
-                                                        class="current-price pl-10 w-full p-2 border border-gray-300 rounded-md"
-                                                        step="0.01"
-                                                        min="0"
-                                                        placeholder="0.00"
-                                                    >
-                                                </div>
-                                                <p class="mt-1 text-xs text-red-500 error-message price-error"></p>
-                                            </div>
-                                            
-                                            <div class="grid grid-cols-2 gap-2">
-                                                <div>
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                        Unidade
-                                                    </label>
-                                                    <select class="unit-measure w-full p-2 border border-gray-300 rounded-md">
-                                                        <option value="kg">kg</option>
-                                                        <option value="g">g</option>
-                                                        <option value="un">un</option>
-                                                        <option value="L">L</option>
-                                                        <option value="ml">ml</option>
-                                                        <option value="pct">pct</option>
-                                                        <option value="cx">cx</option>
-                                                    </select>
-                                                </div>
-                                                
-                                                <div>
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                        Pedido Mínimo <span class="text-red-500">*</span>
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        class="minimum-quantity w-full p-2 border border-gray-300 rounded-md"
-                                                        min="1"
-                                                        step="1"
-                                                        value="1"
-                                                    >
-                                                    <p class="mt-1 text-xs text-red-500 error-message min-order-error"></p>
-                                                </div>
-                                            </div>
+                                            <input
+                                                type="number"
+                                                class="current-price pl-10 w-full p-2 border border-gray-300 rounded-md"
+                                                step="0.01"
+                                                min="0"
+                                                placeholder="0.00"
+                                            >
                                         </div>
-                                        
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Email do Fornecedor
-                                                </label>
-                                                <input
-                                                    type="email"
-                                                    class="supplier-email w-full p-2 border border-gray-300 rounded-md"
-                                                    placeholder="fornecedor@exemplo.com"
-                                                >
-                                            </div>
-                                            
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                    Prioridade
-                                                </label>
-                                                <div class="priority-stars flex items-center">
-                                                    <button type="button" data-star="1" class="priority-btn p-1 focus:outline-none">
-                                                        <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
-                                                    </button>
-                                                    <button type="button" data-star="2" class="priority-btn p-1 focus:outline-none">
-                                                        <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
-                                                    </button>
-                                                    <button type="button" data-star="3" class="priority-btn p-1 focus:outline-none">
-                                                        <i data-feather="star" class="h-5 w-5 text-gray-300 star-active"></i>
-                                                    </button>
-                                                    <button type="button" data-star="4" class="priority-btn p-1 focus:outline-none">
-                                                        <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
-                                                    </button>
-                                                    <button type="button" data-star="5" class="priority-btn p-1 focus:outline-none">
-                                                        <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
-                                                    </button>
-                                                    <span class="priority-text ml-2 text-sm text-gray-600">Média</span>
-                                                </div>
-                                                <input type="hidden" class="priority-value" value="3">
-                                            </div>
-                                            
-                                            <div class="flex items-center mt-6">
-                                                <input
-                                                    type="checkbox"
-                                                    class="available-check h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                                    checked
-                                                >
-                                                <label class="ml-2 block text-sm text-gray-700">
-                                                    Disponível para pedidos
-                                                </label>
-                                            </div>
+                                        <p class="mt-1 text-xs text-red-500 error-message price-error"></p>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                                Unidade
+                                            </label>
+                                            <select class="unit-measure w-full p-2 border border-gray-300 rounded-md">
+                                                <option value="kg">kg</option>
+                                                <option value="g">g</option>
+                                                <option value="un">un</option>
+                                                <option value="L">L</option>
+                                                <option value="ml">ml</option>
+                                                <option value="pct">pct</option>
+                                                <option value="cx">cx</option>
+                                            </select>
                                         </div>
                                         
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                Referência / Observações
+                                                Pedido Mínimo <span class="text-red-500">*</span>
                                             </label>
-                                            <textarea
-                                                class="reference-obs w-full p-2 border border-gray-300 rounded-md"
-                                                rows="2"
-                                                placeholder="Informações adicionais sobre esta variante..."
-                                            ></textarea>
-                                        </div>
-                                        
-                                        <div class="mt-4">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                                Unidades Atendidas <span class="text-red-500">*</span>
-                                            </label>
-                                            
-                                            <p class="served-units-error mt-1 text-xs text-red-500 error-message"></p>
-                                            
-                                            <div class="served-units flex flex-wrap gap-2">
-                                                <button type="button" data-location="Porto" class="location-btn px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 border border-blue-200">Porto</button>
-                                                <button type="button" data-location="Matosinhos" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Matosinhos</button>
-                                                <button type="button" data-location="Braga" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Braga</button>
-                                                <button type="button" data-location="Lisboa" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Lisboa</button>
-                                                <button type="button" data-location="Setúbal" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Setúbal</button>
-                                                <button type="button" data-location="Faro" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Faro</button>
-                                                <button type="button" data-location="Coimbra" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Coimbra</button>
-                                            </div>
+                                            <input
+                                                type="number"
+                                                class="minimum-quantity w-full p-2 border border-gray-300 rounded-md"
+                                                min="1"
+                                                step="1"
+                                                value="1"
+                                            >
+                                            <p class="mt-1 text-xs text-red-500 error-message min-order-error"></p>
                                         </div>
                                     </div>
                                 </div>
-                            </template>
-                        </div>
-                    </div>
-                    
-                    <!-- Sidebar - Imagem e Informações -->
-                    <div class="md:col-span-1">
-                        <div class="bg-white rounded-lg shadow p-6 mb-6">
-                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Imagem do Produto</h2>
-                            
-                            <div class="mb-4">
-                                <div id="image-preview" class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border-2 border-gray-300 border-dashed">
-                                    <div id="no-image" class="text-center">
-                                        <i data-feather="image" class="mx-auto h-12 w-12 text-gray-400"></i>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            Clique para selecionar uma imagem
-                                        </p>
-                                    </div>
-                                    <img id="preview-img" src="" alt="Preview" class="w-full h-full object-contain hidden">
-                                </div>
-                                <input
-                                    type="file"
-                                    id="image-upload"
-                                    name="image-upload"
-                                    accept="image/*"
-                                    class="hidden"
-                                >
-                                <label
-                                    for="image-upload"
-                                    class="mt-2 cursor-pointer block w-full bg-gray-100 text-center text-sm font-medium text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200"
-                                >
-                                    Selecionar Imagem
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow p-6 mb-6">
-                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Informações de Matching</h2>
-                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
-                                <div class="flex items-start">
-                                    <i data-feather="info" class="h-5 w-5 text-blue-500 mr-2 mt-0.5"></i>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                     <div>
-                                        <h3 class="text-sm font-medium text-blue-800">Sobre o Matching de Produtos</h3>
-                                        <p class="mt-1 text-xs text-blue-600">
-                                            Quando um cliente seleciona este produto na loja online, o sistema automaticamente direciona para a variante específica do fornecedor mais adequado com base nos critérios de matching.
-                                        </p>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Email do Fornecedor
+                                        </label>
+                                        <input
+                                            type="email"
+                                            class="supplier-email w-full p-2 border border-gray-300 rounded-md"
+                                            placeholder="fornecedor@exemplo.com"
+                                        >
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Prioridade
+                                        </label>
+                                        <div class="priority-stars flex items-center">
+                                            <button type="button" data-star="1" class="priority-btn p-1 focus:outline-none">
+                                                <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
+                                            </button>
+                                            <button type="button" data-star="2" class="priority-btn p-1 focus:outline-none">
+                                                <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
+                                            </button>
+                                            <button type="button" data-star="3" class="priority-btn p-1 focus:outline-none">
+                                                <i data-feather="star" class="h-5 w-5 text-gray-300 star-active"></i>
+                                            </button>
+                                            <button type="button" data-star="4" class="priority-btn p-1 focus:outline-none">
+                                                <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
+                                            </button>
+                                            <button type="button" data-star="5" class="priority-btn p-1 focus:outline-none">
+                                                <i data-feather="star" class="h-5 w-5 text-gray-300"></i>
+                                            </button>
+                                            <span class="priority-text ml-2 text-sm text-gray-600">Média</span>
+                                        </div>
+                                        <input type="hidden" class="priority-value" value="3">
+                                    </div>
+                                    
+                                    <div class="flex items-center mt-6">
+                                        <input
+                                            type="checkbox"
+                                            class="available-check h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                            checked
+                                        >
+                                        <label class="ml-2 block text-sm text-gray-700">
+                                            Disponível para pedidos
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Referência / Observações
+                                    </label>
+                                    <textarea
+                                        class="reference-obs w-full p-2 border border-gray-300 rounded-md"
+                                        rows="2"
+                                        placeholder="Informações adicionais sobre esta variante..."
+                                    ></textarea>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Unidades Atendidas <span class="text-red-500">*</span>
+                                    </label>
+                                    
+                                    <p class="served-units-error mt-1 text-xs text-red-500 error-message"></p>
+                                    
+                                    <div class="served-units flex flex-wrap gap-2">
+                                        <button type="button" data-location="Porto" class="location-btn px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 border border-blue-200">Porto</button>
+                                        <button type="button" data-location="Matosinhos" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Matosinhos</button>
+                                        <button type="button" data-location="Braga" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Braga</button>
+                                        <button type="button" data-location="Lisboa" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Lisboa</button>
+                                        <button type="button" data-location="Setúbal" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Setúbal</button>
+                                        <button type="button" data-location="Faro" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Faro</button>
+                                        <button type="button" data-location="Coimbra" class="location-btn px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600 border border-gray-200">Coimbra</button>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="space-y-4">
-                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                                    <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
-                                        <i data-feather="dollar-sign" class="w-3 h-3 mr-1"></i>
-                                        Prioridade por Preço
-                                    </h4>
-                                    <p class="text-xs text-gray-600">
-                                        O sistema seleciona automaticamente a variante com o menor preço entre os fornecedores disponíveis.
-                                    </p>
-                                </div>
-                                
-                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                                    <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
-                                        <i data-feather="map" class="w-3 h-3 mr-1"></i>
-                                        Compatibilidade de Unidade
-                                    </h4>
-                                    <p class="text-xs text-gray-600">
-                                        Somente fornecedores que atendem a unidade do usuário serão considerados para o matching.
-                                    </p>
-                                </div>
-                                
-                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                                    <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
-                                        <i data-feather="star" class="w-3 h-3 mr-1"></i>
-                                        Prioridade Manual
-                                    </h4>
-                                    <p class="text-xs text-gray-600">
-                                        Fornecedores com maior prioridade definida manualmente têm preferência quando os preços são iguais.
-                                    </p>
-                                </div>
-                            </div>
                         </div>
-                        
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800">Ações</h2>
-                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                                    Ativo
-                                </span>
+                    </template>
+                </div>
+                
+                <!-- Imagem e Informações -->
+                <div class="dashboard-card p-6 mb-6">
+                    <h2 class="text-lg font-semibold mb-4">Imagem do Produto</h2>
+                    
+                    <div class="mb-4">
+                        <div id="image-preview" class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border-2 border-gray-300 border-dashed">
+                            <div id="no-image" class="text-center">
+                                <i data-feather="image" class="mx-auto h-12 w-12 text-gray-400"></i>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Clique para selecionar uma imagem
+                                </p>
                             </div>
-                            
-                            <div class="space-y-3">
-                                <button
-                                    type="submit"
-                                    id="save-product-btn"
-                                    class="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <i data-feather="save" class="w-5 h-5 mr-2"></i>
-                                    Criar Produto
-                                </button>
-                                
-                                <button
-                                    type="button"
-                                    id="cancel-btn"
-                                    class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
-                                >
-                                    Cancelar
-                                </button>
+                            <img id="preview-img" src="" alt="Preview" class="w-full h-full object-contain hidden">
+                        </div>
+                        <input
+                            type="file"
+                            id="image-upload"
+                            name="image-upload"
+                            accept="image/*"
+                            class="hidden"
+                        >
+                        <label
+                            for="image-upload"
+                            class="mt-2 cursor-pointer block w-full bg-gray-100 text-center text-sm font-medium text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200"
+                        >
+                            Selecionar Imagem
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Informações de Matching -->
+                <div class="dashboard-card p-6 mb-6">
+                    <h2 class="text-lg font-semibold mb-4">Informações de Matching</h2>
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <div class="flex items-start">
+                            <i data-feather="info" class="h-5 w-5 text-blue-500 mr-2 mt-0.5"></i>
+                            <div>
+                                <h3 class="text-sm font-medium text-blue-800">Sobre o Matching de Produtos</h3>
+                                <p class="mt-1 text-xs text-blue-600">
+                                    Quando um cliente seleciona este produto na loja online, o sistema automaticamente direciona para a variante específica do fornecedor mais adequado com base nos critérios de matching.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </main>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                            <i data-feather="dollar-sign" class="w-3 h-3 mr-1"></i>
+                            Prioridade por Preço
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            O sistema seleciona automaticamente a variante com o menor preço entre os fornecedores disponíveis.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                            <i data-feather="map" class="w-3 h-3 mr-1"></i>
+                            Compatibilidade de Unidade
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Somente fornecedores que atendem a unidade do usuário serão considerados para o matching.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <h4 class="text-xs font-semibold text-gray-600 mb-2 flex items-center">
+                            <i data-feather="star" class="w-3 h-3 mr-1"></i>
+                            Prioridade Manual
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Fornecedores com maior prioridade definida manualmente têm preferência quando os preços são iguais.
+                        </p>
+                    </div>
+                </div>
 
-    <!-- Toast de notificação -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50"></div>
-
-    <!-- Modal para confirmação -->
-    <div id="confirm-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
-            <h3 class="text-lg font-medium text-gray-900 mb-4" id="modal-title">Confirmação</h3>
-            <p class="text-gray-500 mb-5" id="modal-message">Tem certeza que deseja realizar esta ação?</p>
-            <div class="flex justify-end space-x-3">
-                <button id="modal-cancel" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancelar</button>
-                <button id="modal-confirm" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Confirmar</button>
+                <!-- Ações -->
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">Ações</h2>
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                            Ativo
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <button type="submit" class="btn btn-primary w-full">
+                            <i class="fas fa-save mr-2"></i>
+                            Criar Produto
+                        </button>
+                        
+                        <button type="button" onclick="history.back()" class="btn btn-secondary w-full">
+                            <i class="fas fa-times mr-2"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
     <script src="../../../js/kitchen/product/new.product.js"></script>
     <script>
-        // Inicializar ícones
         document.addEventListener('DOMContentLoaded', () => {
             feather.replace();
         });

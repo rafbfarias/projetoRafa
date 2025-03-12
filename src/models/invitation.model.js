@@ -6,14 +6,15 @@ const InvitationSchema = new mongoose.Schema({
   invitationId: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    default: () => `INV-${Date.now()}`
   },
 
   // Email do convidado
   email: {
     type: String,
     required: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Por favor, insira um email válido']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email inválido']
   },
   
   // Nome sugerido (opcional)
@@ -61,32 +62,30 @@ const InvitationSchema = new mongoose.Schema({
   },
   
   // Mensagem personalizada
-  message: {
-    type: String
-  },
+  message: String,
   
   // Usuário que criou o convite
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: 'User'
   },
   
   // Datas
   expiresAt: {
     type: Date,
-    required: true
+    required: true,
+    default: () => new Date(+new Date() + 7*24*60*60*1000) // 7 dias
   },
   
-  acceptedAt: {
-    type: Date
-  },
+  acceptedAt: Date,
   
-  rejectedAt: {
-    type: Date
-  }
+  rejectedAt: Date
 }, {
   timestamps: true
 });
+
+// Índices
+InvitationSchema.index({ email: 1, status: 1 });
+InvitationSchema.index({ invitationId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Invitation', InvitationSchema);
