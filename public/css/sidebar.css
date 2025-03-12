@@ -245,4 +245,21 @@
     font-size: 1.25rem;
     color: var(--text-primary);
     cursor: pointer;
+}
+
+/* Estilo para o item de menu quando o submenu está expandido */
+.menu-item.submenu-expanded {
+    background-color: var(--hover-bg, rgba(255, 255, 255, 0.1));
+    color: var(--hover-text, white);
+}
+
+/* Estilo para o hover normal */
+.menu-item:hover {
+    background-color: var(--hover-bg, rgba(255, 255, 255, 0.1));
+    color: var(--hover-text, white);
+}
+
+/* Garantir que o ícone de chevron gire corretamente */
+.menu-item.submenu-expanded .fa-chevron-right {
+    transform: rotate(90deg);
 } 

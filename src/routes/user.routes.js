@@ -4,7 +4,7 @@ const userController = require('../controllers/user.controller');
 const authMiddleware = require('../middleware/auth.middleware');
 const path = require('path');
 const fs = require('fs');
-const UserCompanyAssociation = require('../models/userCompanyAssociation');
+const UserCompanyAssociation = require('../models/userCompanyAssociation.model');
 
 // Rotas públicas (não precisam de autenticação)
 router.get('/validate-token/:token', userController.validateToken);

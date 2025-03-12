@@ -3,6 +3,9 @@ const router = express.Router();
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
 
 // Configuração do nodemailer (ajuste conforme suas configurações de email)
 const transporter = nodemailer.createTransport({
@@ -119,6 +122,62 @@ router.post('/first-access', async (req, res) => {
         res.status(500).json({
             message: error.message
         });
+    }
+});
+
+// Rota para obter a foto de perfil do usuário
+router.get('/profile-photo/:filename', async (req, res) => {
+    try {
+        // Verificar se o usuário está autenticado via sessão OU token
+        let isAuthenticated = false;
+        let userId = null;
+        
+        // Verificar se há um token de autenticação
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            try {
+                const token = authHeader.split(' ')[1];
+                const decoded = jwt.verify(token, process.env.JWT_SECRET || 'sua_chave_secreta');
+                isAuthenticated = true;
+                userId = decoded.id;
+            } catch (error) {
+                console.log('Erro ao verificar token:', error);
+                // Continuar para verificar a sessão
+            }
+        }
+        
+        // Se não autenticado por token, verificar a sessão
+        if (!isAuthenticated && req.session && req.session.user) {
+            isAuthenticated = true;
+            userId = req.session.user._id;
+        }
+        
+        // Se não autenticado de nenhuma forma, retornar erro
+        if (!isAuthenticated) {
+            return res.status(401).send('Acesso não autorizado');
+        }
+        
+        // Obter o nome do arquivo da URL
+        const { filename } = req.params;
+        
+        // Verificar se o arquivo pertence ao usuário (opcional, para maior segurança)
+        if (filename.startsWith(userId)) {
+            console.log('Arquivo pertence ao usuário autenticado');
+        }
+        
+        // Definir o caminho para o arquivo
+        const filePath = path.join(__dirname, '../../uploads/users/', filename);
+        
+        // Verificar se o arquivo existe
+        if (fs.existsSync(filePath)) {
+            return res.sendFile(filePath);
+        } else {
+            console.log(`Arquivo não encontrado: ${filePath}`);
+            return res.status(404).send('Imagem não encontrada');
+        }
+    } catch (error) {
+        console.error('Erro ao buscar foto de perfil:', error);
+        return res.status(500).send('Erro ao buscar imagem');
     }
 });
 

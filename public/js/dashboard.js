@@ -1,3 +1,18 @@
+/**
+ * Formata um valor numérico como moeda
+ * @param {number} value - Valor a ser formatado
+ * @param {string} currency - Código da moeda (padrão: 'EUR')
+ * @returns {string} Valor formatado como moeda
+ */
+function formatCurrency(value, currency = 'EUR') {
+    return new Intl.NumberFormat('pt-PT', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(value);
+}
+
 // Inicializa a página
 function initPage() {
     // Configuração do botão de tema
@@ -123,41 +138,43 @@ function initializeCharts() {
         new Chart(monthlyChart, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                 datasets: [{
                     label: 'Receita',
-                    data: [30000, 35000, 45000, 42000, 50000, 45850],
-                    borderColor: 'var(--chart-line)',
-                    backgroundColor: 'var(--chart-line-bg)',
-                    tension: 0.4
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHitRadius: 10
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: 'var(--chart-text)'
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return formatCurrency(context.raw);
+                            }
                         }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: {
-                            color: 'var(--chart-grid)'
-                        },
-                        ticks: {
-                            color: 'var(--chart-text)'
-                        }
-                    },
                     y: {
-                        grid: {
-                            color: 'var(--chart-grid)'
-                        },
+                        beginAtZero: true,
                         ticks: {
-                            color: 'var(--chart-text)',
-                            callback: value => formatCurrency(value)
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
                         }
                     }
                 }
@@ -261,4 +278,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Inicializa a página quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', initPage);
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar autenticação e associação com empresa
+    const token = localStorage.getItem('token');
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    if (!token) {
+        console.log('Sem token, redirecionando para login');
+        window.location.href = '/login.html';
+        return;
+    }
+    
+    // Verificar se o usuário tem associação ativa com empresa
+    if (!userData.companyAssociation || userData.companyAssociation.status !== 'active') {
+        console.log('Usuário sem associação ativa - redirecionando para welcome');
+        window.location.href = '/pages/welcome/welcome.html';
+        return;
+    }
+    
+    // Se chegou aqui, inicializar dashboard
+    console.log('Iniciando dashboard para usuário com associação ativa');
+    initializeDashboard();
+});

@@ -1,0 +1,14 @@
+<script>
+    // Preencher automaticamente o email se estiver armazenado
+    document.addEventListener('DOMContentLoaded', () => {
+        const storedEmail = localStorage.getItem('registerEmail');
+        if (storedEmail) {
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                emailInput.value = storedEmail;
+            }
+            // Limpar o email armazenado
+            localStorage.removeItem('registerEmail');
+        }
+    });
+</script> 

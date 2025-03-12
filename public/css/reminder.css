@@ -234,3 +234,15 @@
 #board {
     position: relative;
 }
+
+/* Adicione este estilo específico para o botão de novo lembrete */
+#newNoteBtn {
+    cursor: pointer;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    transition: background-color 0.2s;
+}
+
+#newNoteBtn:hover {
+    background-color: var(--btn-primary-hover);
+}

@@ -11,6 +11,7 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         
+        // 1. Verificar se os campos foram preenchidos
         if (!email || !password) {
             return res.status(400).json({
                 status: 'error',
@@ -18,30 +19,33 @@ exports.login = async (req, res) => {
             });
         }
         
+        // 2. Verificar se o usuário existe (ANTES da verificação de senha)
         const user = await User.findOne({ email });
         
         if (!user) {
+            console.log(`Tentativa de login com usuário inexistente: ${email}`);
             return res.status(404).json({
                 status: 'error',
                 message: 'Usuário não encontrado'
             });
         }
         
-        // Verificar senha
+        // 3. Verificar se a senha está correta
         const isMatch = await bcrypt.compare(password, user.password);
         
         if (!isMatch) {
+            console.log(`Senha incorreta para o usuário: ${email}`);
             return res.status(401).json({
                 status: 'error',
                 message: 'Senha incorreta'
             });
         }
         
-        // Verificar se o usuário está ativo (userStatus === 'Ativa')
-        // Agora apenas verificamos se userStatus não é 'Inativa', permitindo 'Pendente' e 'Ativa'
+        // 4. Verificar se o usuário está ativo
         if (user.userStatus === 'Inativa') {
             return res.status(401).json({
                 status: 'error',
+                code: 'USER_INACTIVE',
                 message: 'Usuário desativado. Contate o administrador.'
             });
         }
@@ -83,9 +87,10 @@ exports.login = async (req, res) => {
             status: 'active'
         }).populate('companyId');
 
-        console.log('Associação encontrada:', activeAssociation); // Log para debug
+        console.log('Login bem sucedido para:', email);
+        console.log('Associação ativa:', activeAssociation ? 'Sim' : 'Não');
 
-        // Preparar resposta
+        // Preparar resposta com dados da associação
         const userData = {
             ...user.toObject(),
             companyAssociation: activeAssociation ? {
@@ -95,8 +100,6 @@ exports.login = async (req, res) => {
                 status: activeAssociation.status
             } : null
         };
-
-        console.log('Dados do usuário sendo enviados:', userData); // Log para debug
 
         // Garantir que a sessão seja salva antes de responder
         await new Promise((resolve, reject) => {

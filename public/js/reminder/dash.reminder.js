@@ -21,6 +21,8 @@ let panzoom = null;
  * Inicializa o Reminder Board
  */
 function initReminderBoard() {
+    console.log('Inicializando Reminder Board');
+    
     // Inicializar o zoom
     initializePanZoom();
     
@@ -38,6 +40,8 @@ function initReminderBoard() {
 
     // Inicializar interatividade das notas
     initializeInteractJS();
+    
+    console.log('Reminder Board inicializado com sucesso');
 }
 
 /**
@@ -238,76 +242,115 @@ function createCluster() {
  * Configura todos os event listeners
  */
 function setupEventListeners() {
-    // Botão de novo lembrete
-    const newNoteBtn = document.getElementById('newNoteBtn');
-    if (newNoteBtn) {
-        newNoteBtn.addEventListener('click', function() {
-            const modal = document.getElementById('newNoteModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                // Resetar o formulário
-                const form = document.getElementById('newNoteForm');
-                if (form) form.reset();
-                // Focar no título
-                const titleInput = document.getElementById('noteTitle');
-                if (titleInput) titleInput.focus();
-            }
-        });
-    }
+    console.log('Configurando event listeners');
+    
+    try {
+        // Botão de novo lembrete
+        const newNoteBtn = document.getElementById('newNoteBtn');
+        if (newNoteBtn) {
+            console.log('Botão de novo lembrete encontrado');
+            newNoteBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamento padrão
+                console.log('Botão de novo lembrete clicado');
+                const modal = document.getElementById('newNoteModal');
+                if (modal) {
+                    console.log('Abrindo modal');
+                    modal.classList.remove('hidden');
+                } else {
+                    console.error('Modal não encontrado');
+                }
+            });
+        }
 
-    // Botão salvar nota
-    const saveNoteBtn = document.getElementById('saveNoteBtn');
-    if (saveNoteBtn) {
-        saveNoteBtn.addEventListener('click', function() {
-            saveNote();
-        });
-    }
+        // Botão de salvar nota
+        const saveNoteBtn = document.getElementById('saveNoteBtn');
+        if (saveNoteBtn) {
+            console.log('Botão de salvar nota encontrado');
+            saveNoteBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamento padrão
+                console.log('Botão de salvar nota clicado');
+                saveNote();
+            });
+        }
 
-    // Botões para fechar modais
-    document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.classList.add('hidden');
+        // Botão de cancelar
+        const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+        if (cancelNoteBtn) {
+            cancelNoteBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamento padrão
+                console.log('Botão de cancelar clicado');
+                document.getElementById('newNoteModal').classList.add('hidden');
+            });
+        }
+
+        // Botões para fechar modais
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevenir comportamento padrão
+                console.log('Botão fechar modal clicado');
+                // Encontrar o modal pai
+                let modal = this.closest('.modal');
+                if (modal) modal.classList.add('hidden');
             });
         });
-    });
+        
+        // Botão novo cluster
+        const newClusterBtn = document.getElementById('newClusterBtn');
+        if (newClusterBtn) {
+            newClusterBtn.addEventListener('click', function() {
+                const modal = document.getElementById('clusterModal');
+                if (modal) modal.classList.remove('hidden');
+            });
+        }
 
-    // Botão novo cluster
-    const newClusterBtn = document.getElementById('newClusterBtn');
-    if (newClusterBtn) {
-        newClusterBtn.addEventListener('click', function() {
-            const modal = document.getElementById('clusterModal');
-            if (modal) modal.classList.remove('hidden');
-        });
+        // Mudar tipo de nota
+        const noteType = document.getElementById('noteType');
+        if (noteType) {
+            noteType.addEventListener('change', handleNoteTypeChange);
+        }
+        
+        const editNoteType = document.getElementById('editNoteType');
+        if (editNoteType) {
+            editNoteType.addEventListener('change', handleEditNoteTypeChange);
+        }
+        
+        // Seleção de cores no modal
+        setupColorSelectionEvents();
+        
+        // Event listeners para o board
+        const board = document.getElementById('board');
+        if (board) {
+            board.addEventListener('mousedown', handleBoardMouseDown);
+        }
+        
+        document.addEventListener('mousemove', handleDocumentMouseMove);
+        document.addEventListener('mouseup', handleDocumentMouseUp);
+        
+    } catch (error) {
+        console.error('Erro ao configurar event listeners:', error);
     }
-
-    // Mudar tipo de nota
-    document.getElementById('noteType').addEventListener('change', handleNoteTypeChange);
-    document.getElementById('editNoteType').addEventListener('change', handleEditNoteTypeChange);
-    
-    // Seleção de cores no modal
-    setupColorSelectionEvents();
-    
-    // Dropdown de filtro
-    document.getElementById('filterDropdownButton').addEventListener('click', toggleFilterDropdown);
-    
-    // Fechar dropdowns ao clicar fora
-    document.addEventListener('click', handleOutsideClick);
-    
-    // Event listeners para o board
-    const board = document.getElementById('board');
-    board.addEventListener('mousedown', handleBoardMouseDown);
-    document.addEventListener('mousemove', handleDocumentMouseMove);
-    document.addEventListener('mouseup', handleDocumentMouseUp);
 }
 
 /**
  * Carrega as notas do localStorage
  */
 function loadNotes() {
+    console.log('Carregando notas do localStorage');
     const savedNotes = localStorage.getItem('reminderNotes');
+    
     if (savedNotes) {
-        notes = JSON.parse(savedNotes);
+        try {
+            notes = JSON.parse(savedNotes);
+            console.log('Notas carregadas com sucesso:', notes.length);
+            renderNotes();
+        } catch (error) {
+            console.error('Erro ao carregar notas:', error);
+            notes = [];
+            renderNotes();
+        }
+    } else {
+        console.log('Nenhuma nota encontrada no localStorage');
+        notes = [];
         renderNotes();
     }
 }
@@ -323,18 +366,38 @@ function saveNotesToStorage() {
  * Renderiza todas as notas no board
  */
 function renderNotes() {
+    console.log('Renderizando notas. Total:', notes.length);
     const board = document.getElementById('board');
+    
+    // Limpar o board, mas manter a mensagem de board vazio
+    const emptyBoard = document.getElementById('empty-board');
+    const emptyBoardClone = emptyBoard ? emptyBoard.cloneNode(true) : null;
     
     // Limpar o board
     while (board.firstChild) {
         board.removeChild(board.firstChild);
     }
     
+    // Adicionar de volta a mensagem de board vazio
+    if (emptyBoardClone) {
+        board.appendChild(emptyBoardClone);
+    }
+    
     // Renderizar cada nota
-    notes.forEach(note => {
-        const noteElement = createNoteElement(note);
-        board.appendChild(noteElement);
-    });
+    if (notes.length > 0) {
+        console.log('Renderizando', notes.length, 'notas');
+        notes.forEach(note => {
+            try {
+                const noteElement = createNoteElement(note);
+                board.appendChild(noteElement);
+                console.log('Nota renderizada:', note.id, note.title);
+            } catch (error) {
+                console.error('Erro ao renderizar nota:', note.id, error);
+            }
+        });
+    } else {
+        console.log('Nenhuma nota para renderizar');
+    }
     
     // Atualizar mensagem de board vazio
     updateEmptyBoardMessage();
@@ -492,21 +555,25 @@ function handleReferenceClick(event) {
  * Abre o modal para criar uma nova nota
  */
 function openNewNoteModal() {
-    // Resetar o formulário
-    document.getElementById('newNoteForm').reset();
-    
-    // Esconder o container de referência inicialmente
-    document.getElementById('referenceElementContainer').classList.add('hidden');
-    
-    // Mostrar o modal
-    document.getElementById('newNoteModal').classList.remove('hidden');
-    
-    // Focar no campo de título
-    document.getElementById('noteTitle').focus();
-    
-    // Resetar a seleção de cor
-    document.querySelectorAll('input[name="noteColor"]')[0].checked = true;
-    updateColorSelection('noteColor');
+    console.log('Abrindo modal de nova nota');
+    const modal = document.getElementById('newNoteModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        // Resetar o formulário
+        const form = document.getElementById('newNoteForm');
+        if (form) form.reset();
+        // Focar no título
+        const titleInput = document.getElementById('noteTitle');
+        if (titleInput) titleInput.focus();
+        // Resetar a seleção de cor
+        const colorInputs = document.querySelectorAll('input[name="noteColor"]');
+        if (colorInputs.length > 0) {
+            colorInputs[0].checked = true;
+            updateColorSelection('noteColor');
+        }
+    } else {
+        console.error('Modal não encontrado!');
+    }
 }
 
 /**
@@ -567,45 +634,66 @@ function openDeleteNoteModal(noteId) {
  * Salva uma nova nota
  */
 function saveNote() {
-    const title = document.getElementById('noteTitle').value.trim();
-    const content = document.getElementById('noteContent').value.trim();
-    const type = document.getElementById('noteType').value;
-    const priority = document.getElementById('notePriority').value;
-    const color = document.querySelector('input[name="noteColor"]:checked')?.value || 'yellow';
+    console.log('Executando função saveNote()');
+    
+    try {
+        const title = document.getElementById('noteTitle').value.trim();
+        const content = document.getElementById('noteContent').value.trim();
+        const type = document.getElementById('noteType').value;
+        const priority = document.getElementById('notePriority').value;
+        const color = document.querySelector('input[name="noteColor"]:checked')?.value || 'yellow';
 
-    if (!title) {
-        showToast('error', 'Erro', 'Por favor, informe um título para a nota');
-        return;
+        if (!title) {
+            alert('Por favor, informe um título para a nota');
+            return;
+        }
+
+        // Criar nova nota
+        const newNote = {
+            id: 'note-' + Date.now(),
+            title,
+            content,
+            type,
+            priority,
+            color,
+            posX: Math.random() * 300,
+            posY: Math.random() * 300,
+            date: new Date().toISOString()
+        };
+
+        console.log('Nova nota criada:', newNote);
+
+        // Adicionar ao array de notas
+        notes.push(newNote);
+        
+        // Salvar no localStorage
+        saveNotesToStorage();
+        
+        // Renderizar notas
+        renderNotes();
+        
+        // Fechar modal
+        const modal = document.getElementById('newNoteModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            console.log('Modal fechado após salvar');
+        }
+        
+        // Mostrar mensagem de sucesso
+        alert('Nota criada com sucesso!');
+        
+        // Verificar se as notas foram salvas corretamente
+        const savedNotes = localStorage.getItem('reminderNotes');
+        console.log('Notas salvas no localStorage:', savedNotes);
+        
+        // Verificar se o board está vazio
+        const board = document.getElementById('board');
+        console.log('Conteúdo do board após renderização:', board.innerHTML);
+        
+    } catch (error) {
+        console.error('Erro ao salvar nota:', error);
+        alert('Erro ao salvar nota: ' + error.message);
     }
-
-    // Criar nova nota
-    const newNote = {
-        id: 'note-' + Date.now(),
-        title,
-        content,
-        type,
-        priority,
-        color,
-        posX: Math.random() * 300,
-        posY: Math.random() * 300,
-        date: new Date().toISOString()
-    };
-
-    // Adicionar ao array de notas
-    notes.push(newNote);
-    
-    // Salvar no localStorage
-    saveNotesToStorage();
-    
-    // Renderizar notas
-    renderNotes();
-    
-    // Fechar modal
-    const modal = document.getElementById('newNoteModal');
-    if (modal) modal.classList.add('hidden');
-    
-    // Mostrar mensagem de sucesso
-    showToast('success', 'Sucesso', 'Nota criada com sucesso!');
 }
 
 /**
@@ -673,44 +761,6 @@ function deleteCurrentNote() {
     // Fechar modal
     const modal = document.getElementById('deleteNoteModal');
     if (modal) modal.classList.add('hidden');
-}
-
-/**
- * Alterna a visibilidade do dropdown de filtro
- */
-function toggleFilterDropdown() {
-    const dropdown = document.getElementById('filterDropdown');
-    dropdown.classList.toggle('hidden');
-}
-
-/**
- * Manipula cliques fora dos dropdowns e modais
- */
-function handleOutsideClick(event) {
-    // Fechar dropdown de filtro
-    const filterButton = document.getElementById('filterDropdownButton');
-    const filterDropdown = document.getElementById('filterDropdown');
-    
-    if (!filterButton.contains(event.target) && !filterDropdown.contains(event.target)) {
-        filterDropdown.classList.add('hidden');
-    }
-    
-    // Não fechar modais ao clicar dentro deles
-    const modals = [
-        document.getElementById('newNoteModal'),
-        document.getElementById('editNoteModal'),
-        document.getElementById('deleteNoteModal')
-    ];
-    
-    modals.forEach(modal => {
-        if (!modal.classList.contains('hidden')) {
-            const modalContent = modal.querySelector('div:first-child');
-            if (modal.contains(event.target) && !modalContent.contains(event.target)) {
-                const modal = document.getElementById('newNoteModal');
-                if (modal) modal.classList.add('hidden');
-            }
-        }
-    });
 }
 
 /**
@@ -952,4 +1002,80 @@ function createNoteFromElement(elementType, elementId, elementTitle, elementCont
 window.createNoteFromElement = createNoteFromElement;
 
 // Inicializar quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', initReminderBoard);
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, inicializando Reminder Board');
+    
+    // Adicionar um listener direto para o botão como backup
+    const newNoteBtn = document.getElementById('newNoteBtn');
+    if (newNoteBtn) {
+        console.log('Adicionando listener direto ao botão Novo Lembrete');
+        newNoteBtn.onclick = function() {
+            console.log('Botão Novo Lembrete clicado diretamente');
+            const modal = document.getElementById('newNoteModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            } else {
+                console.error('Modal não encontrado (onclick direto)');
+            }
+        };
+    } else {
+        console.error('Botão Novo Lembrete não encontrado para onclick direto');
+    }
+    
+    try {
+        initReminderBoard();
+    } catch (error) {
+        console.error('Erro ao inicializar Reminder Board:', error);
+    }
+    
+    // Verificar se os elementos críticos existem
+    const criticalElements = [
+        { id: 'newNoteBtn', name: 'Botão Novo Lembrete' },
+        { id: 'newNoteModal', name: 'Modal Nova Nota' },
+        { id: 'saveNoteBtn', name: 'Botão Salvar Nota' }
+    ];
+    
+    criticalElements.forEach(element => {
+        const el = document.getElementById(element.id);
+        console.log(`${element.name} (${element.id}): ${el ? 'Encontrado' : 'NÃO ENCONTRADO'}`);
+    });
+});
+
+function showToast(type, title, message) {
+    // Por enquanto, vamos usar um alert simples
+    alert(`${title}: ${message}`);
+    // Em uma implementação real, você usaria um sistema de notificações mais elegante
+}
+
+/**
+ * Função para depuração que pode ser chamada do console
+ */
+function debugReminderBoard() {
+    console.log('=== DEBUG REMINDER BOARD ===');
+    console.log('Notas em memória:', notes);
+    
+    const savedNotes = localStorage.getItem('reminderNotes');
+    console.log('Notas no localStorage:', savedNotes);
+    
+    if (savedNotes) {
+        try {
+            const parsedNotes = JSON.parse(savedNotes);
+            console.log('Notas parseadas:', parsedNotes);
+            console.log('Número de notas:', parsedNotes.length);
+        } catch (e) {
+            console.error('Erro ao parsear notas do localStorage:', e);
+        }
+    }
+    
+    const board = document.getElementById('board');
+    console.log('Board element:', board);
+    console.log('Board HTML:', board.innerHTML);
+    console.log('Board children:', board.children.length);
+    
+    console.log('=== END DEBUG ===');
+    
+    return 'Debug concluído. Verifique o console para mais informações.';
+}
+
+// Expor função para uso externo
+window.debugReminderBoard = debugReminderBoard;

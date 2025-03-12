@@ -100,7 +100,8 @@
 }
 
 /* Variáveis para tema escuro */
-[data-theme="dark"] {
+[data-theme="dark"],
+.dark {
   --bg-primary: #111827;
   --bg-secondary: #1f2937;
   --text-primary: #f9fafb;

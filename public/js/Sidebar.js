@@ -38,21 +38,59 @@ class Sidebar extends HTMLElement {
         const userNameElement = this.querySelector('.sidebar-user-info p:first-child');
         const userRoleElement = this.querySelector('.sidebar-user-info p:last-child');
         
+        // Atualizar nome e cargo do usuário
+        if (userNameElement) userNameElement.textContent = userName;
+        
+        // Usar o email do usuário em vez de "Usuário" como padrão
+        if (userRoleElement) {
+            // Obter o email do usuário dos dados carregados
+            const user = this.userData?.user;
+            if (user && user.email) {
+                userRoleElement.textContent = user.email;
+            } else {
+                userRoleElement.textContent = userRole;
+            }
+        }
+        
+        // Usar a mesma abordagem do welcome.js
         if (!imageUrl || imageUrl === '') {
             avatarImage.src = '/images/users/default-avatar.svg';
-        } else {
-            let finalImageUrl = imageUrl;
-            if (imageUrl.startsWith('uploads/')) {
-                finalImageUrl = `/api/users/profile-photo/${imageUrl.split('/').pop()}`;
-            }
-            avatarImage.src = finalImageUrl;
-            avatarImage.onerror = () => {
-                avatarImage.src = '/images/users/default-avatar.svg';
-            };
+            return;
         }
-
-        if (userNameElement) userNameElement.textContent = userName;
-        if (userRoleElement) userRoleElement.textContent = userRole;
+        
+        // Ajustar o caminho da imagem
+        if (imageUrl.startsWith('uploads/')) {
+            const token = localStorage.getItem('token');
+            const filename = imageUrl.split('/').pop();
+            
+            // Usar fetch com o token para carregar a imagem
+            fetch(`/api/users/profile-photo/${filename}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao carregar imagem');
+                return response.blob();
+            })
+            .then(blob => {
+                // Criar URL do objeto blob
+                const objectUrl = URL.createObjectURL(blob);
+                avatarImage.src = objectUrl;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar imagem:', error);
+                avatarImage.src = '/images/users/default-avatar.svg';
+            });
+            
+            return; // Importante: retornar aqui para não executar o código abaixo
+        }
+        
+        // Para URLs que não começam com 'uploads/' (caso de URLs externas)
+        avatarImage.src = imageUrl;
+        avatarImage.onerror = () => {
+            avatarImage.src = '/images/users/default-avatar.svg';
+        };
     }
 
     async connectedCallback() {
@@ -73,6 +111,8 @@ class Sidebar extends HTMLElement {
                 throw new Error(userData.message || 'Erro ao carregar dados do usuário');
             }
 
+            // Armazenar os dados do usuário para uso em outros métodos
+            this.userData = userData;
             const user = userData.user;
 
             // Carregar template e inicializar sidebar
@@ -84,8 +124,20 @@ class Sidebar extends HTMLElement {
             this.updatePhotoPreview(
                 user.photo,
                 user.preferredName || user.name,
-                user.role || 'Usuário'
+                user.email || 'Usuário'  // Usar email como padrão em vez de "Usuário"
             );
+
+            // Atualizar informações do dropdown do usuário
+            const dropdownName = this.querySelector('#userDropdown .user-name');
+            const dropdownEmail = this.querySelector('#userDropdown .user-email');
+            
+            if (dropdownName) {
+                dropdownName.textContent = user.preferredName || user.name || user.fullName;
+            }
+            
+            if (dropdownEmail) {
+                dropdownEmail.textContent = user.email;
+            }
 
             // Inicializar comportamentos
             this.initializeSidebarBehaviors();
@@ -189,6 +241,8 @@ class Sidebar extends HTMLElement {
                         if (chevron) {
                             chevron.style.transform = 'rotate(0deg)';
                         }
+                        // Remover classe de expandido
+                        toggle.classList.remove('submenu-expanded');
                     } else {
                         // Abrir submenu
                         submenu.style.display = 'block';
@@ -196,6 +250,8 @@ class Sidebar extends HTMLElement {
                         if (chevron) {
                             chevron.style.transform = 'rotate(90deg)';
                         }
+                        // Adicionar classe de expandido
+                        toggle.classList.add('submenu-expanded');
                     }
                 }
             });
@@ -215,9 +271,12 @@ class Sidebar extends HTMLElement {
                     parentSubmenu.style.maxHeight = parentSubmenu.scrollHeight + 'px';
                     
                     const parentToggle = this.querySelector(`[data-submenu="${parentSubmenu.id.replace('-submenu', '')}"]`);
-                    const chevron = parentToggle?.querySelector('.fa-chevron-right');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(90deg)';
+                    if (parentToggle) {
+                        parentToggle.classList.add('submenu-expanded'); // Adicionar classe de expandido
+                        const chevron = parentToggle.querySelector('.fa-chevron-right');
+                        if (chevron) {
+                            chevron.style.transform = 'rotate(90deg)';
+                        }
                     }
                 }
             }
@@ -256,3 +315,39 @@ class Sidebar extends HTMLElement {
 }
 
 customElements.define('app-sidebar', Sidebar);
+
+function loadUserProfileImage(photoUrl) {
+    if (!photoUrl || photoUrl === '') {
+        document.getElementById('userProfilePhoto').src = '/images/default-avatar.png';
+        return;
+    }
+    
+    // Ajustar o caminho da imagem
+    if (photoUrl.startsWith('uploads/')) {
+        const token = localStorage.getItem('token');
+        const filename = photoUrl.split('/').pop();
+        
+        // Usar fetch com o token para carregar a imagem
+        fetch(`/api/users/profile-photo/${filename}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erro ao carregar imagem');
+            return response.blob();
+        })
+        .then(blob => {
+            // Criar URL do objeto blob
+            const objectUrl = URL.createObjectURL(blob);
+            document.getElementById('userProfilePhoto').src = objectUrl;
+        })
+        .catch(error => {
+            console.error('Erro ao carregar imagem:', error);
+            document.getElementById('userProfilePhoto').src = '/images/default-avatar.png';
+        });
+    } else {
+        // Para URLs que não começam com 'uploads/' (caso de URLs externas)
+        document.getElementById('userProfilePhoto').src = photoUrl;
+    }
+}

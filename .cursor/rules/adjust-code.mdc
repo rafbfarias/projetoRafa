@@ -1,0 +1,6 @@
+---
+description: Quando eu solicitar um ajuste ou edição
+globs: 
+alwaysApply: false
+---
+Quando eu solicitar um ajuste ou edição, não é preciso refazer o código todo. Quero que leia e entenda todo o código e faça o ajuste apenas onde deve ser ajustado. Entender se no contexto geral o arquivo todo ainda faça sentido, e sugerir novas alterações se for o caso, mas não reescrever e principalmente não alterar funções  que já existem caso não estejam envolvidas no escopo da solicitação e principalemte sem avisar que o vai fazer.Ainda não. Quando eu solicitar um ajuste ou edição, não é preciso refazer o código todo. Quero que leia e entenda todo o código e faça o ajuste apenas onde deve ser ajustado. Entender se no contexto geral o arquivo todo ainda faça sentido, e sugerir novas alterações se for o caso, mas não reescrever e principalmente não alterar funções  que já existem caso não estejam envolvidas no escopo da solicitação e principalemte sem avisar que o vai fazer.

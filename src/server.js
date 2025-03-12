@@ -166,16 +166,33 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 
-// Middleware para logs de debug
+// Middleware para logs de debug - versão simplificada
 app.use((req, res, next) => {
-    console.log('=== Debug Info ===');
-    console.log('Path:', req.path);
-    console.log('Method:', req.method);
-    console.log('Session ID:', req.sessionID);
-    console.log('Session:', req.session);
-    console.log('Headers:', req.headers);
-    console.log('Body:', req.body);
-    console.log('================');
+    // Ignorar logs para arquivos estáticos
+    if (req.path.startsWith('/css/') || 
+        req.path.startsWith('/js/') || 
+        req.path.startsWith('/images/') || 
+        req.path.startsWith('/fonts/')) {
+        return next();
+    }
+    
+    // Log resumido para rotas de API
+    if (req.path.startsWith('/api/')) {
+        console.log(`API Request: ${req.method} ${req.path}`);
+        
+        // Log detalhado apenas para login/logout
+        if (req.path === '/api/auth/login' || req.path === '/api/auth/logout') {
+            console.log('=== Auth Info ===');
+            console.log('Email:', req.body.email || 'N/A');
+            console.log('Session ID:', req.sessionID);
+            console.log('Has Token:', !!req.headers.authorization);
+            console.log('================');
+        }
+    } else {
+        // Log simples para páginas
+        console.log(`Page Request: ${req.method} ${req.path}`);
+    }
+    
     next();
 });
 

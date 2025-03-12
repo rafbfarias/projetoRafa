@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function() {
+    // Verificar se o usuário tem associação ativa com empresa
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    if (userData.companyAssociation && userData.companyAssociation.status === 'active') {
+        console.log('Usuário já tem associação ativa - redirecionando para dashboard');
+        window.location.href = '/pages/dashboard.html';
+        return;
+    }
+    
     // Elementos do formulário
     const preferredNameInput = document.getElementById('preferredName');
     const continueBtn = document.getElementById('continueBtn');
@@ -140,11 +149,33 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Ajustar o caminho da imagem
         let finalImageUrl = imageUrl;
         if (imageUrl.startsWith('uploads/')) {
-            finalImageUrl = `/api/users/profile-photo/${imageUrl.split('/').pop()}`; // Pega apenas o nome do arquivo
+            const token = localStorage.getItem('token');
+            const filename = imageUrl.split('/').pop();
+            
+            // Usar fetch com o token para carregar a imagem
+            fetch(`/api/users/profile-photo/${filename}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao carregar imagem');
+                return response.blob();
+            })
+            .then(blob => {
+                // Criar URL do objeto blob
+                const objectUrl = URL.createObjectURL(blob);
+                photoPreview.innerHTML = `<img src="${objectUrl}" alt="Foto de perfil" class="w-full h-full object-cover">`;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar imagem:', error);
+                photoPreview.innerHTML = '<i class="fas fa-user text-3xl text-gray-400"></i>';
+            });
+            
+            return; // Importante: retornar aqui para não executar o código abaixo
         }
         
-        console.log('URL final da imagem:', finalImageUrl);
-        
+        // Para URLs que não começam com 'uploads/' (caso de URLs externas)
         const img = new Image();
         img.onload = () => photoPreview.innerHTML = `<img src="${finalImageUrl}" alt="Foto de perfil" class="w-full h-full object-cover">`;
         img.onerror = () => {

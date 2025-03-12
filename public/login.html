@@ -339,8 +339,14 @@
                 fullNameField.classList.toggle('hidden');
                 toggleText.textContent = isRegistering ? 'Já tem uma conta?' : 'Não tem uma conta?';
                 toggleMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
-                const buttonText = submitButton.querySelector('.button-text');
-                buttonText.textContent = isRegistering ? 'Criar Conta' : 'Entrar';
+                
+                // Atualizar o texto do botão de forma segura
+                submitButton.innerHTML = `
+                    <div class="flex items-center justify-center">
+                        <span class="button-text">${isRegistering ? 'Criar Conta' : 'Entrar'}</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                `;
             }
 
             // Adicionar event listener para o botão de toggle
